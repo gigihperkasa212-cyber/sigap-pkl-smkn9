@@ -68,7 +68,16 @@ jobs:
             "build-tools;35.0.0" > /dev/null 2>&1
           echo "✅ Android SDK siap"
 
-      # ── 5. Grant execute permission Gradle wrapper ───────────────
+      # ── 5. Install Node dependencies (dibutuhkan Capacitor) ──────
+      - name: Setup Node.js + Install dependencies
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: npm install
+        run: npm install
+        
+      # ── 6. Grant execute permission Gradle wrapper ───────────────
       - name: Grant Gradlew permission
         run: chmod +x android/gradlew
 
