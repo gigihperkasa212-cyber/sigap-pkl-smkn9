@@ -105,13 +105,12 @@ Kemudian buka browser dan akses: `http://localhost:8088`
 
 **Master Admin:**
 - Username: `admin`
-- Password: `sampurna01` (PERMANEN - tidak bisa login dengan "123")
+- Password: *(hubungi administrator sekolah)*
 
-> ⚠️ **Penting**: 
-> - Password admin **HANYA** "sampurna01" (password "123" dihapus secara permanen)
+> ⚠️ **Penting**:
+> - Ganti password default setelah login pertama kali
 > - Admin/Guru harus login di tab **"Guru / Pembimbing"**
 > - Siswa harus login di tab **"Siswa"**
-> - Ganti password default setelah login pertama kali
 
 ## Konfigurasi
 
@@ -150,7 +149,7 @@ Server backend perlu dikonfigurasi di file `js/app.js`
 
 ## Sumber
 
-File ini diunduh dari server: `http://103.153.190.69:8088`
+Aplikasi SIGAP PKL dikembangkan oleh tim SMK Negeri 9 Malang.
 
 ---
 
