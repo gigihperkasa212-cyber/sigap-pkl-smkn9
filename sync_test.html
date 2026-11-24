@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIGAP Sync Diagnostic</title>
+<style>
+  body { background:#0f172a; color:#e2e8f0; font-family:monospace; padding:16px; font-size:13px; }
+  h2 { color:#6366f1; }
+  .ok { color:#34d399; }
+  .err { color:#f87171; }
+  .warn { color:#fbbf24; }
+  pre { background:#1e293b; padding:12px; border-radius:8px; overflow-x:auto; white-space:pre-wrap; }
+  button { background:#6366f1; color:#fff; border:none; padding:8px 16px; border-radius:6px; cursor:pointer; margin:4px; font-size:13px; }
+</style>
+</head>
+<body>
+<h2>🔍 SIGAP Sync Diagnostic v1.5.4</h2>
+<div id="out"></div>
+<button onclick="runDiag()">🔄 Run Diagnostic</button>
+<button onclick="clearLocal()">🗑️ Clear localStorage & Reload</button>
+<button onclick="forceSync()">⬇️ Force Sync dari Server</button>
+
+<script>
+(function(){
+  var _a=['aHR0cHM6Ly8xMDMuMTUzLjE5MC42OTo4NDQz'];
+  window._SERVER_HTTPS = atob(_a[0]);
+})();
+
+var log = [];
+function print(msg, cls) {
+  cls = cls || '';
+  log.push('<span class="' + cls + '">' + msg + '</span>');
+  document.getElementById('out').innerHTML = '<pre>' + log.join('\n') + '</pre>';
+}
+
+function apiUrl(path) {
+  var proto = window.location.protocol;
+  var host  = window.location.hostname;
+  var isCap = proto === 'capacitor:' || proto === 'ionic:' || host === 'localhost' || host === '127.0.0.1';
+  var base  = isCap ? window._SERVER_HTTPS : '';
+  return base + (path.startsWith('/') ? path : '/' + path);
+}
+
+async function runDiag() {
+  log = [];
+  print('=== SIGAP SYNC DIAGNOSTIC ===');
+  print('Time: ' + new Date().toLocaleString('id-ID'));
+  print('Protocol: ' + window.location.protocol);
+  print('Host: ' + window.location.hostname);
+  print('Port: ' + window.location.port);
+  var isCap = window.location.protocol === 'capacitor:' || window.location.hostname === 'localhost';
+  print('Mode: ' + (isCap ? 'APK/Capacitor' : 'Browser'), isCap ? 'warn' : 'ok');
+  print('API Base: ' + apiUrl('api.php'));
+  print('');
+
+  // Cek localStorage
+  print('=== LOCALSTORAGE ===');
+  var keys = Object.keys(localStorage);
+  var userKey = keys.find(k => k.includes('Users') || k.includes('users') || k.includes('SIGAP'));
+  print('Keys: ' + keys.join(', '));
+  if (userKey) {
+    try {
+      var localUsers = JSON.parse(localStorage.getItem(userKey) || '[]');
+      print('User key: ' + userKey);
+      print('Local users: ' + (Array.isArray(localUsers) ? localUsers.length : 'NOT ARRAY'), localUsers.length > 0 ? 'ok' : 'err');
+      if (Array.isArray(localUsers)) {
+        localUsers.forEach(function(u) {
+          print('  - ' + (u.username||'?') + ' | ' + (u.role||'?') + ' | pwd:' + (u.password ? u.password.substring(0,8)+'...' : 'KOSONG'), u.password ? '' : 'err');
+        });
+      }
+    } catch(e) { print('Parse error: ' + e.message, 'err'); }
+  } else {
+    print('User key TIDAK DITEMUKAN di localStorage!', 'err');
+  }
+  print('');
+
+  // Cek API
+  print('=== API SERVER TEST ===');
+  var url = apiUrl('api.php?action=get_users');
+  print('Fetching: ' + url);
+  try {
+    var r = await fetch(url, { signal: AbortSignal.timeout(8000) });
+    print('HTTP Status: ' + r.status + ' ' + r.statusText, r.ok ? 'ok' : 'err');
+    if (r.ok) {
+      var data = await r.json();
+      print('success: ' + data.success, data.success ? 'ok' : 'err');
+      var users = data.users || data.data || [];
+      print('Server users: ' + users.length, users.length > 0 ? 'ok' : 'err');
+      users.forEach(function(u) {
+        print('  + ' + (u.username||'?') + ' | ' + (u.role||'?') + ' | ' + (u.name||'?') + ' | pwd_len:' + (u.password||'').length, (u.password||'').length > 0 ? 'ok' : 'warn');
+      });
+    } else {
+      var txt = await r.text();
+      print('Response: ' + txt.substring(0,300), 'err');
+    }
+  } catch(e) {
+    print('FETCH ERROR: ' + e.message, 'err');
+    print('Kemungkinan CORS atau koneksi gagal', 'err');
+  }
+  print('');
+  print('=== SELESAI ===');
+}
+
+function clearLocal() {
+  if (confirm('Hapus semua localStorage dan reload?')) {
+    localStorage.clear();
+    location.reload();
+  }
+}
+
+async function forceSync() {
+  log = [];
+  print('Force sync dari server...');
+  var url = apiUrl('api.php?action=get_users');
+  try {
+    var r = await fetch(url);
+    var data = await r.json();
+    var users = data.users || data.data || [];
+    if (users.length > 0) {
+      var userKey = 'SIGAP PKL SMKN 9 Official_users';
+      var local = [];
+      try { local = JSON.parse(localStorage.getItem(userKey) || '[]'); } catch(e) {}
+      var pwdMap = {};
+      local.forEach(function(u) { if (u && u.id && u.password) pwdMap[String(u.id)] = u.password; });
+      var merged = users.map(function(u) {
+        return Object.assign({}, u, { password: pwdMap[String(u.id)] || u.password || '' });
+      });
+      localStorage.setItem(userKey, JSON.stringify(merged));
+      print('✅ Force sync OK: ' + merged.length + ' users tersimpan ke localStorage', 'ok');
+      merged.forEach(function(u) { print('  + ' + u.username + ' | ' + u.role + ' | pwd:' + (u.password?'ada':'KOSONG'), u.password?'ok':'warn'); });
+      print('');
+      print('Redirect ke app dalam 2 detik...');
+      setTimeout(function() { window.location.href = '/'; }, 2000);
+    } else {
+      print('❌ Server return 0 users', 'err');
+    }
+  } catch(e) {
+    print('❌ Error: ' + e.message, 'err');
+  }
+}
+
+// Auto-run on load
+window.onload = runDiag;
+</script>
+</body>
+</html>

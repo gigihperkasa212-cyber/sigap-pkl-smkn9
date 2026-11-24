@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Flowchart SIGAP PKL — SMK Negeri 9 Malang</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:11pt}
+.cover{background:linear-gradient(135deg,#0f172a 0%,#0891b2 60%,#0f172a 100%);color:#fff;text-align:center;padding:60px 40px;page-break-after:always}
+.cover h1{font-size:2.4rem;font-weight:900;letter-spacing:3px;margin-bottom:6px}
+.cover h2{font-size:1.1rem;font-weight:400;opacity:.8;margin-bottom:20px}
+.cover .ver{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:6px 24px;font-size:.88rem}
+.cover-icon{font-size:4rem;margin-bottom:16px}
+/* ─── Page wrapper ─── */
+.fc-page{background:#fff;max-width:860px;margin:28px auto;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.09);overflow:hidden;page-break-inside:avoid}
+.fc-title{padding:18px 24px;color:#fff;font-size:1.05rem;font-weight:800;display:flex;align-items:center;gap:10px}
+.fc-body{padding:28px 24px}
+/* ─── Flowchart nodes ─── */
+.fc{display:flex;flex-direction:column;align-items:center;width:100%;gap:0}
+.node{border-radius:10px;padding:10px 20px;font-size:.82rem;font-weight:600;text-align:center;min-width:180px;max-width:340px;line-height:1.4}
+.n-start{background:#0f172a;color:#fff;border-radius:50px}
+.n-end  {background:#0f172a;color:#fff;border-radius:50px}
+.n-proc {background:#eff6ff;border:2px solid #3b82f6;color:#1e40af}
+.n-dec  {background:#fffbeb;border:2px solid #f59e0b;color:#92400e;transform:skewX(-8deg)}
+.n-dec span{display:inline-block;transform:skewX(8deg)}
+.n-io   {background:#f0fdf4;border:2px solid #10b981;color:#065f46;transform:skewX(-6deg)}
+.n-io span{display:inline-block;transform:skewX(6deg)}
+.n-green{background:#dcfce7;border:2px solid #16a34a;color:#15803d}
+.n-red  {background:#fee2e2;border:2px solid #dc2626;color:#b91c1c}
+.n-blue {background:#dbeafe;border:2px solid #2563eb;color:#1d4ed8}
+.n-purple{background:#f3e8ff;border:2px solid #9333ea;color:#7e22ce}
+.n-gray {background:#f8fafc;border:2px solid #94a3b8;color:#475569}
+/* ─── Arrows ─── */
+.arrow{display:flex;flex-direction:column;align-items:center;margin:0}
+.arrow-line{width:2px;height:28px;background:#94a3b8}
+.arrow-head{width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:10px solid #94a3b8}
+.arrow-label{font-size:.72rem;color:#64748b;font-weight:600;background:#fff;padding:1px 6px;border-radius:4px;border:1px solid #e2e8f0;margin-bottom:2px}
+/* ─── Branch (decision) ─── */
+.branch{display:flex;align-items:flex-start;justify-content:center;gap:32px;width:100%;margin-top:0}
+.branch-col{display:flex;flex-direction:column;align-items:center;gap:0}
+.branch-label{font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:4px;margin-bottom:4px}
+.bl-yes{background:#dcfce7;color:#15803d;border:1px solid #16a34a}
+.bl-no {background:#fee2e2;color:#b91c1c;border:1px solid #dc2626}
+/* ─── Row (parallel) ─── */
+.row-flow{display:flex;align-items:flex-start;justify-content:center;gap:24px;width:100%}
+.row-col{display:flex;flex-direction:column;align-items:center;gap:0;flex:1}
+.row-label{font-size:.72rem;font-weight:700;color:#fff;padding:3px 12px;border-radius:20px;margin-bottom:6px}
+/* ─── Color themes per flowchart ─── */
+.th-login .fc-title{background:linear-gradient(90deg,#7c3aed,#9333ea)}
+.th-siswa .fc-title{background:linear-gradient(90deg,#059669,#10b981)}
+.th-guru  .fc-title{background:linear-gradient(90deg,#2563eb,#3b82f6)}
+.th-admin .fc-title{background:linear-gradient(90deg,#dc2626,#ef4444)}
+.th-geocode .fc-title{background:linear-gradient(90deg,#0891b2,#06b6d4)}
+.th-cetak .fc-title{background:linear-gradient(90deg,#d97706,#f59e0b)}
+.th-sync  .fc-title{background:linear-gradient(90deg,#0f172a,#1e293b)}
+.th-reset .fc-title{background:linear-gradient(90deg,#b91c1c,#dc2626)}
+/* ─── Notes ─── */
+.fc-note{background:#f0f9ff;border-left:4px solid #0891b2;border-radius:0 8px 8px 0;padding:10px 14px;font-size:.8rem;color:#0369a1;margin-top:16px}
+.fc-warn{background:#fffbeb;border-left:4px solid #f59e0b;border-radius:0 8px 8px 0;padding:10px 14px;font-size:.8rem;color:#92400e;margin-top:10px}
+/* ─── Section divider ─── */
+.sec-div{background:linear-gradient(135deg,#0f172a,#1e40af);color:#fff;padding:32px;text-align:center;page-break-before:always;page-break-after:avoid}
+.sec-div h2{font-size:1.4rem;font-weight:900}
+.sec-div p{opacity:.75;margin-top:6px;font-size:.88rem}
+/* ─── Print ─── */
+@media print{
+  body{background:#fff}
+  .fc-page,.cover{box-shadow:none}
+  .sec-div{page-break-before:always}
+  @page{margin:1.5cm;size:A4}
+}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-icon">🔀</div>
+  <h1>FLOWCHART SIGAP PKL</h1>
+  <h2>Sistem Informasi &amp; Geofencing Absensi PKL<br>SMK Negeri 9 Malang</h2>
+  <div class="ver">📋 Versi 2.1.63 · September 2026</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     FC-1: ALUR UTAMA SISTEM
+     ══════════════════════════════════════════ -->
+<div class="fc-page th-login">
+  <div class="fc-title">📌 FC-1 &nbsp;·&nbsp; Alur Utama Sistem SIGAP PKL</div>
+  <div class="fc-body">
+    <div class="fc">
+      <div class="node n-start">▶ MULAI — Buka Aplikasi APK / Browser</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-proc">checkAuthSession()<br>Cek localStorage + flag SIGAP_PKL_K9_remember_v1</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-dec"><span>Ada sesi tersimpan<br>DAN flag remember = aktif?</span></div>
+    </div>
+    <div class="branch">
+      <div class="branch-col">
+        <div class="branch-label bl-yes">YA</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc">Verifikasi ke server<br>(timeout 6 detik)</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-dec"><span>Akun valid &amp; aktif<br>di server?</span></div>
+        <div class="branch" style="gap:16px">
+          <div class="branch-col">
+            <div class="branch-label bl-yes">YA</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-green" style="font-size:.75rem">Auto Login<br>_proceedWithLocalSession()</div>
+          </div>
+          <div class="branch-col">
+            <div class="branch-label bl-no">TIDAK / TIMEOUT</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-gray" style="font-size:.75rem">Fallback:<br>Offline Login Lokal</div>
+          </div>
+        </div>
+      </div>
+      <div class="branch-col">
+        <div class="branch-label bl-no">TIDAK</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-io"><span>Tampilkan Halaman Login<br>clearLoginForm()</span></div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc">User input Username + Password</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-dec"><span>Login valid?</span></div>
+        <div class="branch" style="gap:12px">
+          <div class="branch-col">
+            <div class="branch-label bl-yes">YA</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-green" style="font-size:.75rem">performUserLogin()<br>Simpan sesi</div>
+          </div>
+          <div class="branch-col">
+            <div class="branch-label bl-no">TIDAK</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-red" style="font-size:.75rem">Toast Error<br>Kembali ke form</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fc" style="margin-top:16px">
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-proc">applyUserInterface(user)<br>Routing berdasarkan role</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+    </div>
+    <div class="row-flow">
+      <div class="row-col">
+        <div class="row-label" style="background:#059669">🎓 SISWA</div>
+        <div class="node n-green" style="font-size:.75rem">Tab Absensi<br>Peta + Tombol Absen</div>
+      </div>
+      <div class="row-col">
+        <div class="row-label" style="background:#2563eb">👨‍🏫 GURU</div>
+        <div class="node n-blue" style="font-size:.75rem">Tab Monitoring<br>Daftar Siswa Bimbingan</div>
+      </div>
+      <div class="row-col">
+        <div class="row-label" style="background:#dc2626">⚙️ ADMIN</div>
+        <div class="node n-red" style="font-size:.75rem">Dashboard Admin<br>Statistik Realtime</div>
+      </div>
+    </div>
+    <div class="fc-note">💡 Polling background setiap 8 detik menjaga data selalu terkini tanpa perlu refresh manual</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     FC-2: LOGIN & AUTENTIKASI
+     ══════════════════════════════════════════ -->
+<div class="fc-page th-login">
+  <div class="fc-title">🔑 FC-2 &nbsp;·&nbsp; Login &amp; Autentikasi</div>
+  <div class="fc-body">
+    <div class="fc">
+      <div class="node n-start">▶ MULAI — User klik [MASUK]</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-proc">Baca username + password dari form</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-proc">Cari di getUsers() (cache lokal)<br>Cocokkan username + password</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-dec"><span>User ditemukan &amp;<br>aktif = 1?</span></div>
+    </div>
+    <div class="branch">
+      <div class="branch-col">
+        <div class="branch-label bl-no">TIDAK</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-red">Toast: "Username atau password salah"</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-end">◀ Kembali ke form login</div>
+      </div>
+      <div class="branch-col">
+        <div class="branch-label bl-yes">YA</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-dec"><span>Centang "Ingat Saya"?</span></div>
+        <div class="branch" style="gap:16px">
+          <div class="branch-col">
+            <div class="branch-label bl-yes">YA</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-gray" style="font-size:.75rem">localStorage<br>+ flag remember_v1 = '1'<br>(persist antar sesi)</div>
+          </div>
+          <div class="branch-col">
+            <div class="branch-label bl-no">TIDAK</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-gray" style="font-size:.75rem">sessionStorage saja<br>(hilang saat tab ditutup)</div>
+          </div>
+        </div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-green">applyUserInterface(user)<br>Sembunyikan login, tampilkan dashboard</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc">applyTargetLocationFromUser()<br>Set TARGET_LOCATION dari koordinat PKL</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-end">✅ SELESAI — User masuk ke dashboard</div>
+      </div>
+    </div>
+    <div class="fc-note">💡 Default isRemember = <strong>false</strong>. Buka tab/browser baru → selalu tampilkan login, tidak auto-masuk.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION: SISWA
+     ══════════════════════════════════════════ -->
+<div class="sec-div">
+  <div style="font-size:2.5rem;margin-bottom:8px">🎓</div>
+  <h2>FLOWCHART SISWA PKL</h2>
+  <p>Alur absensi, izin/sakit, dan jurnal untuk Siswa PKL</p>
+</div>
+
+<!-- FC-3: ABSENSI SISWA -->
+<div class="fc-page th-siswa">
+  <div class="fc-title">📍 FC-3 &nbsp;·&nbsp; Absensi Siswa PKL (Masuk &amp; Pulang)</div>
+  <div class="fc-body">
+    <div class="fc">
+      <div class="node n-start">▶ Siswa klik [ABSEN MASUK] atau [ABSEN PULANG]</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-dec"><span>Sudah absen hari ini<br>(tipe yang sama)?</span></div>
+    </div>
+    <div class="branch">
+      <div class="branch-col">
+        <div class="branch-label bl-yes">SUDAH</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-red">Toast: "Sudah absen hari ini"</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-end">◀ Selesai (tidak diproses)</div>
+      </div>
+      <div class="branch-col">
+        <div class="branch-label bl-no">BELUM</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc">openCameraModal()<br>Minta izin Kamera + GPS</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-dec"><span>Izin kamera &amp; GPS<br>diberikan?</span></div>
+        <div class="branch" style="gap:12px">
+          <div class="branch-col">
+            <div class="branch-label bl-no">TIDAK</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-red" style="font-size:.74rem">Error: "Izin kamera/<br>GPS diperlukan"</div>
+          </div>
+          <div class="branch-col">
+            <div class="branch-label bl-yes">YA</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-proc" style="font-size:.75rem">Tampilkan live kamera<br>+ overlay GPS realtime</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-proc" style="font-size:.75rem">Hitung jarak Haversine<br>user ↔ TARGET_LOCATION PKL</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-io"><span>User klik [📸 AMBIL FOTO]</span></div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-dec"><span>Dalam radius<br>geofence (350m)?</span></div>
+            <div class="branch" style="gap:10px">
+              <div class="branch-col">
+                <div class="branch-label bl-yes">YA</div>
+                <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+                <div class="node n-green" style="font-size:.73rem">Status = "Hadir"</div>
+              </div>
+              <div class="branch-col">
+                <div class="branch-label bl-no">TIDAK</div>
+                <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+                <div class="node n-gray" style="font-size:.73rem">Status = "Luar Radius Xm"<br>(tetap absen)</div>
+              </div>
+            </div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-proc" style="font-size:.75rem">POST api.php?action=simpan_presensi<br>{user_id, tipe, GPS, foto, status, waktu}</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-green">Toast: "✅ Absen [Masuk/Pulang] berhasil! HH:MM"</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-proc" style="font-size:.75rem">SSE broadcast → Admin/Guru<br>update realtime</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fc" style="margin-top:16px">
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-proc">_runAutoAlpa() — cek akhir hari<br>Jika tidak ada masuk+pulang → insert Alpa</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-end">✅ SELESAI</div>
+    </div>
+    <div class="fc-note">💡 Absen masuk dan pulang masing-masing hanya bisa dilakukan <strong>1 kali per hari</strong></div>
+  </div>
+</div>
+
+<!-- FC-4: IZIN/SAKIT -->
+<div class="fc-page th-siswa">
+  <div class="fc-title">📋 FC-4 &nbsp;·&nbsp; Pengajuan &amp; Persetujuan Izin/Sakit</div>
+  <div class="fc-body">
+    <div class="row-flow" style="align-items:flex-start">
+      <!-- Siswa -->
+      <div class="row-col">
+        <div class="row-label" style="background:#059669">🎓 SISWA</div>
+        <div class="node n-start" style="font-size:.8rem">Buka tab Izin/Sakit</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-io"><span>Isi form:<br>jenis, tgl mulai-selesai, keterangan</span></div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc">POST submit_permission<br>status = "pending"</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-gray">Status: ⏳ Menunggu Persetujuan</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-dec"><span>Guru/Admin<br>menyetujui?</span></div>
+        <div class="branch" style="gap:10px">
+          <div class="branch-col">
+            <div class="branch-label bl-yes">YA</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-green" style="font-size:.73rem">Status = "Disetujui"<br>Log Alpa → Izin/Sakit</div>
+          </div>
+          <div class="branch-col">
+            <div class="branch-label bl-no">TIDAK</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-red" style="font-size:.73rem">Status = "Ditolak"<br>Log tetap Alpa</div>
+          </div>
+        </div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-end" style="font-size:.8rem">✅ Selesai</div>
+      </div>
+      <!-- Guru/Admin -->
+      <div class="row-col">
+        <div class="row-label" style="background:#2563eb">👨‍🏫 GURU / ADMIN</div>
+        <div class="node n-proc" style="font-size:.78rem">SSE broadcast → notifikasi muncul</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.78rem">Buka tab Persetujuan Pengajuan</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-io"><span>Baca detail pengajuan:<br>nama, jenis, tgl, alasan</span></div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-dec"><span>Setujui atau Tolak?</span></div>
+        <div class="branch" style="gap:10px">
+          <div class="branch-col">
+            <div class="branch-label bl-yes">SETUJUI</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-green" style="font-size:.73rem">PUT approve_user<br>status = "approved"</div>
+          </div>
+          <div class="branch-col">
+            <div class="branch-label bl-no">TOLAK</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-red" style="font-size:.73rem">PUT approve_user<br>status = "rejected"</div>
+          </div>
+        </div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.78rem">renderPendingUserApprovals()</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION: ADMIN
+     ══════════════════════════════════════════ -->
+<div class="sec-div">
+  <div style="font-size:2.5rem;margin-bottom:8px">⚙️</div>
+  <h2>FLOWCHART MASTER ADMIN</h2>
+  <p>Import CSV, Geocoding, Cetak Laporan, Reset Database</p>
+</div>
+
+<!-- FC-5: IMPORT CSV -->
+<div class="fc-page th-admin">
+  <div class="fc-title">📂 FC-5 &nbsp;·&nbsp; Import Data Massal CSV</div>
+  <div class="fc-body">
+    <div class="fc">
+      <div class="node n-start">▶ Admin upload file .csv / .xlsx</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-proc">parseAndImportCSV(csvText)<br>Split baris, deteksi delimiter</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-proc">Loop setiap baris CSV</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-dec"><span>Baris valid?<br>(role, nama, username unik)</span></div>
+    </div>
+    <div class="branch">
+      <div class="branch-col">
+        <div class="branch-label bl-no">TIDAK VALID</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-red" style="font-size:.75rem">Tambah ke validationErrors[]<br>Lanjut baris berikutnya</div>
+      </div>
+      <div class="branch-col">
+        <div class="branch-label bl-yes">VALID</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-dec"><span>Username sudah ada<br>di DB?</span></div>
+        <div class="branch" style="gap:10px">
+          <div class="branch-col">
+            <div class="branch-label bl-yes">SUDAH ADA</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-gray" style="font-size:.72rem">Update pklLocation<br>Reset koordinat ke 0<br>Trigger geocode ulang</div>
+          </div>
+          <div class="branch-col">
+            <div class="branch-label bl-no">BARU</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-proc" style="font-size:.72rem">POST create_user<br>latitude=0, longitude=0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fc" style="margin-top:16px">
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-proc">Setelah semua baris:<br>saveUsers() → renderAdminUsersTable()</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-proc">Filter _toGeocode: siswa dengan koordinat = 0<br>Dedup per nama lokasi</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-proc">Batch geocode (1.2 detik/lokasi unik)<br>→ geocodeLocationName() via Nominatim</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-proc">POST update_pkl_location ke server<br>untuk setiap siswa yang di-geocode</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-green">renderCSVValidationReport()<br>Tampilkan hasil: berhasil / gagal per baris</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-end">✅ SELESAI — Data tersimpan di DB + koordinat di-geocode</div>
+    </div>
+  </div>
+</div>
+
+<!-- FC-6: GEOCODING -->
+<div class="fc-page th-geocode">
+  <div class="fc-title">🗺️ FC-6 &nbsp;·&nbsp; Geocoding Koordinat Lokasi PKL</div>
+  <div class="fc-body">
+    <div class="fc">
+      <div class="node n-start">▶ geocodeLocationName(locationName, user)</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-dec"><span>Ada di _geocodeNameCache<br>(cache 30 hari)?</span></div>
+    </div>
+    <div class="branch">
+      <div class="branch-col">
+        <div class="branch-label bl-yes">CACHE HIT ✓</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-green" style="font-size:.75rem">Pakai koordinat cache<br>0 request Nominatim</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.75rem">Update user + DB langsung</div>
+      </div>
+      <div class="branch-col">
+        <div class="branch-label bl-no">CACHE MISS</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc">Buat 4 query Nominatim<br>(spesifik → umum)</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc">fetch nominatim.openstreetmap.org<br>countrycodes=id, limit=5</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc">Pilih hasil terdekat Malang (Haversine)<br>radius maks 1000km</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-dec"><span>Ditemukan &amp;<br>dalam radius?</span></div>
+        <div class="branch" style="gap:10px">
+          <div class="branch-col">
+            <div class="branch-label bl-yes">YA</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-green" style="font-size:.73rem">Koordinat presisi ✓</div>
+          </div>
+          <div class="branch-col">
+            <div class="branch-label bl-no">TIDAK</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-gray" style="font-size:.73rem">Fallback: kamus lokal<br>getCoordinatesByLocationName()</div>
+          </div>
+        </div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.75rem">_addToGeocodeCache(nama, lat, lng)<br>Simpan ke localStorage — 30 hari</div>
+      </div>
+    </div>
+    <div class="fc" style="margin-top:16px">
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-proc">POST update_pkl_location → UPDATE DB<br>latitude_pkl, longitude_pkl</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-proc">Update user object + localStorage<br>_updateMapUIAndReset()</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-end">✅ Koordinat PKL tersimpan di DB &amp; cache</div>
+    </div>
+    <div class="fc-note">💡 Cache deduplikasi: 50 siswa dengan nama PKL yang sama → Nominatim hanya dipanggil <strong>1 kali</strong></div>
+  </div>
+</div>
+
+<!-- FC-7: CETAK LAPORAN -->
+<div class="fc-page th-cetak">
+  <div class="fc-title">🖨️ FC-7 &nbsp;·&nbsp; Cetak Laporan PDF</div>
+  <div class="fc-body">
+    <div class="row-flow" style="align-items:flex-start;gap:20px">
+      <!-- Cetak Lengkap -->
+      <div class="row-col">
+        <div class="row-label" style="background:#d97706">📄 Cetak Lengkap</div>
+        <div class="node n-start" style="font-size:.78rem">Klik [Cetak Lengkap]</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.73rem">showToast → setTimeout(80ms)<br>→ _doExportCetakLengkap()</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-dec" style="font-size:.72rem"><span>&gt;50 siswa?<br>Konfirmasi dulu</span></div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.73rem">Pre-index O(n):<br>_logsIndex + _journalsIndex<br>(foto di-strip)</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.73rem">Loop siswa:<br>buildSiswaSection()<br>makeMapIframe (1 OSM tile)</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.73rem">_buildTtdHtml()<br>3 kolom: Waka|Kepsek|Pokja/Guru</div>
+      </div>
+      <!-- Cetak Statistik/Rekap -->
+      <div class="row-col">
+        <div class="row-label" style="background:#d97706">📊📋 Statistik / Rekap</div>
+        <div class="node n-start" style="font-size:.78rem">Klik [Cetak Statistik] / [Cetak Rekap]</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.73rem">showToast → setTimeout(50ms)<br>→ _doExport...()</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.73rem">Pre-index O(n):<br>_rekLogsIndex (filter bulan via slice)<br>_rekPermsIndex</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.73rem">Loop siswa O(n):<br>Ambil log dari index<br>Build tabel HTML</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.73rem">ttdStr55 / ttdStr50<br>= _buildTtdHtml(isAdmin, ...)</div>
+      </div>
+    </div>
+    <div class="fc" style="margin-top:20px">
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-proc">_printAsPDF(html, fileName)<br>Modal fullscreen preview</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-proc">requestAnimationFrame → setTimeout(50ms)<br>new Blob([html]) → URL.createObjectURL<br>frame.src = blobUrl</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-dec"><span>User klik [💾 Simpan PDF]?</span></div>
+    </div>
+    <div class="branch">
+      <div class="branch-col">
+        <div class="branch-label bl-yes">YA</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.75rem">_savePdfViaServer()<br>POST HTML ke Puppeteer<br>↓ base64 PDF<br>↓ Simpan ke Downloads</div>
+      </div>
+      <div class="branch-col">
+        <div class="branch-label bl-no">Ctrl+P</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-gray" style="font-size:.75rem">Browser print dialog<br>Save as PDF</div>
+      </div>
+    </div>
+    <div class="fc" style="margin-top:12px">
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-end">✅ File PDF tersimpan</div>
+    </div>
+    <div class="fc-note">💡 <strong>Tip performa:</strong> Filter per guru pembimbing untuk cetak lebih cepat. Cetak semua 300+ siswa → 50+ detik.</div>
+  </div>
+</div>
+
+<!-- FC-8: SYNC REALTIME -->
+<div class="fc-page th-sync">
+  <div class="fc-title">🔄 FC-8 &nbsp;·&nbsp; Sinkronisasi Realtime (SSE + Polling)</div>
+  <div class="fc-body">
+    <div class="row-flow" style="align-items:flex-start;gap:24px">
+      <div class="row-col">
+        <div class="row-label" style="background:#0f172a">▶ App Startup</div>
+        <div class="node n-proc" style="font-size:.75rem">startupSync()<br>fetch get_users</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.75rem">_mergeServerUsers(res, true)<br>Server data merge ke lokal</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.75rem">_initGeocodeCache()<br>Load cache koordinat</div>
+      </div>
+      <div class="row-col">
+        <div class="row-label" style="background:#0f172a">🔴 SSE Realtime</div>
+        <div class="node n-proc" style="font-size:.75rem">connectRealtimeSSE()<br>EventSource /api.php?action=sse_events</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.75rem">onmessage → event data</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.75rem">renderAdminDashboard()<br>Update UI realtime</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-dec" style="font-size:.72rem"><span>Koneksi putus?</span></div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-gray" style="font-size:.73rem">Reconnect otomatis<br>setelah 5 detik</div>
+      </div>
+      <div class="row-col">
+        <div class="row-label" style="background:#0f172a">⏱️ Polling 8 detik</div>
+        <div class="node n-proc" style="font-size:.75rem">setInterval(8000)</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.75rem">fetch get_users<br>_mergeServerUsers()</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.75rem">Cek koordinat server:<br>default SMKN9 + lokal geocoded?<br>→ Preserve lokal</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.75rem">Update activeUser koordinat<br>_updateMapUIAndReset()</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.75rem">renderAdminUsersTable()<br>renderAdminDashboard()</div>
+      </div>
+    </div>
+    <div class="fc-warn">⚠️ syncDataFromServer() <strong>TIDAK</strong> dipanggil saat klik tombol cetak — mencegah hang akibat download ribuan log presensi</div>
+  </div>
+</div>
+
+<!-- FC-9: RESET DATABASE -->
+<div class="fc-page th-reset">
+  <div class="fc-title">🗑️ FC-9 &nbsp;·&nbsp; Reset Database</div>
+  <div class="fc-body">
+    <div class="fc">
+      <div class="node n-start">▶ Admin klik [Reset Database]</div>
+      <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+      <div class="node n-dec"><span>Konfirmasi dialog ke-1<br>"Yakin reset semua data?"</span></div>
+    </div>
+    <div class="branch">
+      <div class="branch-col">
+        <div class="branch-label bl-no">BATAL</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-end">◀ Tidak ada perubahan</div>
+      </div>
+      <div class="branch-col">
+        <div class="branch-label bl-yes">OK</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-dec"><span>Konfirmasi dialog ke-2<br>"Tindakan tidak bisa dibatalkan!"</span></div>
+        <div class="branch" style="gap:10px">
+          <div class="branch-col">
+            <div class="branch-label bl-no">BATAL</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-end" style="font-size:.78rem">◀ Tidak jadi reset</div>
+          </div>
+          <div class="branch-col">
+            <div class="branch-label bl-yes">OK LANJUTKAN</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-proc">_doResetDatabase()</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-proc" style="font-size:.73rem">POST api.php?action=reset_database<br>(server: hapus semua kecuali admin)</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-proc" style="font-size:.73rem">saveUsers([admin only])<br>saveLogs([]) → invalidate cache<br>savePermissions([])<br>saveApprovalReports([])</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-proc" style="font-size:.73rem">_initGeocodeCache()<br>Refresh cache koordinat<br>(geocache TIDAK dihapus)</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-green">Toast: "Database berhasil di-reset"<br>Render ulang semua tab</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+            <div class="node n-end">✅ Dashboard bersih, akun admin aktif</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-warn">⚠️ TIDAK BISA DIBATALKAN. Cache koordinat PKL (SIGAP_PKL_K9_geocache_v1) tetap tersimpan untuk keperluan import ulang siswa.</div>
+  </div>
+</div>
+
+<!-- FC-10: GURU MONITORING -->
+<div class="fc-page th-guru">
+  <div class="fc-title">🔍 FC-10 &nbsp;·&nbsp; Monitoring Guru &amp; Persetujuan Akun/PKL</div>
+  <div class="fc-body">
+    <div class="row-flow" style="align-items:flex-start;gap:20px">
+      <div class="row-col">
+        <div class="row-label" style="background:#2563eb">🔍 Absen Monitoring</div>
+        <div class="node n-start" style="font-size:.78rem">Guru klik [Absen Monitoring]</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.73rem">openCameraModal()<br>mode = "monitoring"</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-io"><span>Foto selfie + pilih<br>siswa/PKL dikunjungi</span></div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.73rem">Simpan log:<br>isGuruMonitoring: true<br>monitoringTarget: nama siswa</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-green" style="font-size:.73rem">Log tampil di Cetak Lengkap<br>sebagai bukti kunjungan</div>
+      </div>
+      <div class="row-col">
+        <div class="row-label" style="background:#2563eb">✅ Persetujuan PKL</div>
+        <div class="node n-proc" style="font-size:.73rem">Guru klik [Edit Data] siswa</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-io"><span>Ubah nama lokasi PKL</span></div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.73rem">POST request_edit_pkl<br>status = "pending_edit_pkl"<br>(menunggu admin)</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-gray" style="font-size:.73rem">Admin: tab Persetujuan<br>→ [Setujui] / [Tolak]</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.73rem">Jika setuju:<br>UPDATE koordinat PKL di DB<br>Geocode via Nominatim</div>
+      </div>
+      <div class="row-col">
+        <div class="row-label" style="background:#2563eb">👀 Dashboard Guru</div>
+        <div class="node n-proc" style="font-size:.73rem">getSupervisedStudentsOnly()<br>Filter: supervisor = nama guru</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.73rem">Statistik: hadir, alpa, izin<br>khusus siswa bimbingan</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-proc" style="font-size:.73rem">Update 8 detik sekali<br>via polling _mergeServerUsers()</div>
+        <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+        <div class="node n-green" style="font-size:.73rem">renderAdminDashboard()<br>Grafik + daftar absen hari ini</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="text-align:center;padding:36px 20px;color:#94a3b8;font-size:.8rem;background:#fff;border-top:2px solid #e2e8f0;margin-top:24px">
+  <p><strong>FLOWCHART SIGAP PKL K9</strong> — SMK Negeri 9 Malang</p>
+  <p>Versi 2.1.63 · September 2026 · 10 Flowchart: FC-1 s/d FC-10</p>
+  <p style="margin-top:6px">FC-1 Alur Utama · FC-2 Login · FC-3 Absensi Siswa · FC-4 Izin/Sakit · FC-5 Import CSV<br>
+  FC-6 Geocoding · FC-7 Cetak PDF · FC-8 Sync Realtime · FC-9 Reset DB · FC-10 Monitoring Guru</p>
+</div>
+
+</body>
+</html>

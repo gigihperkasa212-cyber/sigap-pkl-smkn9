@@ -1,0 +1,10 @@
+username	name	role	status	aktif
+admin	Master Administrator	admin	approved	1
+999	guru1	guru	approved	1
+888	guru2	guru	approved	1
+DB_FIX_DONE
+API_PUSHED
+Total users from API: 3
+ - 999 guru approved
+ - 888 guru approved
+ - admin admin approved

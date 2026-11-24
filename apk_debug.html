@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>APK Debug</title>
+<style>
+body{background:#0f172a;color:#e2e8f0;font-family:monospace;padding:12px;font-size:12px;word-break:break-all;}
+.ok{color:#34d399;} .err{color:#f87171;} .warn{color:#fbbf24;} .info{color:#60a5fa;}
+pre{background:#1e293b;padding:10px;border-radius:6px;overflow-x:auto;white-space:pre-wrap;max-height:60vh;overflow-y:auto;}
+button{background:#6366f1;color:#fff;border:none;padding:8px 14px;border-radius:6px;cursor:pointer;margin:4px 2px;font-size:12px;}
+h3{color:#818cf8;margin:8px 0 4px;}
+</style>
+</head>
+<body>
+<h3>APK Sync Debug v1.6.1</h3>
+<div>
+<button onclick="runTest()">🔄 Full Test</button>
+<button onclick="clearAll()">🗑 Clear All Storage</button>
+<button onclick="forceSync()">⬇ Force Sync</button>
+<button onclick="showStorage()">📦 Show Storage</button>
+</div>
+<pre id="out">Tap Full Test...</pre>
+
+<script>
+// Same server config as app.js
+(function(){
+  var _a=['aHR0cHM6Ly8xMDMuMTUzLjE5MC42OTo4NDQz'];
+  window._SERVER_HTTPS = atob(_a[0]);
+})();
+
+var STORAGE_KEY_USERS = 'SIGAP PKL SMKN 9 Official_users';
+var STORAGE_KEY_AUTH  = 'SIGAP PKL SMKN 9 Official_active_session_v6';
+var STORAGE_KEY_DB_VERSION = 'SIGAP PKL SMKN 9 Official_db_schema_version';
+
+var logs = [];
+function log(msg, cls) {
+  logs.push('<span class="'+(cls||'')+'">'+String(msg).replace(/</g,'&lt;')+'</span>');
+  document.getElementById('out').innerHTML = logs.join('\n');
+  // auto scroll
+  var el = document.getElementById('out');
+  el.scrollTop = el.scrollHeight;
+}
+
+function apiUrl(path) {
+  var proto = window.location.protocol;
+  var host  = window.location.hostname;
+  var isCap = proto === 'capacitor:' || proto === 'ionic:' || host === 'localhost' || host === '127.0.0.1';
+  var base  = isCap ? window._SERVER_HTTPS : '';
+  return base + (path.startsWith('/') ? path : '/' + path);
+}
+
+async function runTest() {
+  logs = [];
+  log('=== APK SYNC DEBUG ===');
+  log('Time: ' + new Date().toLocaleString('id-ID'));
+
+  // 1. Environment
+  log('\n--- ENVIRONMENT ---');
+  log('protocol: ' + window.location.protocol, window.location.protocol === 'capacitor:' ? 'ok' : 'warn');
+  log('hostname: ' + window.location.hostname);
+  log('isCap: ' + (window.location.protocol === 'capacitor:' || window.location.hostname === 'localhost'), 'info');
+  log('_SERVER_HTTPS: ' + window._SERVER_HTTPS, 'info');
+  log('apiUrl: ' + apiUrl('api.php?action=get_users'), 'info');
+
+  // 2. localStorage
+  log('\n--- LOCALSTORAGE ---');
+  log('DB Version key: ' + localStorage.getItem(STORAGE_KEY_DB_VERSION));
+  log('Auth key: ' + (localStorage.getItem(STORAGE_KEY_AUTH) ? 'EXISTS' : 'MISSING'), localStorage.getItem(STORAGE_KEY_AUTH) ? 'ok' : 'err');
+  var usersRaw = localStorage.getItem(STORAGE_KEY_USERS);
+  if (usersRaw) {
+    try {
+      var u = JSON.parse(usersRaw);
+      log('Users in localStorage: ' + u.length, u.length > 0 ? 'ok' : 'warn');
+      u.forEach(function(x){ log('  - '+x.username+' | '+x.role+' | pwd:'+x.password); });
+    } catch(e) { log('Parse error: '+e.message, 'err'); }
+  } else {
+    log('Users localStorage: EMPTY/NULL', 'err');
+  }
+
+  // 3. Network test — basic connectivity
+  log('\n--- NETWORK TEST ---');
+  log('Fetching: ' + apiUrl('api.php?action=get_users'));
+  try {
+    var start = Date.now();
+    var r = await fetch(apiUrl('api.php?action=get_users'), {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' }
+    });
+    var elapsed = Date.now() - start;
+    log('HTTP Status: ' + r.status + ' (' + elapsed + 'ms)', r.ok ? 'ok' : 'err');
+    log('Content-Type: ' + r.headers.get('content-type'));
+
+    if (r.ok) {
+      var text = await r.text();
+      log('Raw response (first 300 chars): ' + text.substring(0, 300), 'info');
+      try {
+        var data = JSON.parse(text);
+        log('success: ' + data.success, data.success ? 'ok' : 'err');
+        var users = data.users || data.data || [];
+        log('Server users count: ' + users.length, users.length > 0 ? 'ok' : 'err');
+        users.forEach(function(u){
+          log('  + '+u.username+' | '+u.role+' | pwd:'+u.password, 'ok');
+        });
+
+        // 4. Save test
+        log('\n--- SAVE TEST ---');
+        log('Calling saveUsers...');
+        localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(users));
+        var check = JSON.parse(localStorage.getItem(STORAGE_KEY_USERS) || '[]');
+        log('After save, localStorage has: ' + check.length + ' users', check.length > 0 ? 'ok' : 'err');
+
+      } catch(e) {
+        log('JSON parse failed: ' + e.message, 'err');
+        log('Response was: ' + text.substring(0, 500), 'err');
+      }
+    } else {
+      var errText = await r.text();
+      log('Error response: ' + errText.substring(0, 300), 'err');
+    }
+  } catch(e) {
+    log('FETCH ERROR: ' + e.name + ': ' + e.message, 'err');
+    if (e.name === 'TypeError') {
+      log('→ Possible causes: CORS, SSL cert rejected, network unreachable', 'warn');
+    }
+  }
+
+  log('\n=== DONE ===');
+}
+
+function clearAll() {
+  if (confirm('Clear ALL localStorage?')) {
+    localStorage.clear();
+    log('localStorage cleared. Reload app.', 'warn');
+  }
+}
+
+async function forceSync() {
+  logs = [];
+  log('Force syncing from server...');
+  try {
+    var r = await fetch(apiUrl('api.php?action=get_users'));
+    var data = await r.json();
+    var users = data.users || data.data || [];
+    if (users.length > 0) {
+      localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(users));
+      log('✅ Saved ' + users.length + ' users to localStorage', 'ok');
+      users.forEach(function(u){ log('  + '+u.username+' | '+u.role, 'ok'); });
+      log('\nReloading in 2s...');
+      setTimeout(function(){ window.location.href = '/'; }, 2000);
+    } else {
+      log('❌ Server returned 0 users', 'err');
+    }
+  } catch(e) {
+    log('❌ Error: ' + e.message, 'err');
+  }
+}
+
+function showStorage() {
+  logs = [];
+  log('=== ALL LOCALSTORAGE ===');
+  for (var i = 0; i < localStorage.length; i++) {
+    var k = localStorage.key(i);
+    var v = localStorage.getItem(k);
+    var preview = v ? v.substring(0, 80) : 'null';
+    log(k + ' = ' + preview + (v && v.length > 80 ? '...' : ''));
+  }
+  log('Total keys: ' + localStorage.length);
+}
+
+// Auto run on load
+window.onload = runTest;
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Trust self-signed certificate SIGAP server untuk fetch() via OkHttp -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">103.153.190.69</domain>
+        <trust-anchors>
+            <certificates src="system"/>
+            <certificates src="user"/>
+            <!-- Trust certificate SIGAP server yang di-embed langsung di APK -->
+            <certificates src="@raw/sigap_server"/>
+        </trust-anchors>
+    </domain-config>
+    <!-- Base: izinkan HTTP dan HTTPS ke semua host -->
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system"/>
+            <certificates src="user"/>
+        </trust-anchors>
+    </base-config>
+</network-security-config>

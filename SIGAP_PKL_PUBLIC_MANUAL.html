@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual Penggunaan SIGAP PKL - SMK Negeri 9 Malang</title>
+<style>
+  :root { --blue:#0891b2; --navy:#0f172a; --green:#10b981; --red:#ef4444; --yellow:#f59e0b; --gray:#64748b; --light:#f8fafc; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Segoe UI',Arial,sans-serif; background:#f1f5f9; color:#1e293b; line-height:1.6; }
+  .cover { background:linear-gradient(135deg,#0f172a 0%,#0891b2 100%); color:#fff; padding:60px 40px; text-align:center; }
+  .cover h1 { font-size:2.4rem; font-weight:900; letter-spacing:2px; margin-bottom:8px; }
+  .cover h2 { font-size:1.2rem; font-weight:400; opacity:.85; }
+  .cover .badge { display:inline-block; margin-top:20px; background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.3); border-radius:20px; padding:6px 20px; font-size:.9rem; }
+  .toc { background:#fff; max-width:900px; margin:32px auto; border-radius:12px; padding:28px 32px; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+  .toc h3 { color:var(--navy); margin-bottom:16px; font-size:1.1rem; }
+  .toc a { color:var(--blue); text-decoration:none; display:block; padding:4px 0; border-bottom:1px dashed #e2e8f0; }
+  .toc a:hover { color:#0369a1; }
+  .section { background:#fff; max-width:900px; margin:24px auto; border-radius:12px; padding:32px; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+  .section-header { display:flex; align-items:center; gap:12px; margin-bottom:24px; padding-bottom:16px; border-bottom:2px solid #e2e8f0; }
+  .section-icon { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+  .icon-admin { background:#fef3c7; }
+  .icon-guru  { background:#dbeafe; }
+  .icon-siswa { background:#dcfce7; }
+  .icon-info  { background:#f0fdf4; }
+  h2.sec-title { font-size:1.4rem; color:var(--navy); }
+  .role-badge { display:inline-block; padding:3px 12px; border-radius:20px; font-size:.75rem; font-weight:700; text-transform:uppercase; margin-left:8px; }
+  .rb-admin { background:#fef3c7; color:#92400e; }
+  .rb-guru  { background:#dbeafe; color:#1e40af; }
+  .rb-siswa { background:#dcfce7; color:#065f46; }
+  .step { display:flex; gap:16px; margin-bottom:24px; }
+  .step-num { width:32px; height:32px; border-radius:50%; background:var(--blue); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.9rem; flex-shrink:0; margin-top:2px; }
+  .step-body { flex:1; }
+  .step-body h4 { font-size:1rem; color:var(--navy); margin-bottom:6px; }
+  .step-body p { color:#475569; font-size:.9rem; }
+  .mockup { background:#0f172a; border-radius:12px; padding:16px; margin:12px 0; font-family:'Courier New',monospace; font-size:.78rem; color:#e2e8f0; line-height:1.8; overflow-x:auto; }
+  .mockup .title { color:#38bdf8; font-weight:700; text-align:center; margin-bottom:8px; font-size:.85rem; }
+  .mockup .btn { color:#4ade80; }
+  .mockup .input { color:#fbbf24; }
+  .mockup .label { color:#94a3b8; }
+  .mockup .val { color:#fff; }
+  .mockup .badge-green { color:#4ade80; }
+  .mockup .badge-red { color:#f87171; }
+  .mockup .badge-yellow { color:#fbbf24; }
+  .mockup .badge-blue { color:#60a5fa; }
+  .note { background:#f0f9ff; border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:12px 16px; margin:12px 0; font-size:.88rem; color:#0369a1; }
+  .warn { background:#fffbeb; border-left:4px solid var(--yellow); border-radius:0 8px 8px 0; padding:12px 16px; margin:12px 0; font-size:.88rem; color:#92400e; }
+  .tip  { background:#f0fdf4; border-left:4px solid var(--green); border-radius:0 8px 8px 0; padding:12px 16px; margin:12px 0; font-size:.88rem; color:#065f46; }
+  table { width:100%; border-collapse:collapse; margin:12px 0; font-size:.88rem; }
+  table th { background:#0f172a; color:#fff; padding:10px 12px; text-align:left; }
+  table td { padding:8px 12px; border-bottom:1px solid #e2e8f0; }
+  table tr:nth-child(even) td { background:#f8fafc; }
+  .divider { border:none; border-top:2px solid #e2e8f0; margin:24px 0; }
+  .feature-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin:12px 0; }
+  .feature-card { background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:14px; }
+  .feature-card .icon { font-size:1.4rem; margin-bottom:6px; }
+  .feature-card h5 { font-size:.85rem; color:var(--navy); margin-bottom:4px; }
+  .feature-card p { font-size:.78rem; color:#64748b; }
+  footer { text-align:center; padding:32px; color:#94a3b8; font-size:.82rem; }
+  @media(max-width:600px) { .section { padding:20px; } .mockup { font-size:.7rem; } }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div style="font-size:3rem;margin-bottom:16px;">📱</div>
+  <h1>SIGAP PKL</h1>
+  <h2>Sistem Informasi & Geofencing Absensi PKL</h2>
+  <h2 style="margin-top:4px;">SMK Negeri 9 Malang</h2>
+  <div class="badge">📖 Buku Manual Penggunaan • Versi 2.1.63 • September 2026</div>
+  <div style="margin-top:12px; opacity:.7; font-size:.85rem;">https://103.153.190.69:8443</div>
+</div>
+
+<!-- DAFTAR ISI -->
+<div class="toc">
+  <h3>📋 Daftar Isi</h3>
+  <a href="#akses">1. Cara Mengakses Aplikasi</a>
+  <a href="#login">2. Login ke Aplikasi</a>
+  <a href="#siswa">3. Panduan Siswa PKL</a>
+  <a href="#guru">4. Panduan Guru Pembimbing</a>
+  <a href="#admin">5. Panduan Master Admin</a>
+  <a href="#cetak">6. Cetak Laporan PDF</a>
+  <a href="#faq">7. FAQ & Troubleshooting</a>
+</div>
+
+<!-- 1. AKSES -->
+<div class="section" id="akses">
+  <div class="section-header">
+    <div class="section-icon icon-info">🌐</div>
+    <div><h2 class="sec-title">1. Cara Mengakses Aplikasi</h2></div>
+  </div>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="icon">📱</div>
+      <h5>APK Android</h5>
+      <p>Install file SIGAP-PKL-K9-v2.1.63.apk di HP Android</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🌐</div>
+      <h5>Browser Web</h5>
+      <p>Buka: https://103.153.190.69:8443</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🔒</div>
+      <h5>SSL Self-Signed</h5>
+      <p>Klik "Lanjutkan" jika browser memberi peringatan SSL</p>
+    </div>
+  </div>
+
+  <div class="mockup">
+    <div class="title">── Splash Screen (muncul saat buka APK) ──</div>
+┌─────────────────────────────────────┐
+│                                     │
+│         <span class="badge-blue">⬡ SIGAP PKL ⬡</span>                │
+│                                     │
+│      Sistem Informasi &             │
+│      Geofencing Absensi PKL         │
+│                                     │
+│         SMK NEGERI 9 MALANG         │
+│                                     │
+│          <span class="badge-green">▓▓▓▓▓▓░░░░</span>  Loading...       │
+│                                     │
+└─────────────────────────────────────┘
+  </div>
+</div>
+
+<!-- 2. LOGIN -->
+<div class="section" id="login">
+  <div class="section-header">
+    <div class="section-icon icon-info">🔑</div>
+    <div><h2 class="sec-title">2. Login ke Aplikasi</h2></div>
+  </div>
+
+  <div class="mockup">
+    <div class="title">── Halaman Login ──</div>
+┌─────────────────────────────────────┐
+│  <span class="badge-blue">🏫 SIGAP PKL - SMK NEGERI 9 MALANG</span>  │
+│                                     │
+│  <span class="label">Username :</span> <span class="input">[nasywa69_______]</span>   │
+│  <span class="label">Password :</span> <span class="input">[••••••••••••••]</span>   │
+│                                     │
+│  <span class="label">☐ Ingat Saya</span>                          │
+│                                     │
+│       <span class="btn">[ 🔐  MASUK  ]</span>                  │
+└─────────────────────────────────────┘
+  </div>
+
+  <table>
+    <tr><th>Peran</th><th>Contoh Username</th><th>Password Default</th></tr>
+    <tr><td>🔴 Master Admin</td><td>admin</td><td>sampurna01</td></tr>
+    <tr><td>🔵 Guru Pembimbing</td><td>nama.guru (contoh: budi.santoso)</td><td>Dibuat saat import</td></tr>
+    <tr><td>🟢 Siswa PKL</td><td>nisn siswa (contoh: nasywa69)</td><td>Dibuat saat import</td></tr>
+  </table>
+
+  <div class="note">💡 <strong>Ingat Saya:</strong> Centang jika ingin tetap login setelah browser/app ditutup. Jika tidak dicentang, sesi otomatis hilang saat browser ditutup.</div>
+  <div class="warn">⚠️ Jika buka link baru tanpa centang "Ingat Saya", aplikasi akan menampilkan halaman login (bukan langsung masuk ke akun).</div>
+</div>
+
+<!-- 3. SISWA -->
+<div class="section" id="siswa">
+  <div class="section-header">
+    <div class="section-icon icon-siswa">🎓</div>
+    <div>
+      <h2 class="sec-title">3. Panduan Siswa PKL <span class="role-badge rb-siswa">SISWA</span></h2>
+    </div>
+  </div>
+
+  <div class="mockup">
+    <div class="title">── Tampilan Utama Siswa (setelah login) ──</div>
+┌─────────────────────────────────────────┐
+│ <span class="badge-blue">SIGAP PKL</span>          <span class="badge-green">● Online</span>  🌙/☀️  │
+├─────────────────────────────────────────┤
+│  Halo, <span class="val">NASYWA NATA NEILLA</span>            │
+│  NISN: 1234567890                       │
+│  📍 Lokasi PKL: <span class="badge-blue">CV. Lintas Tech</span>       │
+│  🎯 Radius: 350 meter                   │
+├──────────┬──────────┬────────────┬──────┤
+│<span class="badge-green"> Absensi  </span>│ Log Pre- │ Izin/Sakit │Profil│
+│          │ sensi    │            │      │
+├─────────────────────────────────────────┤
+│  📍 PETA LOKASI PKL                     │
+│  ┌─────────────────────────────────┐   │
+│  │  [Leaflet Map - OSM Tiles]      │   │
+│  │         ○ Geofence 350m         │   │
+│  │              📍 PKL             │   │
+│  │    ⬤ Posisi Anda               │   │
+│  └─────────────────────────────────┘   │
+│                                         │
+│  ┌──────────────┐ ┌──────────────────┐ │
+│  │ <span class="badge-green">▶ ABSEN MASUK </span>│ │<span class="badge-red"> ▶ ABSEN PULANG</span>│ │
+│  └──────────────┘ └──────────────────┘ │
+└─────────────────────────────────────────┘
+  </div>
+
+  <hr class="divider">
+
+  <h3 style="margin-bottom:16px;color:var(--navy);">3.1 Absen Masuk</h3>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h4>Buka tab Absensi</h4>
+      <p>Tab Absensi otomatis terbuka setelah login. Lihat peta lokasi PKL dan posisi Anda saat ini.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <h4>Pastikan berada di area PKL</h4>
+      <p>Posisi Anda (titik biru) harus berada dalam lingkaran geofence (radius 350m dari lokasi PKL). Status GPS tampil di atas peta.</p>
+      <div class="mockup" style="margin-top:8px;">
+<span class="badge-green">✓ Dalam Radius PKL (125m)</span>
+<span class="badge-red">✗ Luar Radius PKL (890m)</span>  ← masih bisa absen, status "Luar Radius"
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <h4>Klik [ABSEN MASUK]</h4>
+      <p>Modal kamera terbuka. Arahkan ke wajah Anda untuk foto selfie.</p>
+      <div class="mockup" style="margin-top:8px;">
+<div class="title">── Modal Kamera Absen ──</div>
+┌─────────────────────────────────────┐
+│  <span class="badge-blue">📷 Absen Masuk — Selfie Wajib</span>       │
+│  ┌───────────────────────────────┐  │
+│  │                               │  │
+│  │    [TAMPILAN KAMERA LIVE]     │  │
+│  │                               │  │
+│  │    GPS: -7.97123, 112.63456   │  │
+│  │    Jarak: 125 meter dari PKL  │  │
+│  └───────────────────────────────┘  │
+│                                     │
+│         <span class="btn">[ 📸 AMBIL FOTO ]</span>            │
+│         <span class="label">[ Batal ]</span>                   │
+└─────────────────────────────────────┘
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <h4>Klik [📸 AMBIL FOTO]</h4>
+      <p>Foto selfie diambil otomatis. Sistem menyimpan foto + koordinat GPS + waktu absen ke server.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-body">
+      <h4>Konfirmasi berhasil</h4>
+      <div class="mockup" style="margin-top:8px;">
+<span class="badge-green">✅ Absen Masuk berhasil! 08:15 WIB — Hadir</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">💡 Absen masuk dan pulang hanya bisa dilakukan <strong>1 kali per hari</strong>. Jika sudah absen masuk, tombol absen masuk akan nonaktif.</div>
+
+  <hr class="divider">
+
+  <h3 style="margin-bottom:16px;color:var(--navy);">3.2 Absen Pulang</h3>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h4>Klik [ABSEN PULANG]</h4>
+      <p>Prosedur sama dengan absen masuk. Kamera terbuka → foto selfie → submit.</p>
+    </div>
+  </div>
+
+  <div class="note">⏰ Absen pulang bisa dilakukan kapan saja setelah absen masuk. Jika hari berakhir tanpa absen masuk atau pulang → otomatis tercatat <strong>Alpa</strong>.</div>
+
+  <hr class="divider">
+
+  <h3 style="margin-bottom:16px;color:var(--navy);">3.3 Log Presensi</h3>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h4>Buka tab Log Presensi</h4>
+      <div class="mockup" style="margin-top:8px;">
+<div class="title">── Tab Log Presensi ──</div>
+┌──────────────────────────────────────────┐
+│ 📅 LOG PRESENSI HARIAN                   │
+│                                          │
+│ 02/09/2026  08:15 / 16:30  <span class="badge-green">Hadir</span>       │
+│ 01/09/2026  08:20 / 16:45  <span class="badge-green">Hadir</span>       │
+│ 31/08/2026  --:-- / --:--  <span class="badge-red">Alpa</span>        │
+│ 30/08/2026  08:10 / --:--  <span class="badge-yellow">Izin</span>        │
+│                                          │
+│ Total: 2 Hadir | 1 Izin | 1 Alpa        │
+└──────────────────────────────────────────┘
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <h3 style="margin-bottom:16px;color:var(--navy);">3.4 Pengajuan Izin / Sakit</h3>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h4>Buka tab Izin/Sakit</h4>
+      <p>Klik tab <strong>Izin/Sakit</strong> di menu bawah.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <h4>Isi form pengajuan</h4>
+      <div class="mockup" style="margin-top:8px;">
+<div class="title">── Form Izin/Sakit ──</div>
+┌──────────────────────────────────────────┐
+│  Jenis    : [Izin ▼]  / [Sakit ▼]       │
+│  Tgl Mulai: [2026-09-03]                │
+│  Tgl Selesai: [2026-09-03]              │
+│  Keterangan: [keperluan keluarga___]    │
+│                                          │
+│  <span class="btn">[ 📤 KIRIM PENGAJUAN ]</span>               │
+└──────────────────────────────────────────┘
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <h4>Tunggu persetujuan</h4>
+      <p>Status pengajuan: <strong>Menunggu</strong> → <strong>Disetujui</strong> / <strong>Ditolak</strong> oleh Guru/Admin.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <h3 style="margin-bottom:16px;color:var(--navy);">3.5 Jurnal Harian</h3>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h4>Buka tab Jurnal</h4>
+      <p>Isi jurnal kegiatan harian (1 kali per hari). Bisa tambah foto kegiatan.</p>
+      <div class="mockup" style="margin-top:8px;">
+<div class="title">── Form Jurnal Harian ──</div>
+┌──────────────────────────────────────────┐
+│  Tanggal: 02/09/2026 (otomatis hari ini) │
+│  Narasi:                                  │
+│  [Hari ini belajar instalasi jaringan    │
+│   LAN di ruang server CV. Lintas Tech...]│
+│  📷 [Tambah Foto Kegiatan (opsional)]    │
+│                                           │
+│  <span class="btn">[ 💾 SIMPAN JURNAL ]</span>                │
+└──────────────────────────────────────────┘
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. GURU -->
+<div class="section" id="guru">
+  <div class="section-header">
+    <div class="section-icon icon-guru">👨‍🏫</div>
+    <div>
+      <h2 class="sec-title">4. Panduan Guru Pembimbing <span class="role-badge rb-guru">GURU</span></h2>
+    </div>
+  </div>
+
+  <div class="mockup">
+    <div class="title">── Tampilan Utama Guru (setelah login) ──</div>
+┌─────────────────────────────────────────────┐
+│ <span class="badge-blue">SIGAP PKL</span>              <span class="badge-green">● Online</span>  🌙/☀️ │
+├─────────────────────────────────────────────┤
+│  Halo, <span class="val">BUDI SANTOSO, S.Pd.</span>              │
+│  NIP: 198501012010011001                    │
+├───────────┬───────────┬───────────┬─────────┤
+│<span class="badge-blue"> Monitoring</span>│Log Presen │Persetujuan│  Profil  │
+│           │si         │           │          │
+├─────────────────────────────────────────────┤
+│  📊 Siswa Bimbingan: 15 siswa               │
+│  ✅ Hadir hari ini: 12                       │
+│  ⚠️  Belum absen: 2  │  🔴 Alpa: 1          │
+│                                             │
+│         <span class="btn">[ 🔍 ABSEN MONITORING ]</span>         │
+└─────────────────────────────────────────────┘
+  </div>
+
+  <hr class="divider">
+
+  <h3 style="margin-bottom:16px;color:var(--navy);">4.1 Absen Monitoring Kunjungan</h3>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h4>Klik [ABSEN MONITORING]</h4>
+      <p>Tombol ini menggantikan absen masuk/pulang untuk guru. Digunakan saat mengunjungi lokasi PKL siswa.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <h4>Foto selfie + pilih siswa yang dikunjungi</h4>
+      <div class="mockup" style="margin-top:8px;">
+<div class="title">── Modal Monitoring ──</div>
+┌──────────────────────────────────────────┐
+│  <span class="badge-blue">🔍 Absen Monitoring Guru</span>            │
+│  ┌────────────────────────────────────┐  │
+│  │      [TAMPILAN KAMERA LIVE]        │  │
+│  └────────────────────────────────────┘  │
+│  Siswa/PKL dikunjungi:                   │
+│  [NASYWA - CV. Lintas Tech          ▼]  │
+│  Catatan: [kunjungan rutin___________]   │
+│                                          │
+│  <span class="btn">[ 📸 AMBIL FOTO & SIMPAN ]</span>           │
+└──────────────────────────────────────────┘
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <h3 style="margin-bottom:16px;color:var(--navy);">4.2 Melihat Daftar Siswa Bimbingan</h3>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h4>Buka tab Daftar User</h4>
+      <div class="mockup" style="margin-top:8px;">
+<div class="title">── Daftar Siswa Bimbingan ──</div>
+┌──────────────────────────────────────────────────────┐
+│ <span class="badge-blue">Siswa Bimbingan (BUDI SANTOSO): 15 Anak</span>      │
+│ Cari: [__________________________]                   │
+├───────────────────┬────────┬────────────────┬────────┤
+│ Nama / Username   │ Peran  │ Lokasi PKL     │ Aksi   │
+├───────────────────┼────────┼────────────────┼────────┤
+│ NASYWA NATA       │ SISWA  │ CV. Lintas     │ Edit   │
+│ (nasywa69)        │        │ Tech           │ Data   │
+│ 📋 Kelas: XI RPL 1│        │ 📍GPS:-7.9700, │        │
+│ 👤 Budi Santoso   │        │ 112.6300       │        │
+├───────────────────┼────────┼────────────────┼────────┤
+│ RANDY JADMIKO     │ SISWA  │ AHASS Asia     │ Edit   │
+│ (randy70)         │        │ Sulfat         │ Data   │
+└───────────────────┴────────┴────────────────┴────────┘
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <h3 style="margin-bottom:16px;color:var(--navy);">4.3 Persetujuan Izin/Sakit</h3>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h4>Buka tab Persetujuan</h4>
+      <div class="mockup" style="margin-top:8px;">
+<div class="title">── Tab Persetujuan Pengajuan ──</div>
+┌────────────────────────────────────────────────────┐
+│ <span class="badge-yellow">⏳ Menunggu Persetujuan (2)</span>                     │
+├──────────────────────────────────────────────────  │
+│ 🎓 NASYWA - Izin - 03-04 Sep 2026                  │
+│    "keperluan keluarga"                            │
+│    <span class="btn">[ ✅ Setujui ]</span>  <span class="badge-red">[ ❌ Tolak ]</span>              │
+├──────────────────────────────────────────────────  │
+│ 🎓 RANDY - Sakit - 03 Sep 2026                     │
+│    "demam"                                         │
+│    <span class="btn">[ ✅ Setujui ]</span>  <span class="badge-red">[ ❌ Tolak ]</span>              │
+└────────────────────────────────────────────────────┘
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 5. ADMIN -->
+<div class="section" id="admin">
+  <div class="section-header">
+    <div class="section-icon icon-admin">⚙️</div>
+    <div>
+      <h2 class="sec-title">5. Panduan Master Admin <span class="role-badge rb-admin">ADMIN</span></h2>
+    </div>
+  </div>
+
+  <div class="mockup">
+    <div class="title">── Tampilan Dashboard Admin ──</div>
+┌─────────────────────────────────────────────────┐
+│ <span class="badge-blue">SIGAP PKL</span>                  <span class="badge-green">● Online</span>  🌙/☀️  │
+├─────────────────────────────────────────────────┤
+│  MASTER ADMINISTRATOR                           │
+│                                                 │
+│  <span class="badge-green">323</span> Siswa  │ <span class="badge-blue">⬡ 280 Hadir</span> │ <span class="badge-red">🔴 15 Alpa</span>    │
+│  <span class="badge-yellow">28</span> Guru   │ <span class="badge-yellow">⏳ 5 Pending</span>│ <span class="badge-blue">📋 3 Izin</span>     │
+├──────┬──────┬─────────┬──────────┬──────────────┤
+│Admin │Kelola│Perset.  │Log Pre-  │  Profil &    │
+│Dash  │Siswa │Pengajuan│sensi     │  Pengaturan  │
+│board │& Guru│         │          │              │
+└─────────────────────────────────────────────────┘
+  </div>
+
+  <hr class="divider">
+
+  <h3 style="margin-bottom:16px;color:var(--navy);">5.1 Import Data Massal Siswa & Guru</h3>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h4>Buka tab Kelola Siswa & Guru</h4>
+      <p>Klik tab <strong>Kelola Siswa & Guru</strong> di menu navigasi.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <h4>Download template CSV</h4>
+      <p>Klik <strong>[📥 Download Template CSV]</strong> untuk mendapatkan format yang benar.</p>
+      <div class="mockup" style="margin-top:8px;">
+Format CSV (9 kolom, tanpa header baris pertama):
+role, nama, nomor_induk, username, password, kelas, sekolah, lokasi_pkl, guru_pembimbing
+
+Contoh:
+<span class="badge-green">siswa</span>,Nasywa Nata Neilla,1234567890,nasywa69,pass123,XI RPL 1,SMK Negeri 9 Malang,CV. Lintas Tech,Budi Santoso
+<span class="badge-blue">guru</span>,Budi Santoso,198501012010011001,budi.santoso,guru123,,SMK Negeri 9 Malang,SMK Negeri 9 Malang,
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <h4>Upload file CSV</h4>
+      <div class="mockup" style="margin-top:8px;">
+<div class="title">── Import Data Massal ──</div>
+┌────────────────────────────────────────────┐
+│ <span class="badge-blue">📂 Import Data Massal Siswa & Guru</span>      │
+│                                            │
+│ [ 📥 Download Template CSV ]               │
+│                                            │
+│ Upload file: [Pilih File .csv/.xlsx]       │
+│                                            │
+│ [ 🚀 Import Sekarang ]                     │
+└────────────────────────────────────────────┘
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <h4>Lihat laporan validasi</h4>
+      <div class="mockup" style="margin-top:8px;">
+<div class="title">── Hasil Import ──</div>
+┌────────────────────────────────────────────────┐
+│ <span class="badge-green">✅ Import Berhasil 100%</span>                        │
+│ 318 Siswa & 5 Guru berhasil diimpor            │
+│                                                │
+│ <span class="badge-yellow">⚠️ 2 Baris Gagal:</span>                             │
+│ • Baris 15: Username "randy70" sudah ada       │
+│ • Baris 87: Role "staff" tidak valid           │
+└────────────────────────────────────────────────┘
+      </div>
+    </div>
+  </div>
+
+  <div class="note">💡 Setelah import, sistem otomatis melakukan geocoding koordinat PKL via Nominatim (1.2 detik/lokasi). Koordinat yang sudah pernah di-geocode akan diambil dari cache — tidak perlu tunggu lama.</div>
+
+  <hr class="divider">
+
+  <h3 style="margin-bottom:16px;color:var(--navy);">5.2 Kelola Data User</h3>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h4>Cari user di tabel</h4>
+      <p>Gunakan kotak pencarian untuk filter berdasarkan nama, username, kelas, lokasi PKL, atau guru pembimbing.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <h4>Edit data user</h4>
+      <p>Klik <strong>[Edit Data]</strong> pada baris user untuk membuka modal edit lengkap.</p>
+      <div class="mockup" style="margin-top:8px;">
+<div class="title">── Modal Edit User ──</div>
+┌──────────────────────────────────────────┐
+│  <span class="badge-blue">✏️ Edit Data User</span>                    │
+│  Nama         : [NASYWA NATA NEILLA___]  │
+│  Username     : [nasywa69_____________]  │
+│  Password     : [••••••••••••••_______]  │
+│  Kelas        : [XI RPL 1_____________]  │
+│  Lokasi PKL   : [CV. Lintas Tech______]  │
+│  GPS lat/lng  : [-7.97000, 112.63000__]  │
+│    🔍 [Cari di Maps]                     │
+│  Guru Pembimb : [Budi Santoso_________]  │
+│                                          │
+│  <span class="btn">[ 💾 Simpan Perubahan ]</span>              │
+└──────────────────────────────────────────┘
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <h3 style="margin-bottom:16px;color:var(--navy);">5.3 Pengaturan Sekolah</h3>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h4>Buka tab Profil & Pengaturan</h4>
+      <p>Atur data: nama sekolah, nama kepala sekolah, nama Waka Humas, nama Ketua Pokja PKL, kota, NIP masing-masing — digunakan untuk kop surat dan TTD laporan.</p>
+      <div class="mockup" style="margin-top:8px;">
+<div class="title">── Pengaturan Sekolah ──</div>
+┌──────────────────────────────────────────┐
+│  Nama Sekolah    : [SMK Negeri 9 Malang] │
+│  Kepala Sekolah  : [Drs. Ahmad Fauzi___] │
+│  NIP Kepala      : [196905151990031003_] │
+│  Waka Humas      : [Heri Prasetyo, M.Pd] │
+│  NIP Waka Humas  : [197803142005011002_] │
+│  Ketua Pokja PKL : [Agus Wahyudi, S.Pd_] │
+│  NIP Ketua Pokja : [198204052008011003_] │
+│  Kota            : [Malang_____________] │
+│                                          │
+│  <span class="btn">[ 💾 Simpan Pengaturan ]</span>             │
+└──────────────────────────────────────────┘
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <h3 style="margin-bottom:16px;color:var(--navy);">5.4 Persetujuan Akun Guru/Siswa</h3>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h4>Buka tab Persetujuan Pengajuan</h4>
+      <p>Semua akun guru baru dan perubahan lokasi PKL yang diajukan guru butuh persetujuan admin.</p>
+      <div class="mockup" style="margin-top:8px;">
+<div class="title">── Persetujuan Pengajuan ──</div>
+┌────────────────────────────────────────────────┐
+│ <span class="badge-yellow">⏳ Akun Baru Pending (3)</span>                      │
+│  🔵 Ahmad Fauzi (guru) — <span class="btn">[ ✅ Setujui ]</span> <span class="badge-red">[❌]</span>  │
+│  🟢 Siti Rahma (siswa) — <span class="btn">[ ✅ Setujui ]</span> <span class="badge-red">[❌]</span>  │
+│                                                │
+│ <span class="badge-yellow">⏳ Edit PKL Pending (1)</span>                       │
+│  🟢 Randy → dari "AHASS Putra" ke "AHASS Asia" │
+│    <span class="btn">[ ✅ Setujui ]</span> <span class="badge-red">[ ❌ Tolak ]</span>                  │
+└────────────────────────────────────────────────┘
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <h3 style="margin-bottom:16px;color:var(--navy);">5.5 Reset Database</h3>
+
+  <div class="warn">⚠️ <strong>Hati-hati!</strong> Reset database akan menghapus SEMUA data siswa, guru, log presensi, izin, dan jurnal. Akun Master Admin tetap dipertahankan. Cache koordinat PKL TIDAK ikut dihapus.</div>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h4>Buka tab Reset Database di Pengaturan</h4>
+      <p>Konfirmasi 2 kali sebelum reset dijalankan.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 6. CETAK LAPORAN -->
+<div class="section" id="cetak">
+  <div class="section-header">
+    <div class="section-icon icon-info">🖨️</div>
+    <div><h2 class="sec-title">6. Cetak Laporan PDF</h2></div>
+  </div>
+
+  <table>
+    <tr><th>Jenis Laporan</th><th>Tersedia untuk</th><th>Isi Laporan</th></tr>
+    <tr><td>📊 Cetak Statistik</td><td>Admin + Guru</td><td>Grafik kehadiran, tabel statistik per siswa, per bulan</td></tr>
+    <tr><td>📋 Cetak Rekap</td><td>Admin + Guru</td><td>Tabel rekap presensi semua siswa (per bulan/guru)</td></tr>
+    <tr><td>📄 Cetak Lengkap</td><td>Admin + Guru</td><td>Per siswa: peta PKL, tabel harian, jurnal, TTD 3-kolom</td></tr>
+  </table>
+
+  <h3 style="margin-top:24px;margin-bottom:16px;color:var(--navy);">6.1 Cara Cetak Laporan</h3>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h4>Pilih filter (jika admin)</h4>
+      <p>Admin bisa memilih: Semua Guru / Guru tertentu / Bulan tertentu.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <h4>Klik tombol cetak</h4>
+      <div class="mockup" style="margin-top:8px;">
+[ 📊 Cetak Statistik ]  [ 📋 Cetak Rekap ]  [ 📄 Cetak Lengkap ]
+      </div>
+      <p style="margin-top:8px;">Modal preview muncul dalam beberapa detik.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <h4>Simpan atau print dari modal preview</h4>
+      <div class="mockup" style="margin-top:8px;">
+<div class="title">── Modal Preview Laporan ──</div>
+┌─────────────────────────────────────────────────┐
+│ [← Kembali]   Laporan_Lengkap_Admin_2026...  [💾 Simpan PDF] │
+├─────────────────────────────────────────────────┤
+│  [iframe: isi laporan PDF]                      │
+│                                                 │
+│  ┌─────────────────────────────────────────┐   │
+│  │  PEMERINTAH PROVINSI JAWA TIMUR         │   │
+│  │  DINAS PENDIDIKAN                       │   │
+│  │  SMK NEGERI 9 MALANG                    │   │
+│  │  ════════════════════════════════════   │   │
+│  │  LAPORAN PRESENSI HARIAN PKL            │   │
+│  │  ...                                    │   │
+│  └─────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────┘
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <h4>TTD (Tanda Tangan) di laporan</h4>
+      <div class="mockup" style="margin-top:8px;">
+─── TTD Admin ────────────────────────────────────
+  Waka Humas,        Mengetahui,        Ketua Pokja PKL,
+                     Kepala SMKN 9,
+
+
+  ___________        ___________        ___________
+  NIP. ...           NIP. ...           NIP. ...
+
+─── TTD Guru ─────────────────────────────────────
+  Waka Humas,        Mengetahui,        Guru Pembimbing PKL,
+                     Kepala SMKN 9,
+
+
+  ___________        ___________        ___________
+  NIP. ...           NIP. ...           NIP. ...
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">💡 Untuk cetak cepat: Admin disarankan filter per guru pembimbing (bukan "Semua"). Cetak Lengkap semua 300+ siswa sekaligus akan membutuhkan waktu lebih lama.</div>
+</div>
+
+<!-- 7. FAQ -->
+<div class="section" id="faq">
+  <div class="section-header">
+    <div class="section-icon icon-info">❓</div>
+    <div><h2 class="sec-title">7. FAQ & Troubleshooting</h2></div>
+  </div>
+
+  <table>
+    <tr><th>Masalah</th><th>Solusi</th></tr>
+    <tr><td>Buka link langsung masuk ke akun</td><td>Logout dulu, atau hapus cache browser. Jangan centang "Ingat Saya" jika HP dipakai bersama.</td></tr>
+    <tr><td>Absen tidak bisa — GPS tidak akurat</td><td>Tunggu GPS stabil (ikon GPS hijau). Aktifkan mode akurasi tinggi di pengaturan HP.</td></tr>
+    <tr><td>Peta tidak muncul di cetak lengkap</td><td>Pastikan koneksi internet aktif. Tile OSM membutuhkan internet untuk load gambar peta.</td></tr>
+    <tr><td>Cetak laporan lama / freeze</td><td>Filter per guru terlebih dahulu. Jangan cetak semua 300+ siswa sekaligus.</td></tr>
+    <tr><td>Titik GPS siswa di peta salah</td><td>Admin edit lokasi PKL siswa → sistem geocode ulang via Nominatim.</td></tr>
+    <tr><td>Import CSV gagal</td><td>Cek format CSV: 9 kolom, role harus "siswa" atau "guru", username unik.</td></tr>
+    <tr><td>Koordinat PKL semua sama (SMKN9)</td><td>Tunggu batch geocoding selesai (1.2 detik/lokasi). Atau admin jalankan script geocode_live.ps1.</td></tr>
+    <tr><td>Tidak bisa login</td><td>Cek username/password. Hubungi admin untuk reset password.</td></tr>
+    <tr><td>Notifikasi tidak terbaca</td><td>Ganti ke Mode Malam (🌙) di pojok kanan atas.</td></tr>
+  </table>
+
+  <div class="note" style="margin-top:20px;">
+    📞 <strong>Kontak Support:</strong><br>
+    Aplikasi: https://103.153.190.69:8443<br>
+    Server: root@103.153.190.69 (SSH key required)<br>
+    Versi APK: SIGAP-PKL-K9-v2.1.63.apk
+  </div>
+</div>
+
+<footer>
+  <p>SIGAP PKL — Sistem Informasi & Geofencing Absensi PKL</p>
+  <p>SMK Negeri 9 Malang • Versi 2.1.63 • 3 September 2026</p>
+  <p style="margin-top:8px;font-size:.75rem;">Dokumen ini dibuat otomatis. Untuk versi terbaru, unduh dari server aplikasi.</p>
+</footer>
+
+</body>
+</html>

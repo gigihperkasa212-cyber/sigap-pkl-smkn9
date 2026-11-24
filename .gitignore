@@ -1,0 +1,68 @@
+# ── Node ──────────────────────────────────────────
+node_modules/
+
+# ── Android build output ──────────────────────────
+android/app/build/
+android/.gradle/
+android/.idea/
+android/.kotlin/
+android/capacitor-cordova-android-plugins/
+
+# ── Keystore (JANGAN pernah commit!) ──────────────
+android/release.keystore
+*.keystore
+*.jks
+
+# ── Backup files ──────────────────────────────────
+backup_*/
+backup_proxmox_*/
+backup_v*/
+
+# ── Log & temp output ─────────────────────────────
+*_out.txt
+*.log
+/0
+
+# ── OS files ──────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── SSH key ───────────────────────────────────────
+*.pem
+sigap_pkl_key*
+
+# ── Keystore Base64 (JANGAN commit!) ──────────────
+keystore_base64.txt
+
+# ── Credential DB (JANGAN commit!) ────────────────
+config.php
+config.secret.php
+
+# ── Keystore signing properties (JANGAN commit!) ──
+android/github.properties
+android/signing.properties
+
+# ── File backup API (mengandung credential) ────────
+api.php.bak*
+*.bak
+
+# ── Script deploy lokal (mengandung IP/path lokal) ─
+deploy_*.ps1
+force_rebuild*.ps1
+check_*.ps1
+download_*.ps1
+dl*.ps1
+do_deploy.ps1
+auto_download_apk.ps1
+add_http_nat.sh
+
+# ── APK output lokal ──────────────────────────────
+output/
+
+# ── File temp kiro ────────────────────────────────
+downloaded_file.html
+index_backup.html
+index_temp.html
+golden_base/
+www_backup/

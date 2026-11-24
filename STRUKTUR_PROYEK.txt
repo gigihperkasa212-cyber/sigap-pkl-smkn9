@@ -1,0 +1,195 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║   SIGAP - SISTEM INFORMASI & GEOFENCING ABSENSI PKL                        ║
+║   SMK Negeri 9 Malang  •  Versi 2.1.63  •  3 September 2026               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+📁 STRUKTUR FILE PROYEK
+=========================
+
+absen pkl update/
+│
+├── 📄 index.html                   - Halaman utama aplikasi (SPA)
+├── 📄 manifest.json                - PWA manifest config
+├── 📄 capacitor.config.json        - Konfigurasi Capacitor (APK)
+├── 📄 package.json                 - Dependencies Node.js
+├── 📄 api.php                      - Backend API PHP (semua endpoint)
+│
+├── 📁 css/
+│   └── 📄 styles.css               (~180 KB)
+│       ├── Dark mode (default)     — CSS variables, komponen lengkap
+│       ├── Light mode (siang)      — Theme toggle, kontras optimal
+│       ├── Border tabel & kotak    — Bold hitam (siang) / putih (malam)
+│       ├── Toast notification      — Kontras light/dark mode
+│       └── Responsive mobile       — Optimasi tampilan HP
+│
+├── 📁 js/
+│   └── 📄 app.js                   (~489 KB, ~11.000 baris)
+│       ├── ── KONFIGURASI ──
+│       │   ├── Server config (HTTPS 8443)
+│       │   ├── KNOWN_PKL_LOCATIONS   — Kamus koordinat 50+ lokasi Malang
+│       │   ├── _geocodeNameCache     — Cache koordinat per nama lokasi (persist 30 hari)
+│       │   ├── _logsCache / _journalCache — In-memory cache localStorage
+│       │   └── Storage keys (AUTH, USERS, ATTENDANCE, JOURNALS, dll)
+│       │
+│       ├── ── GEOCODING & MAP ──
+│       │   ├── geocodeLocationName()       — Nominatim multi-strategy
+│       │   ├── _buildTtdHtml()             — Helper TTD 3-kolom semua cetak
+│       │   ├── applyTargetLocationFromUser() — Set TARGET_LOCATION saat login
+│       │   ├── _initGeocodeCache()         — Init cache dari localStorage + DB
+│       │   ├── _addToGeocodeCache()        — Simpan hasil geocode ke cache
+│       │   └── initMap() / _updateMapUIAndReset()
+│       │
+│       ├── ── AUTENTIKASI ──
+│       │   ├── checkAuthSession()     — Cek sesi + flag remember_v1
+│       │   ├── performUserLogin()     — Login + sessionStorage/localStorage
+│       │   ├── handleLogout()         — Logout + hapus flag remember
+│       │   └── _proceedWithLocalSession()
+│       │
+│       ├── ── DATA & SYNC ──
+│       │   ├── getLogs() / saveLogs()        — In-memory cache attendance
+│       │   ├── getJournals() / saveJournals() — In-memory cache journals
+│       │   ├── getUsers() / saveUsers()
+│       │   ├── _mergeServerUsers()    — Server-wins merge + preserve geocode lokal
+│       │   ├── syncDataFromServer()   — Pull users/logs/perms dari server
+│       │   └── initRealtimeFeed()     — SSE + polling 8 detik
+│       │
+│       ├── ── ABSENSI ──
+│       │   ├── openCameraModal()      — Modal selfie + GPS geofencing
+│       │   ├── captureAbsensi()       — Submit absen masuk/pulang
+│       │   ├── _runAutoAlpa()         — Auto-alpa jika tidak absen (pkl_start_date)
+│       │   └── renderTodayStatus()
+│       │
+│       ├── ── RENDER UI ──
+│       │   ├── renderStats()                — Dashboard statistik
+│       │   ├── renderHistoryList()          — Log presensi harian
+│       │   ├── renderAdminDashboard()       — Dashboard admin realtime
+│       │   ├── renderAdminUsersTable()      — Daftar user + GPS link
+│       │   ├── renderPendingUserApprovals() — Persetujuan akun/PKL
+│       │   ├── renderChart()                — Chart.js (dark/light aware)
+│       │   └── renderMonthlyReportsArchive()
+│       │
+│       ├── ── LAPORAN CETAK ──
+│       │   ├── exportCetakLengkap()         — Wrapper (defer 80ms)
+│       │   ├── _doExportCetakLengkap()      — Per-siswa: map tile + TTD
+│       │   ├── exportMonthlyAttendanceStatsPDF() — Cetak statistik (langsung)
+│       │   ├── _doExportMonthlyAttendanceStatsPDF()
+│       │   ├── exportAdminRekapPDF()         — Cetak rekap (langsung)
+│       │   ├── _doExportAdminRekapPDF()      — Pre-index O(n) rekap
+│       │   ├── _buildTtdHtml()              — 3-kolom: Waka|Kepsek|Pokja/Guru
+│       │   ├── _printAsPDF()                — Modal iframe + requestAnimationFrame
+│       │   └── _savePdfViaServer()          — Puppeteer PDF via API
+│       │
+│       ├── ── MANAJEMEN USER ──
+│       │   ├── parseAndImportCSV()          — Import massal + auto-geocode
+│       │   ├── editStudentPklLocationPrompt() — Edit lokasi PKL + geocode
+│       │   ├── openEditUserModal()          — Modal edit user lengkap
+│       │   └── renderCSVValidationReport()
+│       │
+│       └── ── UTILITIES ──
+│           ├── showToast()                  — Notifikasi popup
+│           ├── toggleTheme() / applyTheme() — Light/dark mode
+│           ├── formatDateIndo()             — Format tanggal Indonesia
+│           └── _buildTtdHtml()              — TTD seragam semua cetak
+│
+├── 📁 img/
+│   ├── logo_smkn9.png      — Logo SMK Negeri 9 Malang
+│   ├── logo_jatim.png      — Logo Jawa Timur (kop surat cetak)
+│   ├── sigap_logo.png      — Logo SIGAP splash screen
+│   └── admin_avatar.jpg    — Avatar default Master Admin
+│
+├── 📁 android/             — Proyek Android (Capacitor 5)
+│   ├── app/build.gradle    — versionCode 163, versionName "2.1.63"
+│   ├── app/src/main/
+│   │   ├── AndroidManifest.xml
+│   │   ├── assets/public/  — Bundle web (js/app.js, css/, img/)
+│   │   └── java/com/smkn9/sigappkl/
+│   │       ├── MainActivity.java
+│   │       └── TrustAllSSLPlugin.java
+│   └── app/build/outputs/apk/release/
+│       └── 🤖 SIGAP-PKL-K9-v2.1.63.apk  (6.29 MB)
+│
+├── 📁 docs/
+│   ├── FLOWCHART_SIGAP_PKL.md         — Flowchart alur sistem
+│   ├── MANUAL_BOOK_SIGAP_PKL.md       — Manual book per peran
+│   └── IMPLEMENTATION_PLAN_SIGAP_PKL.md
+│
+├── 📄 SIGAP_PKL_FULL_DOCUMENTATION.html — Dokumentasi teknis lengkap
+├── 📄 SIGAP_PKL_PUBLIC_MANUAL.html      — Manual pengguna publik
+├── 📄 STRUKTUR_PROYEK.txt               — File ini
+├── 📄 BACKUP_KEYSTORE_HAK_CIPTA.md      — Info keystore APK
+└── 📄 geocode_batch.php / geocode_live.ps1 — Script geocode batch
+
+══════════════════════════════════════════════════════════════════════════════
+📡 INFRASTRUKTUR SERVER
+══════════════════════════════════════════════════════════════════════════════
+
+Server Produksi:
+  • Host     : Proxmox VE — IP 103.153.190.69
+  • Container: CT102 (Debian) — IP 192.168.100.30
+  • Web Root : /var/www/html/SIGAP-SMKN9-Official/
+  • HTTPS    : https://103.153.190.69:8443 (self-signed cert)
+  • PHP      : 8.2.33 (FPM + Nginx)
+
+Database:
+  • MariaDB  : 192.168.100.1:3306
+  • DB Name  : sigap_pkl
+  • DB User  : sigap_user
+  • Tabel    : users, attendance, permissions, journals, sessions, approval_reports
+
+API Endpoints (api.php):
+  • get_users              — Ambil semua user aktif
+  • create_user            — Buat user baru (+ auto-geocode)
+  • update_user            — Update data user lengkap
+  • update_pkl_location    — Update koordinat PKL hasil geocoding
+  • simpan_presensi        — Simpan log absensi
+  • get_presensi           — Ambil log absensi
+  • submit_permission      — Pengajuan izin/sakit
+  • get_permissions        — Ambil data izin
+  • reset_database         — Reset semua data (kecuali admin)
+  • generate_pdf_base64    — Generate PDF via Puppeteer
+  • save_monthly_report    — Arsip laporan bulanan
+  • sse_events             — Server-Sent Events realtime
+
+══════════════════════════════════════════════════════════════════════════════
+🔐 SISTEM AUTENTIKASI
+══════════════════════════════════════════════════════════════════════════════
+
+  • sessionStorage  : Sesi hilang saat browser/tab ditutup (default)
+  • localStorage    : Persist hanya jika centang "Ingat Saya" (flag: SIGAP_PKL_K9_remember_v1)
+  • Default         : isRemember = FALSE (buka link baru → selalu tampil login)
+
+══════════════════════════════════════════════════════════════════════════════
+📦 PERAN PENGGUNA
+══════════════════════════════════════════════════════════════════════════════
+
+  ┌──────────────────┬─────────────────────────────────────────────────────┐
+  │ MASTER ADMIN     │ Kelola semua user, import CSV, cetak semua laporan,  │
+  │                  │ reset database, persetujuan akun & PKL               │
+  ├──────────────────┼─────────────────────────────────────────────────────┤
+  │ GURU PEMBIMBING  │ Monitoring siswa bimbingan, persetujuan izin,        │
+  │                  │ cetak laporan siswa bimbingan, absen monitoring      │
+  ├──────────────────┼─────────────────────────────────────────────────────┤
+  │ SISWA PKL        │ Absen masuk/pulang, isi jurnal, pengajuan izin/sakit │
+  └──────────────────┴─────────────────────────────────────────────────────┘
+
+══════════════════════════════════════════════════════════════════════════════
+📱 RIWAYAT VERSI
+══════════════════════════════════════════════════════════════════════════════
+
+  v2.1.63  3 Sep 2026   Map OSM 1-tile di cetak lengkap, in-memory cache logs/journals
+  v2.1.62  3 Sep 2026   Cache getLogs/getJournals, strip foto base64 cetak, limit 50 siswa
+  v2.1.61  3 Sep 2026   Pre-index rekap O(n), _journalsIndex, _doExportCetakLengkap wrapper
+  v2.1.60  3 Sep 2026   Fix auto-login: default isRemember=false, flag SIGAP_PKL_K9_remember_v1
+  v2.1.59  3 Sep 2026   Fix cetak rekap/statistik hang: hapus syncDataFromServer dari cetak
+  v2.1.58  3 Sep 2026   TTD 3-kolom seragam (Waka|Kepsek|Pokja/Guru), helper _buildTtdHtml
+  v2.1.57  3 Sep 2026   Fix kop surat cetak lengkap (penutup </div> kop-container hilang)
+  v2.1.56  3 Sep 2026   Revert logo-spacer kop surat
+  v2.1.55  2 Sep 2026   Fix TTD tidak rata: flex column + min-height
+  v2.1.51  2 Sep 2026   Cache geocode persist 30 hari, init saat app load
+  v2.1.50  2 Sep 2026   Sistem cache koordinat PKL _geocodeNameCache
+  v2.1.49  2 Sep 2026   Fix parseAndImportCSV tidak overwrite koordinat valid
+  v2.1.48  2 Sep 2026   Live geocode dari lokal via Nominatim, filter koordinat default
+  v2.1.45  1 Sep 2026   Batch geocode PKL, fix _mergeServerUsers server-wins
+  v2.1.43  1 Sep 2026   pkl_start_date: batas bawah pencatatan absensi
+  v2.1.40  31 Agt 2026  TTD cetak: Waka Humas + Kepala Sekolah + Ketua Pokja PKL
+  v2.0.3   28 Agt 2026  Basis stabil: absen siswa, monitoring guru, cetak PDF

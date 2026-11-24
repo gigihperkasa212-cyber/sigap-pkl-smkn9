@@ -1,0 +1,2248 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <!-- Paksa browser selalu load versi terbaru — jangan cache HTML -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>SIGAP - Sistem Informasi & Geofencing Absensi PKL</title>
+  
+  <!-- PWA Metadata -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/sigap_logo.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="img/sigap_logo.png">
+  <link rel="apple-touch-icon" href="img/sigap_logo.png">
+
+  <!-- Google Fonts & FontAwesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons — coba lokal dulu, fallback ke CDN jika gagal -->
+  <link rel="stylesheet" href="css/all.min.css" id="fa-local-css">
+  <script>
+    (function(){
+      var t=setTimeout(function(){
+        // Cek apakah FA lokal berhasil load dengan tes icon render
+        var d=document.createElement('i');
+        d.className='fa-solid fa-check';d.style.cssText='position:absolute;top:-999px;font-family:"Font Awesome 6 Free"';
+        document.body.appendChild(d);
+        var w=window.getComputedStyle(d,':before').getPropertyValue('content');
+        document.body.removeChild(d);
+        if(!w||w==='none'||w==='""'||w==="''"){
+          // FA lokal gagal, load CDN
+          var l=document.createElement('link');
+          l.rel='stylesheet';
+          l.href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+          document.head.appendChild(l);
+          console.log('[SIGAP] FA lokal gagal, switch ke CDN');
+        }
+      },1500);
+    })();
+  </script>
+  
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- App Custom Styles -->
+  <link rel="stylesheet" href="css/styles.css?v=1.4.3">
+
+  <!-- ===== SPLASH SCREEN STYLES (inline, tidak ganggu styles.css) ===== -->
+  <style>
+  #splashScreen{
+    position:fixed;inset:0;z-index:999999;
+    background:linear-gradient(135deg,#080c1a 0%,#0d1230 40%,#1a1060 100%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    overflow:hidden;
+    transition:opacity 0.8s ease,visibility 0.8s ease;
+    pointer-events:none;
+  }
+  #splashScreen.hide{opacity:0;visibility:hidden;pointer-events:none;}
+
+  /* ── Partikel bintang ── */
+  .sp-star{position:absolute;border-radius:50%;background:#fff;animation:spTwinkle 2s infinite alternate;}
+  @keyframes spTwinkle{from{opacity:.1}to{opacity:.9}}
+
+  /* ── Cincin orbital ── */
+  .sp-orbit{
+    position:absolute;border-radius:50%;border:1.5px solid transparent;
+    animation:spOrbit linear infinite;
+  }
+  .sp-orbit::before{
+    content:'';position:absolute;width:8px;height:8px;border-radius:50%;
+    top:-4px;left:calc(50% - 4px);
+    box-shadow:0 0 8px 3px currentColor;
+  }
+  .sp-orbit1{width:200px;height:200px;border-color:rgba(99,102,241,.4);color:#6366f1;animation-duration:4s;}
+  .sp-orbit2{width:260px;height:260px;border-color:rgba(6,182,212,.3);color:#06b6d4;animation-duration:7s;animation-direction:reverse;}
+  .sp-orbit3{width:320px;height:320px;border-color:rgba(245,158,11,.25);color:#f59e0b;animation-duration:11s;}
+  @keyframes spOrbit{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+  /* ── Scene 3D logo ── */
+  .sp-scene{perspective:900px;margin-bottom:32px;position:relative;}
+  .sp-cube-wrap{
+    width:130px;height:130px;position:relative;
+    transform-style:preserve-3d;
+    animation:spSpin3d 3.5s cubic-bezier(.4,0,.2,1) forwards,
+              spFloat 3s ease-in-out 3.5s infinite alternate;
+  }
+  .sp-face{
+    position:absolute;width:130px;height:130px;
+    border-radius:24px;overflow:hidden;
+    backface-visibility:hidden;
+    border:2px solid rgba(99,102,241,.6);
+    box-shadow:0 0 30px rgba(99,102,241,.4) inset,0 0 20px rgba(99,102,241,.3);
+  }
+  .sp-face img{width:100%;height:100%;object-fit:contain;padding:8px;}
+  .sp-face-front {transform:translateZ(65px);background:#ffffff;}
+  .sp-face-back  {transform:rotateY(180deg) translateZ(65px);background:#f8faff;}
+  .sp-face-right {transform:rotateY(90deg) translateZ(65px);background:#f0f4ff;}
+  .sp-face-left  {transform:rotateY(-90deg) translateZ(65px);background:#f0f4ff;}
+  .sp-face-top   {transform:rotateX(90deg) translateZ(65px);background:#f8faff;}
+  .sp-face-bottom{transform:rotateX(-90deg) translateZ(65px);background:#f8faff;}
+
+  @keyframes spSpin3d{
+    0%  {transform:rotateX(-30deg) rotateY(-180deg) scale(.3);opacity:0;}
+    20% {opacity:1;}
+    60% {transform:rotateX(10deg) rotateY(30deg) scale(1.08);}
+    80% {transform:rotateX(-5deg) rotateY(-10deg) scale(.98);}
+    100%{transform:rotateX(0deg) rotateY(0deg) scale(1);}
+  }
+  @keyframes spFloat{
+    from{transform:rotateX(4deg) rotateY(-6deg) translateY(0px);}
+    to  {transform:rotateX(-4deg) rotateY(6deg) translateY(-14px);}
+  }
+
+  /* ── Glow ring ── */
+  .sp-glow{
+    position:absolute;inset:-20px;border-radius:50%;
+    background:conic-gradient(#6366f1,#06b6d4,#f59e0b,#6366f1);
+    filter:blur(16px);opacity:.5;
+    animation:spGlowRot 4s linear infinite;
+  }
+  @keyframes spGlowRot{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+  /* ── Pulse rings ── */
+  .sp-pulse{
+    position:absolute;inset:-12px;border-radius:50%;
+    border:2px solid rgba(99,102,241,.5);
+    animation:spPulseOut 2s ease-out infinite;
+  }
+  .sp-pulse:nth-child(2){animation-delay:.7s;}
+  .sp-pulse:nth-child(3){animation-delay:1.4s;}
+  @keyframes spPulseOut{0%{transform:scale(1);opacity:.7}100%{transform:scale(2.4);opacity:0}}
+
+  /* ── Teks ── */
+  .sp-title{
+    font-family:'Plus Jakarta Sans',sans-serif;font-size:2.8rem;font-weight:800;
+    letter-spacing:.15em;
+    background:linear-gradient(90deg,#818cf8,#06b6d4,#fbbf24,#818cf8);
+    background-size:200% auto;
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    animation:spFadeUp .6s ease .5s both,spShine 3s linear 1s infinite;
+    margin-bottom:6px;
+  }
+  @keyframes spShine{to{background-position:200% center}}
+  .sp-sub{
+    font-family:'Plus Jakarta Sans',sans-serif;font-size:.75rem;font-weight:500;
+    color:rgba(148,163,184,.85);letter-spacing:.06em;text-align:center;
+    animation:spFadeUp .6s ease .8s both;
+    margin-bottom:36px;
+  }
+  @keyframes spFadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ── Loading bar ── */
+  .sp-bar-wrap{
+    width:200px;height:4px;background:rgba(255,255,255,.08);
+    border-radius:99px;overflow:hidden;
+    animation:spFadeUp .6s ease 1s both;
+    margin-bottom:10px;
+  }
+  .sp-bar{
+    height:100%;width:0%;border-radius:99px;
+    background:linear-gradient(90deg,#6366f1,#06b6d4,#f59e0b);
+    animation:spLoad 8.4s cubic-bezier(.4,0,.2,1) .4s forwards;
+  }
+  @keyframes spLoad{
+    0%{width:0%}10%{width:6%}25%{width:22%}
+    50%{width:50%}75%{width:75%}90%{width:90%}100%{width:100%}
+  }
+  .sp-loading-txt{
+    font-family:'Plus Jakarta Sans',sans-serif;font-size:.65rem;
+    color:rgba(148,163,184,.55);letter-spacing:.14em;text-transform:uppercase;
+    animation:spFadeUp .6s ease 1.1s both;
+    margin-bottom:8px;
+  }
+
+  /* ── Badge sekolah ── */
+  .sp-school{
+    position:absolute;bottom:28px;left:0;right:0;text-align:center;
+    font-family:'Plus Jakarta Sans',sans-serif;font-size:.65rem;
+    color:rgba(148,163,184,.4);letter-spacing:.04em;
+    animation:spFadeUp .6s ease 1.4s both;
+  }
+  </style>
+</head>
+<body data-theme="light">
+
+  <!-- ===== SPLASH SCREEN 3D ===== -->
+  <div id="splashScreen">
+    <!-- Bintang -->
+    <div id="spStarsWrap"></div>
+
+    <!-- Cincin orbital -->
+    <div class="sp-orbit sp-orbit1"></div>
+    <div class="sp-orbit sp-orbit2"></div>
+    <div class="sp-orbit sp-orbit3"></div>
+
+    <!-- Logo 3D Cube -->
+    <div class="sp-scene">
+      <div class="sp-glow"></div>
+      <div class="sp-pulse"></div>
+      <div class="sp-pulse"></div>
+      <div class="sp-pulse"></div>
+      <div class="sp-cube-wrap">
+        <div class="sp-face sp-face-front"><img src="img/sigap_logo_edit.png" alt="SIGAP"></div>
+        <div class="sp-face sp-face-back" ><img src="img/sigap_logo_edit.png" alt="SIGAP"></div>
+        <div class="sp-face sp-face-right"><img src="img/sigap_logo_edit.png" alt="SIGAP"></div>
+        <div class="sp-face sp-face-left" ><img src="img/sigap_logo_edit.png" alt="SIGAP"></div>
+        <div class="sp-face sp-face-top"  ><img src="img/sigap_logo_edit.png" alt="SIGAP"></div>
+        <div class="sp-face sp-face-bottom"><img src="img/sigap_logo_edit.png" alt="SIGAP"></div>
+      </div>
+    </div>
+
+    <div class="sp-title">SIGAP</div>
+    <div class="sp-sub">Sistem Informasi &amp; Geofencing Absensi PKL</div>
+    <div class="sp-bar-wrap"><div class="sp-bar"></div></div>
+    <div class="sp-loading-txt">Memuat aplikasi...</div>
+    <div class="sp-school">SMK Negeri 9 Malang &nbsp;•&nbsp; SIGAP PKL K9</div>
+  </div>
+
+  <script>
+    // Generate bintang acak
+    (function(){
+      var w=document.getElementById('spStarsWrap');
+      if(!w)return;
+      w.style.cssText='position:absolute;inset:0;overflow:hidden;pointer-events:none;';
+      for(var i=0;i<70;i++){
+        var s=document.createElement('span');
+        var sz=(Math.random()*2.5+.5);
+        s.className='sp-star';
+        s.style.cssText='width:'+sz+'px;height:'+sz+'px;'
+          +'left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;'
+          +'opacity:'+(Math.random()*.7+.1)+';'
+          +'animation-duration:'+(Math.random()*2+1)+'s;'
+          +'animation-delay:'+(Math.random()*3)+'s;';
+        w.appendChild(s);
+      }
+    })();
+
+    // Tutup splash setelah 9 detik
+    window.addEventListener('DOMContentLoaded',function(){
+      setTimeout(function(){
+        var el=document.getElementById('splashScreen');
+        if(el){
+          el.classList.add('hide');
+          setTimeout(function(){el.style.display='none'; el.style.pointerEvents='none';},850);
+        }
+      },9000);
+    });
+  </script>
+  <div id="loginScreen" class="login-overlay">
+    <div class="login-card">
+      <div class="login-header text-center">
+        <div class="app-logo" style="background:none; box-shadow:none; width:68px; height:auto; margin-bottom:8px;">
+          <img src="img/logo_smkn9.png?v=2.1.9" alt="Logo Resmi SMK Negeri 9 Malang" style="width:100%; height:auto; object-fit:contain; display:block; margin:0 auto; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));">
+        </div>
+        <h2 style="letter-spacing:1px; font-size:1.6rem; font-weight:800;">SIGAP</h2>
+        <p class="text-muted text-sm" style="font-size:0.75rem; line-height:1.3; margin-top:2px;">Sistem Informasi & Geofencing Absensi PKL</p>
+      </div>
+
+      <!-- Role Tabs Selection -->
+      <div class="login-role-tabs">
+        <button type="button" class="role-tab active" id="tabLoginSiswa" onclick="setLoginRole('siswa')">
+          <i class="fa-solid fa-user-graduate"></i> Siswa
+        </button>
+        <button type="button" class="role-tab" id="tabLoginGuru" onclick="setLoginRole('guru')">
+          <i class="fa-solid fa-chalkboard-user"></i> Guru / Pembimbing
+        </button>
+      </div>
+
+      <form id="loginForm" action="javascript:void(0);" onsubmit="handleLoginSubmit(event); return false;" autocomplete="off">
+        <!-- Prevent browser autofill on login -->
+        <input type="text" style="position:absolute; top:-9999px; left:-9999px; opacity:0; pointer-events:none; width:0; height:0;" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <input type="password" style="position:absolute; top:-9999px; left:-9999px; opacity:0; pointer-events:none; width:0; height:0;" tabindex="-1" autocomplete="new-password" aria-hidden="true">
+
+        <div class="form-group">
+          <label id="lblUsername"><i class="fa-solid fa-id-card"></i> NISN / Username Siswa</label>
+          <input type="text" id="loginUsername" name="loginUsername_off" placeholder="Contoh: 0054819203 atau siswa" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-form-type="other">
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa-solid fa-lock"></i> Kata Sandi</label>
+          <div class="password-input-wrapper">
+            <input type="password" id="loginPassword" name="loginPassword_off" placeholder="Masukkan password (default: 123)" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-form-type="other">
+            <button type="button" class="toggle-pwd-btn" onclick="togglePasswordVisibility()"><i class="fa-solid fa-eye" id="pwdEyeIcon"></i></button>
+          </div>
+        </div>
+
+        <div class="login-options space-between">
+          <label class="checkbox-label">
+            <input type="checkbox" id="rememberMe" checked onchange="updateRememberMeAutocompleteState()">
+            <span>Ingat Saya</span>
+          </label>
+          <a href="#" onclick="showToast('Lupa Password? Silakan hubungi Admin Sekolah untuk reset password.', 'info'); return false;" class="forgot-link">Lupa Password?</a>
+        </div>
+
+        <button type="submit" class="btn-primary full-width mt-3">
+          <i class="fa-solid fa-right-to-bracket"></i> Masuk Aplikasi
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- App Wrapper (Simulates Mobile Screen or Responsive Desktop View) -->
+  <div id="app" class="app-container">
+    
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="user-profile-bar">
+        <div class="user-avatar" id="headerAvatar" onclick="switchTab('profile')" style="cursor:pointer;" title="Buka Profil Saya & Ubah Foto">
+          <img src="img/admin_avatar.jpg" alt="Avatar User" id="headerAvatarImg">
+        </div>
+        <div class="user-info">
+          <h2 id="userName">Budi Santoso</h2>
+          <p id="userSubtext"><i class="fa-solid fa-graduation-cap"></i> XII RPL 1 • PKL PT. Tech Solution</p>
+        </div>
+      </div>
+      
+      <div class="header-actions">
+        <!-- Live SSE Indicator -->
+        <span class="live-indicator-badge" id="realtimeSyncBadge" title="Database Sync Realtime Active"><span class="pulse-dot"></span> Real-time Live</span>
+
+        <!-- Theme Toggle: Siang / Malam -->
+        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Ganti Mode Siang/Malam">
+          <div class="theme-toggle-track">
+            <div class="theme-toggle-thumb" id="themeToggleThumb"></div>
+          </div>
+          <span class="theme-toggle-label" id="themeToggleLabel">Siang</span>
+        </button>
+        
+        <button class="icon-btn logout-header-btn" title="Keluar / Logout" onclick="handleLogout()">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="app-content">
+      
+      <!-- ================= TAB 1: BERANDA SISWA ================= -->
+      <section id="tab-home" class="tab-page active">
+        <!-- Digital Clock & Date Card -->
+        <div class="card live-clock-card">
+          <div class="clock-badge"><i class="fa-regular fa-clock"></i> <span id="currentDate">Senin, 7 Agustus 2026</span></div>
+          <h1 id="liveTime">07:30:00</h1>
+          <div class="location-status" id="locationStatus">
+            <i class="fa-solid fa-location-dot pulse"></i>
+            <span id="geoText">Mendeteksi Lokasi GPS...</span>
+          </div>
+        </div>
+
+        <!-- Quick Attendance Action Buttons -->
+        <!-- Tombol Absen: Monitoring (Guru/Admin) + Masuk/Pulang (Siswa) -->
+        <!-- Visibility dikontrol via CSS body[data-role] — tanpa timing issue -->
+        <div class="attendance-actions" id="attendanceActionsContainer">
+
+          <!-- Tombol Monitoring: muncul untuk guru dan admin -->
+          <button class="btn-action primary full-monitoring-btn attendance-guru-admin"
+            id="btnAbsenMonitoring"
+            onclick="openCameraModal('monitoring')"
+            style="width:100%;justify-content:center;gap:14px;
+              background:linear-gradient(180deg,rgba(16,185,129,0.15) 0%,rgba(30,41,59,0.85) 100%);
+              border:1.5px solid rgba(16,185,129,0.45);">
+            <div class="action-icon" style="background:rgba(16,185,129,0.18);color:#10b981;">
+              <i class="fa-solid fa-location-crosshairs"></i>
+            </div>
+            <div class="action-text">
+              <strong>Absen Monitoring</strong>
+              <span id="monitoringBtnLabel">Verifikasi Lokasi PKL Siswa</span>
+            </div>
+          </button>
+
+          <!-- Tombol Masuk: muncul untuk siswa saja -->
+          <button class="btn-action primary attendance-siswa"
+            id="btnAbsenMasuk" onclick="openCameraModal('masuk')">
+            <div class="action-icon"><i class="fa-solid fa-camera"></i></div>
+            <div class="action-text">
+              <strong>Absen Masuk</strong>
+              <span>Ambil Selfie &amp; GPS</span>
+            </div>
+          </button>
+
+          <!-- Tombol Pulang: muncul untuk siswa saja -->
+          <button class="btn-action secondary attendance-siswa"
+            id="btnAbsenPulang" onclick="openCameraModal('pulang')">
+            <div class="action-icon"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
+            <div class="action-text">
+              <strong>Absen Pulang</strong>
+              <span>Akhiri Sesi Kerja</span>
+            </div>
+          </button>
+
+        </div>
+
+        <!-- Attendance Method Alternative: QR Code Scan -->
+        <div class="qr-scan-banner hidden" id="qrScanBanner" onclick="openQRScannerModal()">
+          <div class="qr-info">
+            <i class="fa-solid fa-qrcode text-xl"></i>
+            <div>
+              <h4>Scan QR Code Kelas/Kantor</h4>
+              <p>Gunakan kamera untuk memindai QR Code resmi</p>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+
+        <!-- Summary Stats Grid -->
+        <div class="stats-grid" id="summaryStatsGrid">
+          <div class="stat-card hadir">
+            <div class="stat-icon"><i class="fa-solid fa-user-check"></i></div>
+            <div class="stat-number" id="statHadir">18</div>
+            <div class="stat-label">Hadir</div>
+          </div>
+
+          <div class="stat-card izin">
+            <div class="stat-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
+            <div class="stat-number" id="statIzin">2</div>
+            <div class="stat-label">Izin</div>
+          </div>
+
+          <div class="stat-card sakit">
+            <div class="stat-icon"><i class="fa-solid fa-notes-medical"></i></div>
+            <div class="stat-number" id="statSakit">1</div>
+            <div class="stat-label">Sakit</div>
+          </div>
+
+          <div class="stat-card alpa">
+            <div class="stat-icon"><i class="fa-solid fa-user-xmark"></i></div>
+            <div class="stat-number" id="statAlpa">0</div>
+            <div class="stat-label">Alpa</div>
+          </div>
+        </div>
+
+        <!-- Monthly Attendance Statistics (Student Only) -->
+        <div id="studentMonthlyStatsSection" class="hidden">
+          <div class="section-title space-between">
+            <h3><i class="fa-solid fa-chart-pie text-indigo-400"></i> Statistik Kehadiran Bulanan</h3>
+            <select id="monthlyStatsFilter" onchange="updateStudentMonthlyStats()" style="padding:6px 12px; border-radius:6px; border:1px solid rgba(255,255,255,0.2); background:rgba(15,23,42,0.8); color:#fff; font-size:0.8rem;">
+              <option value="current">Bulan Ini</option>
+              <option value="all">Semua Bulan</option>
+            </select>
+          </div>
+
+          <!-- Current Month Stats -->
+          <div class="card" style="background:linear-gradient(135deg, rgba(79,70,229,0.15), rgba(99,102,241,0.1)); border:1px solid rgba(99,102,241,0.3); margin-bottom:10px; padding:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <h4 style="color:#a5b4fc; font-size:0.82rem; margin:0;">
+                <i class="fa-solid fa-calendar-check"></i> <span id="currentMonthName">Agustus 2026</span>
+              </h4>
+              <div style="font-size:0.7rem; color:#cbd5e1; background:rgba(99,102,241,0.2); padding:3px 7px; border-radius:4px;">
+                <i class="fa-solid fa-clock"></i> Real-time
+              </div>
+            </div>
+
+            <div class="monthly-stats-grid" id="currentMonthStats">
+              <div class="monthly-stat-item">
+                <div class="monthly-stat-number" style="color:#10b981;" id="currentMonthHadir">0</div>
+                <div class="monthly-stat-label">Hadir</div>
+              </div>
+              <div class="monthly-stat-item">
+                <div class="monthly-stat-number" style="color:#f59e0b;" id="currentMonthIzin">0</div>
+                <div class="monthly-stat-label">Izin</div>
+              </div>
+              <div class="monthly-stat-item">
+                <div class="monthly-stat-number" style="color:#06b6d4;" id="currentMonthSakit">0</div>
+                <div class="monthly-stat-label">Sakit</div>
+              </div>
+              <div class="monthly-stat-item">
+                <div class="monthly-stat-number" style="color:#ef4444;" id="currentMonthAlpa">0</div>
+                <div class="monthly-stat-label">Alpa</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total Accumulation Stats -->
+          <div class="card" style="background:linear-gradient(135deg, rgba(16,185,129,0.15), rgba(5,150,105,0.1)); border:1px solid rgba(16,185,129,0.3); padding:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <h4 style="color:#34d399; font-size:0.82rem; margin:0;">
+                <i class="fa-solid fa-chart-line"></i> Total Akumulasi Semua Bulan
+              </h4>
+              <div style="font-size:0.7rem; color:#cbd5e1; background:rgba(16,185,129,0.2); padding:3px 7px; border-radius:4px;">
+                <i class="fa-solid fa-database"></i> Database
+              </div>
+            </div>
+
+            <div class="monthly-stats-grid" id="totalAccumulationStats">
+              <div class="monthly-stat-item">
+                <div class="monthly-stat-number" style="color:#10b981;" id="totalHadir">0</div>
+                <div class="monthly-stat-label">Total Hadir</div>
+              </div>
+              <div class="monthly-stat-item">
+                <div class="monthly-stat-number" style="color:#f59e0b;" id="totalIzin">0</div>
+                <div class="monthly-stat-label">Total Izin</div>
+              </div>
+              <div class="monthly-stat-item">
+                <div class="monthly-stat-number" style="color:#06b6d4;" id="totalSakit">0</div>
+                <div class="monthly-stat-label">Total Sakit</div>
+              </div>
+              <div class="monthly-stat-item">
+                <div class="monthly-stat-number" style="color:#ef4444;" id="totalAlpa">0</div>
+                <div class="monthly-stat-label">Total Alpa</div>
+              </div>
+            </div>
+
+            <div style="margin-top:10px; padding:10px; background:rgba(16,185,129,0.1); border-radius:8px; border-left:4px solid #10b981; display:none;">
+              <p style="font-size:0.8rem; color:#94a3b8; margin:0; line-height:1.5;">
+                <i class="fa-solid fa-info-circle text-emerald-400"></i> 
+                <strong>Data ini akan masuk ke:</strong> Database cetak rekap PDF pembimbing dan cetak statistik untuk laporan
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overall Attendance Chart (Realtime Monitoring for Master Admin & Guru on Beranda) -->
+        <div id="adminHomeChartSection" class="hidden" style="margin-top:14px;">
+          <div class="card chart-card-3d" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 12px; padding: 16px;">
+            <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px; gap:8px;">
+              <h4 style="margin:0; font-size:0.9rem; color:#fff;">
+                <i class="fa-solid fa-chart-line text-indigo-400"></i> Statistik Kehadiran Real-time (Komparasi Bulan H-1 vs Bulan H)
+              </h4>
+              <div id="trendIndicatorBadge">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+
+            <!-- Two Comparison Cards Side-by-Side (Equal 50%-50% Grid Split Full Width) -->
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:14px; margin-bottom:16px; width:100%;">
+              <!-- Bulan H-1 (Lalu) -->
+              <div style="background:linear-gradient(145deg, rgba(30,41,59,0.8), rgba(15,23,42,0.9)); border:1px solid rgba(255,255,255,0.12); border-radius:14px; padding:14px; text-align:center; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); width:100%; display:flex; flex-direction:column; justify-content:space-between;">
+                <div>
+                  <div style="font-size:0.8rem; font-weight:800; color:#a5b4fc; margin-bottom:8px; letter-spacing:0.5px; text-transform:uppercase;">
+                    <i class="fa-solid fa-calendar-minus text-indigo-400"></i> BULAN H-1 (<span id="labelMonthH1">Juli</span>)
+                  </div>
+                  <div id="metricsH1" style="font-size:0.75rem; color:#cbd5e1; margin-bottom:12px; display:flex; justify-content:space-around; flex-wrap:wrap; gap:4px; background:rgba(15,23,42,0.6); padding:6px 10px; border-radius:8px;">
+                    <!-- Populated by JS -->
+                  </div>
+                </div>
+                <div style="width:100%; height:230px; position:relative;">
+                  <canvas id="attendanceChartH1"></canvas>
+                </div>
+              </div>
+
+              <!-- Bulan H (Sekarang) -->
+              <div style="background:linear-gradient(145deg, rgba(30,41,59,0.8), rgba(15,23,42,0.9)); border:1px solid rgba(99,102,241,0.4); border-radius:14px; padding:14px; text-align:center; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5), 0 0 15px rgba(99,102,241,0.2); width:100%; display:flex; flex-direction:column; justify-content:space-between;">
+                <div>
+                  <div style="font-size:0.8rem; font-weight:800; color:#38bdf8; margin-bottom:8px; letter-spacing:0.5px; text-transform:uppercase;">
+                    <i class="fa-solid fa-calendar-check text-sky-400"></i> BULAN H (<span id="labelMonthH">Agustus</span>)
+                  </div>
+                  <div id="metricsH" style="font-size:0.75rem; color:#cbd5e1; margin-bottom:12px; display:flex; justify-content:space-around; flex-wrap:wrap; gap:4px; background:rgba(15,23,42,0.6); padding:6px 10px; border-radius:8px;">
+                    <!-- Populated by JS -->
+                  </div>
+                </div>
+                <div style="width:100%; height:230px; position:relative;">
+                  <canvas id="attendanceChartH"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Grouped Bar Chart Komparasi H-1 vs H -->
+            <div id="compBarChartWrapper" style="background:rgba(15,23,42,0.5); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px;">
+              <div id="compBarChartTitle" style="font-size:0.75rem; font-weight:bold; color:#e2e8f0; margin-bottom:8px; text-align:center;">
+                <i class="fa-solid fa-chart-column text-emerald-400"></i> Perbandingan Batang Presensi Real-Time (Bulan H-1 vs Bulan H)
+              </div>
+              <div style="height:200px; position:relative; width:100%;">
+                <canvas id="attendanceComparisonBarChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Today's Status Banner -->
+        <!-- todayStatusSection: hanya untuk siswa — disembunyikan by default, ditampilkan via applyUserInterface() untuk siswa -->
+        <div id="todayStatusSection" class="hidden">
+          <div class="section-title">
+            <h3>Status Hari Ini</h3>
+          </div>
+
+          <div class="card status-today-card" id="todayStatusCard">
+            <div class="status-empty">
+              <i class="fa-solid fa-calendar-day"></i>
+              <p>Anda belum melakukan presensi masuk hari ini.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map Location Preview Card -->
+        <div id="geofencingMapSection">
+          <div class="section-title space-between">
+            <h3>Geofencing Lokasi Sekolah/PKL</h3>
+            <button type="button" class="btn-xs btn-primary" onclick="requestLiveLocation()" style="font-size:0.72rem; padding:4px 10px; border-radius:6px; background:linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); color:#fff; border:none; cursor:pointer;">
+              <i class="fa-solid fa-crosshairs"></i> Deteksi Lokasi GPS Saya (Live)
+            </button>
+          </div>
+          <div class="card map-card">
+            <div id="map"></div>
+
+            <!-- GPS Distance Info (Task 2) - Hidden, data tetap berjalan di background -->
+            <div class="distance-info-card hidden" id="gpsDistanceInfo">
+              <div class="distance-info-header">
+                <h4 class="distance-info-title"><i class="fa-solid fa-location-crosshairs"></i> Informasi Lokasi GPS Anda (Real-time)</h4>
+                <span class="distance-info-status" id="gpsAccuracyBadge"><i class="fa-solid fa-satellite-dish"></i> Mendeteksi...</span>
+              </div>
+              <div class="distance-metrics">
+                <div class="distance-metric-item">
+                  <div class="distance-metric-value" id="gpsCurrentLat">--</div>
+                  <div class="distance-metric-label"><i class="fa-solid fa-arrows-up-down"></i> Latitude</div>
+                </div>
+                <div class="distance-metric-item">
+                  <div class="distance-metric-value" id="gpsCurrentLng">--</div>
+                  <div class="distance-metric-label"><i class="fa-solid fa-arrows-left-right"></i> Longitude</div>
+                </div>
+                <div class="distance-metric-item">
+                  <div class="distance-metric-value" id="gpsAccuracyValue">-- m</div>
+                  <div class="distance-metric-label"><i class="fa-solid fa-circle-dot"></i> Akurasi GPS</div>
+                </div>
+                <div class="distance-metric-item">
+                  <div class="distance-metric-value" id="gpsDistanceValue" style="color:#22d3ee;">-- m</div>
+                  <div class="distance-metric-label"><i class="fa-solid fa-ruler"></i> Jarak ke Target</div>
+                </div>
+              </div>
+              <!-- Google Maps Link -->
+              <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+                <a id="googleMapsCurrentLink" href="#" target="_blank" rel="noopener noreferrer"
+                   style="display:inline-flex; align-items:center; gap:6px; background:rgba(66,133,244,0.2); border:1px solid rgba(66,133,244,0.4); color:#60a5fa; padding:6px 12px; border-radius:6px; font-size:0.75rem; font-weight:600; text-decoration:none; transition:all 0.3s;">
+                  <i class="fa-solid fa-map-location-dot"></i> Buka Posisi Saya di Google Maps
+                </a>
+                <a id="googleMapsDirectionLink" href="#" target="_blank" rel="noopener noreferrer"
+                   style="display:inline-flex; align-items:center; gap:6px; background:rgba(52,211,153,0.2); border:1px solid rgba(52,211,153,0.4); color:#34d399; padding:6px 12px; border-radius:6px; font-size:0.75rem; font-weight:600; text-decoration:none; transition:all 0.3s;">
+                  <i class="fa-solid fa-route"></i> Rute ke Lokasi PKL
+                </a>
+              </div>
+            </div>
+
+            <!-- Target Location from Database (Task 3) - Hidden, data tetap sync di background -->
+            <div class="target-location-card hidden" id="targetLocationCard">
+              <div class="target-location-header">
+                <div class="target-location-icon">
+                  <i class="fa-solid fa-map-pin"></i>
+                </div>
+                <div class="target-location-info">
+                  <h4 id="targetLocationName">-- Memuat Target --</h4>
+                  <p id="targetLocationSubtext">Lokasi PKL dari database guru pembimbing / admin</p>
+                </div>
+                <div style="margin-left:auto;">
+                  <span id="targetStatusBadge" style="font-size:0.7rem; padding:4px 8px; border-radius:4px; font-weight:700; background:rgba(34,197,94,0.2); color:#22c55e;">
+                    <i class="fa-solid fa-database"></i> Database
+                  </span>
+                </div>
+              </div>
+
+              <!-- Dropdown Selector Siswa untuk Guru Pembimbing — dihapus, diganti multi-marker -->
+
+              <!-- Geocode status -->
+              <div id="geocodeStatusBadge" style="display:none; align-items:center; gap:8px; font-size:0.75rem; font-weight:600; padding:8px 12px; border-radius:8px; border:1px solid rgba(6,182,212,0.4); background:rgba(6,182,212,0.15); color:#22d3ee; margin-bottom:10px;">
+              </div>
+
+              <div class="target-coordinates">
+                <div class="coordinate-item">
+                  <div class="coordinate-label">📍 Nama Lokasi</div>
+                  <div class="coordinate-value" id="targetPklName" style="font-family:inherit; font-size:0.85rem;">--</div>
+                </div>
+                <div class="coordinate-item">
+                  <div class="coordinate-label">🌐 Latitude</div>
+                  <div class="coordinate-value" id="targetLatValue">--</div>
+                </div>
+                <div class="coordinate-item">
+                  <div class="coordinate-label">🌐 Longitude</div>
+                  <div class="coordinate-value" id="targetLngValue">--</div>
+                </div>
+                <div class="coordinate-item">
+                  <div class="coordinate-label">📏 Radius</div>
+                  <div class="coordinate-value" id="targetRadiusValue">350 m</div>
+                </div>
+              </div>
+              <!-- Google Maps target link + Sync button (auto on login, manual jika perlu) -->
+              <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                <a id="googleMapsTargetLink" href="#" target="_blank" rel="noopener noreferrer"
+                   style="display:inline-flex; align-items:center; gap:6px; background:rgba(34,197,94,0.15); border:1px solid rgba(34,197,94,0.3); color:#22c55e; padding:6px 12px; border-radius:6px; font-size:0.75rem; font-weight:600; text-decoration:none;">
+                  <i class="fa-brands fa-google"></i> Lihat di Google Maps
+                </a>
+                <button type="button" onclick="resyncLocationFromGoogleMaps()"
+                  style="display:inline-flex; align-items:center; gap:6px; background:rgba(6,182,212,0.15); border:1px solid rgba(6,182,212,0.3); color:#22d3ee; padding:6px 12px; border-radius:6px; font-size:0.75rem; font-weight:600; cursor:pointer;"
+                  title="Sync ulang koordinat jika titik map masih tidak sesuai">
+                  <i class="fa-solid fa-rotate" id="resyncIcon"></i> Sync Ulang
+                </button>
+              </div>
+            </div>
+
+            <!-- Status Distance Banner -->
+            <div id="distanceStatusBanner" style="display:none; padding:10px 14px; border-radius:8px; margin-top:8px; font-size:0.82rem; font-weight:700; display:flex; align-items:center; gap:8px;">
+            </div>
+
+            <!-- Out of Radius Reason Form (Task 4) - shown when outside geofence -->
+            <div class="out-radius-form hidden" id="outRadiusReasonForm">
+              <h4><i class="fa-solid fa-triangle-exclamation"></i> Anda di Luar Radius Izin Absensi</h4>
+              <p style="font-size:0.8rem; color:#fbbf24; margin-bottom:12px;">
+                Jarak Anda <strong id="outRadiusDistance">-- m</strong> dari lokasi PKL
+                (radius izin: <strong id="outRadiusLimit">350 m</strong>).
+                Wajib mengisi alasan untuk tetap melakukan absensi.
+              </p>
+              <label style="font-size:0.8rem; color:#e2e8f0; display:block; margin-bottom:6px; font-weight:600;">
+                <i class="fa-solid fa-pen"></i> Alasan Absensi di Luar Radius: <span style="color:#ef4444;">*</span>
+              </label>
+              <textarea id="outRadiusReason" placeholder="Contoh: Sedang dalam perjalanan menuju lokasi PKL, terjebak kemacetan / Tugas luar dari pembimbing / Kondisi darurat lainnya..." maxlength="300"></textarea>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
+                <span id="outRadiusCharCount" style="font-size:0.7rem; color:#94a3b8;">0 / 300 karakter</span>
+                <div style="display:flex; gap:8px;">
+                  <button type="button" class="btn-out-radius secondary" onclick="cancelOutRadiusAbsen()">
+                    <i class="fa-solid fa-xmark"></i> Batal
+                  </button>
+                  <button type="button" class="btn-out-radius primary" id="btnSubmitOutRadius" onclick="submitOutRadiusAbsen()">
+                    <i class="fa-solid fa-check"></i> Tetap Absen + Simpan Alasan
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="map-info" id="mapInfoBar">
+              <p><i class="fa-solid fa-building-flag"></i> Target: <strong id="targetMapName">PT. Tech Solution Indonesia</strong></p>
+              <p><i class="fa-solid fa-ruler"></i> Radius Izin: <strong id="radiusMetersText">350 Meter</strong> | Jarak Anda: <strong id="distanceText">-- m</strong></p>
+            </div>
+
+            <!-- Legenda titik PKL siswa (hanya tampil untuk guru) -->
+            <div id="guruPklLegend" style="display:none; margin-top:10px; padding:10px 12px; background:rgba(15,23,42,0.7); border:1px solid rgba(99,102,241,0.3); border-radius:10px;">
+              <p style="font-size:0.72rem; color:#94a3b8; margin-bottom:8px; font-weight:600;">
+                <i class="fa-solid fa-map-pin text-indigo-400"></i> Titik PKL Siswa Bimbingan:
+              </p>
+              <div id="guruPklLegendList" style="display:flex; flex-direction:column; gap:5px;">
+                <!-- Diisi oleh JS -->
+              </div>
+            </div>
+
+            <!-- Notifikasi koordinat PKL belum ada (hanya untuk siswa, muncul di beranda) -->
+            <div id="homeKoordNotice" class="hidden"
+              style="margin-top:10px; padding:10px 12px; background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.4); border-radius:10px; display:flex; align-items:center; justify-content:space-between; gap:10px;">
+              <div style="font-size:0.76rem; color:#fde68a; line-height:1.4;">
+                <i class="fa-solid fa-triangle-exclamation" style="color:#f59e0b;"></i>
+                <strong>Koordinat PKL belum tersedia.</strong>
+                <span style="color:#cbd5e1;"> Peta menampilkan lokasi sementara.</span>
+              </div>
+              <button type="button" onclick="openAjukanKoordModal()"
+                style="flex-shrink:0; background:linear-gradient(135deg,#f59e0b,#d97706); color:#fff; border:none; padding:6px 12px; border-radius:7px; font-size:0.75rem; font-weight:700; cursor:pointer; white-space:nowrap;">
+                <i class="fa-solid fa-map-pin"></i> Ajukan
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 2: RIWAYAT ABSENSI ================= -->
+      <section id="tab-history" class="tab-page">
+        <div class="section-title space-between">
+          <h3>Riwayat Kehadiran</h3>
+          <button class="btn-sm btn-outline" onclick="exportHistoryCSV()"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="filter-bar">
+          <select id="filterMonth" onchange="renderHistoryList()">
+            <option value="all">Semua Bulan</option>
+            <option value="8" selected>Agustus 2026</option>
+            <option value="7">Juli 2026</option>
+          </select>
+
+          <select id="filterStatus" onchange="renderHistoryList()">
+            <option value="all">Semua Status</option>
+            <option value="Hadir">Hadir</option>
+            <option value="Izin">Izin</option>
+            <option value="Sakit">Sakit</option>
+          </select>
+        </div>
+
+        <!-- Attendance History List -->
+        <div class="history-list" id="historyListContainer">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- ================= TAB 3: FORM IZIN / SAKIT (SISWA) & LOG PRESENSI (GURU) ================= -->
+      <section id="tab-permission" class="tab-page">
+        <!-- Siswa View: Form Pengajuan Izin / Sakit — hidden by default, shown via applyUserInterface() -->
+        <div id="studentPermissionFormCard" class="hidden">
+          <div class="section-title">
+            <h3><i class="fa-solid fa-file-signature text-indigo-400"></i> Pengajuan Izin / Sakit</h3>
+          </div>
+
+          <div class="card form-card">
+            <form id="permissionForm" onsubmit="handlePermissionSubmit(event)" autocomplete="off">
+              <div class="form-group">
+                <label><i class="fa-solid fa-layer-group"></i> Jenis Pengajuan</label>
+                <select id="permType" required>
+                  <option value="Izin">Izin Tidak Masuk</option>
+                  <option value="Sakit">Sakit (Dengan Surat Dokter)</option>
+                  <option value="Dinas">Tugas Dinas / Lapangan</option>
+                </select>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label><i class="fa-regular fa-calendar"></i> Tanggal Mulai</label>
+                  <input type="date" id="permStartDate" required>
+                </div>
+                <div class="form-group">
+                  <label><i class="fa-regular fa-calendar"></i> Tanggal Selesai</label>
+                  <input type="date" id="permEndDate" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label><i class="fa-solid fa-align-left"></i> Alasan & Keterangan</label>
+                <textarea id="permReason" rows="3" placeholder="Tuliskan alasan lengkap pengajuan izin/sakit..." required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label><i class="fa-solid fa-paperclip"></i> Upload Bukti / Surat (Opsional)</label>
+                <div class="file-upload-box" onclick="document.getElementById('permFile').click()">
+                  <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
+                  <p id="fileNamePreview">Klik untuk upload foto surat dokter / surat izin</p>
+                  <input type="file" id="permFile" accept="image/*" class="hidden" onchange="previewUploadFile(this)">
+                </div>
+              </div>
+
+              <button type="submit" class="btn-primary full-width">
+                <i class="fa-solid fa-paper-plane"></i> Kirim Permohonan
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Guru View: Log Presensi Hari Ini & Persetujuan Izin Pending -->
+        <div id="guruLogPresensiContainer" class="hidden">
+          <div class="section-title space-between mb-2">
+            <h3><i class="fa-solid fa-list-check text-indigo-400"></i> Log Presensi Hari Ini</h3>
+            <span class="badge-count" id="guruTodayLogCount">Live Feed</span>
+          </div>
+
+          <!-- Quick Filters Row for Guru Tab -->
+          <div class="card p-2 mb-2" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between;">
+            <div style="display:flex; gap:8px; flex:1; min-width:200px; flex-wrap:wrap;">
+              <select id="guruTabFilterGuru" onchange="renderGuruLogPresensiTab()" style="background:#1e293b; color:#fff; border:1px solid #4f46e5; padding:6px 10px; border-radius:6px; font-size:0.78rem; flex:2; min-width:140px; outline:none;">
+                <option value="ALL">-- Kelompok Bimbingan Saya --</option>
+                <option value="ALL_SCHOOL">Semua Siswa Sekolah (Master List)</option>
+              </select>
+              <select id="guruTabFilterStatus" onchange="renderGuruLogPresensiTab()" style="background:#1e293b; color:#fff; border:1px solid #4f46e5; padding:6px 10px; border-radius:6px; width:120px; outline:none;">
+                <option value="ALL">Semua Status</option>
+                <option value="Hadir">Hadir</option>
+                <option value="Izin">Izin</option>
+                <option value="Sakit">Sakit</option>
+                <option value="Alpa">Alpa</option>
+              </select>
+              <!-- Filter Tanggal: default hari ini, bisa diubah ke rentang -->
+              <select id="guruTabFilterDateMode" onchange="toggleGuruDateRange()" style="background:#1e293b; color:#fff; border:1px solid #4f46e5; padding:6px 10px; border-radius:6px; width:120px; outline:none; font-size:0.78rem;">
+                <option value="today">Hari Ini</option>
+                <option value="range">Pilih Tanggal</option>
+                <option value="all">Semua Tanggal</option>
+              </select>
+              <div id="guruDateRangePanel" style="display:none; gap:4px; align-items:center; flex-wrap:nowrap;">
+                <input type="date" id="guruTabFilterDateStart" onchange="renderGuruLogPresensiTab()" style="background:#1e293b; color:#fff; border:1px solid #4f46e5; padding:5px 8px; border-radius:6px; font-size:0.78rem; width:130px; outline:none;">
+                <span style="color:#64748b; font-size:0.75rem;">s/d</span>
+                <input type="date" id="guruTabFilterDateEnd" onchange="renderGuruLogPresensiTab()" style="background:#1e293b; color:#fff; border:1px solid #4f46e5; padding:5px 8px; border-radius:6px; font-size:0.78rem; width:130px; outline:none;">
+              </div>
+            </div>
+            <button type="button" class="btn-sm btn-outline" onclick="refreshGuruTabFeed()" style="font-size:0.75rem; padding:6px 12px; cursor:pointer;">
+              <i class="fa-solid fa-arrows-rotate text-emerald-400"></i> Refresh
+            </button>
+          </div>
+
+          <div class="card table-card mb-3">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th style="width:35px; text-align:center;">No</th>
+                    <th>Siswa &amp; Instansi PKL</th>
+                    <th style="white-space:nowrap; width:80px;">Tanggal</th>
+                    <th style="white-space:nowrap; width:68px;">Jam Masuk</th>
+                    <th style="white-space:nowrap; width:68px;">Jam Pulang</th>
+                    <th>Lokasi GPS / Keterangan</th>
+                    <th style="text-align:center; width:60px;">Foto Selfie</th>
+                    <th style="text-align:center; width:70px;">Status</th>
+                    <th style="width:160px;">Jurnal Harian</th>
+                  </tr>
+                </thead>
+                <tbody id="guruTabStudentLogTable">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Guru Approval List in Tab 3 -->
+          <div class="section-title space-between mb-2">
+            <h3><i class="fa-solid fa-file-circle-check text-indigo-400"></i> Persetujuan Izin Pending Siswa</h3>
+            <button type="button" class="btn-sm btn-outline" onclick="refreshPermissionApprovalsFeed()" style="font-size:0.75rem; padding:5px 11px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+              <i class="fa-solid fa-arrows-rotate text-emerald-400"></i> Refresh Scan Izin
+            </button>
+          </div>
+          <div class="admin-approval-list" id="guruTabApprovalList">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Submitted Permissions List for Siswa — hidden by default, shown via applyUserInterface() -->
+        <div id="studentPermissionTitleContainer" class="hidden">
+          <div class="section-title space-between mb-2">
+            <h3><i class="fa-solid fa-file-signature text-indigo-400"></i> Status Pengajuan Saya</h3>
+            <button type="button" class="btn-sm btn-outline" onclick="refreshStudentPermissionFeed()" style="font-size:0.75rem; padding:5px 11px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+              <i class="fa-solid fa-arrows-rotate text-emerald-400"></i> Cek Status Pengajuan
+            </button>
+          </div>
+          <div class="permission-list" id="permissionListContainer">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB JURNAL: JURNAL HARIAN SISWA PKL ================= -->
+      <section id="tab-journal" class="tab-page">
+        <div class="section-title">
+          <h3><i class="fa-solid fa-book-open text-emerald-400"></i> Jurnal Harian PKL</h3>
+        </div>
+
+        <!-- Form Upload Jurnal Hari Ini -->
+        <div class="card form-card" id="journalFormCard">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:10px;">
+            <h4 style="font-size:0.9rem;color:#fff;margin:0;"><i class="fa-solid fa-pen-to-square text-emerald-400"></i> Tulis Jurnal Hari Ini</h4>
+            <span id="journalTodayBadge" style="font-size:0.72rem;padding:3px 10px;border-radius:10px;background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3);display:none;">
+              <i class="fa-solid fa-circle-check"></i> Sudah diisi
+            </span>
+          </div>
+
+          <div id="journalTodayPreview" style="display:none;margin-bottom:14px;padding:10px 12px;background:rgba(16,185,129,0.08);border-radius:10px;border:1px solid rgba(16,185,129,0.25);">
+            <p style="font-size:0.78rem;color:#34d399;margin-bottom:6px;font-weight:700;"><i class="fa-solid fa-circle-check"></i> Jurnal hari ini sudah dikirim.</p>
+            <p id="journalTodayNarasi" style="font-size:0.8rem;color:#cbd5e1;margin-bottom:8px;"></p>
+            <img id="journalTodayImg" src="" alt="Foto Kegiatan" style="width:100%;max-width:200px;border-radius:8px;object-fit:cover;display:none;">
+            <button type="button" style="margin-top:8px;font-size:0.75rem;color:#f59e0b;background:none;border:1px solid rgba(245,158,11,0.4);border-radius:6px;padding:4px 12px;cursor:pointer;" onclick="resetJournalForm()">
+              <i class="fa-solid fa-rotate"></i> Edit / Kirim Ulang
+            </button>
+          </div>
+
+          <form id="journalForm" onsubmit="handleJournalSubmit(event)" autocomplete="off">
+            <div class="form-group">
+              <label style="font-size:0.78rem;color:var(--text-muted);"><i class="fa-solid fa-align-left text-emerald-400"></i> Narasi / Catatan Kegiatan Hari Ini <span style="color:#ef4444;">*</span></label>
+              <textarea id="journalNarasi" rows="4" required placeholder="Ceritakan kegiatan PKL Anda hari ini... (minimal 20 karakter)" style="width:100%;padding:10px 12px;background:rgba(15,23,42,0.7);border:1px solid rgba(99,102,241,0.4);border-radius:8px;color:#fff;font-size:0.85rem;resize:vertical;font-family:inherit;" maxlength="1000"></textarea>
+              <small id="journalNarasiCount" style="font-size:0.7rem;color:#64748b;">0 / 1000 karakter</small>
+            </div>
+
+            <div class="form-group">
+              <label style="font-size:0.78rem;color:var(--text-muted);"><i class="fa-solid fa-camera text-indigo-400"></i> Foto Kegiatan <span style="font-size:0.7rem;color:#64748b;">(opsional)</span></label>
+              <div id="journalPhotoWrap" style="border:2px dashed rgba(99,102,241,0.4);border-radius:10px;padding:16px;text-align:center;cursor:pointer;transition:all .2s;" onclick="document.getElementById('journalPhotoInput').click()">
+                <i class="fa-solid fa-cloud-arrow-up" style="font-size:1.8rem;color:#6366f1;margin-bottom:8px;display:block;"></i>
+                <p style="font-size:0.78rem;color:#94a3b8;margin:0;">Tap untuk pilih foto dari galeri atau kamera</p>
+              </div>
+              <input type="file" id="journalPhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="previewJournalPhoto(this)">
+              <div id="journalPhotoPreview" style="display:none;margin-top:10px;text-align:center;">
+                <img id="journalPhotoImg" src="" alt="Preview" style="max-width:100%;max-height:200px;border-radius:8px;object-fit:contain;border:1px solid rgba(255,255,255,0.1);">
+                <button type="button" onclick="clearJournalPhoto()" style="display:block;margin:6px auto 0;font-size:0.72rem;color:#f87171;background:none;border:none;cursor:pointer;">
+                  <i class="fa-solid fa-xmark"></i> Hapus foto
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary full-width" id="btnJournalSubmit" style="margin-top:4px;">
+              <i class="fa-solid fa-paper-plane"></i> Kirim Jurnal Harian
+            </button>
+          </form>
+        </div>
+
+        <!-- Riwayat Jurnal -->
+        <div class="card" style="margin-top:16px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <h4 style="font-size:0.85rem;color:#fff;margin:0;"><i class="fa-solid fa-clock-rotate-left text-indigo-400"></i> Riwayat Jurnal</h4>
+            <span id="journalCountBadge" style="font-size:0.72rem;padding:2px 8px;border-radius:8px;background:rgba(99,102,241,0.15);color:#a5b4fc;">0 jurnal</span>
+          </div>
+          <div id="journalListContainer">
+            <p class="text-muted text-sm text-center" style="padding:16px;">Belum ada jurnal. Mulai tulis jurnal pertama Anda!</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB 4: DASHBOARD GURU & MANAJEMEN ADMIN ================= -->
+      <section id="tab-admin" class="tab-page">
+
+        <div class="admin-header-banner">
+          <div class="admin-banner-title">
+            <h3>Panel Admin & Guru Pembimbing</h3>
+            <p>Monitoring Real-time & Kelola User Siswa/Guru</p>
+          </div>
+          <div class="admin-banner-actions">
+            <!-- Baris 1: Filter dropdown -->
+            <div class="admin-banner-row">
+              <div class="admin-banner-filter-group">
+                <span class="admin-banner-filter-label"><i class="fa-solid fa-calendar-days"></i></span>
+                <select id="selectMonthFilterPDF" onchange="onMonthFilterPDFChange(this)" title="Pilih Bulan Rekap">
+                  <option value="ALL" selected>Semua Bulan</option>
+                  <option value="1">Januari</option>
+                  <option value="2">Februari</option>
+                  <option value="3">Maret</option>
+                  <option value="4">April</option>
+                  <option value="5">Mei</option>
+                  <option value="6">Juni</option>
+                  <option value="7">Juli</option>
+                  <option value="8">Agustus</option>
+                  <option value="9">September</option>
+                  <option value="10">Oktober</option>
+                  <option value="11">November</option>
+                  <option value="12">Desember</option>
+                </select>
+              </div>
+              <div class="admin-banner-filter-group" style="flex:1.4;">
+                <span class="admin-banner-filter-label"><i class="fa-solid fa-users"></i></span>
+                <select id="selectGuruFilterPDF" onchange="onGuruFilterPDFChange(this)" title="Pilih Guru Pembimbing">
+                  <option value="ALL">All Siswa & Pembimbing</option>
+                  <option value="CUSTOM_SELECT">-- Pilihan Pembimbing --</option>
+                </select>
+              </div>
+            </div>
+            <!-- Baris 2: Tombol aksi -->
+            <div class="admin-banner-row">
+              <button type="button" class="admin-banner-btn btn-stat" onclick="exportMonthlyAttendanceStatsPDF()"><i class="fa-solid fa-chart-pie"></i> Cetak Statistik</button>
+              <button type="button" class="admin-banner-btn btn-rekap" onclick="exportAdminRekapPDF()"><i class="fa-solid fa-file-pdf"></i> Cetak Rekap PDF</button>
+              <button type="button" class="admin-banner-btn btn-csv" onclick="exportAdminRekapCSV()"><i class="fa-solid fa-download"></i> Unduh CSV</button>
+              <button type="button" class="admin-banner-btn" style="background:linear-gradient(135deg,#0891b2,#0e7490); color:#fff;" onclick="exportCetakLengkap()"><i class="fa-solid fa-id-card"></i> Cetak Lengkap</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Input Data Kepala Sekolah (Terletak Tepat di Bawah Banner Panel Admin & Guru) -->
+        <div class="card form-card mb-3" id="quickPrincipalCard" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 12px; padding: 16px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px;">
+            <h4 style="font-size:0.88rem; margin:0; color:#fff;"><i class="fa-solid fa-file-signature text-indigo-400"></i> Pengaturan Data Kepala Sekolah (PDF Sync)</h4>
+            <button type="button" class="btn-sm btn-outline" style="font-size:0.7rem; padding:4px 10px; border-color:#f87171; color:#f87171; cursor:pointer;" onclick="resetPrincipalSettingsForm()"><i class="fa-solid fa-rotate-left"></i> Reset Isian Kolom</button>
+          </div>
+
+          <form id="principalFormCard" onsubmit="handleSavePrincipalSettings(event)" autocomplete="off">
+            <!-- Dummy hidden inputs to trap browser autofill history -->
+            <input type="text" style="position:absolute; opacity:0; pointer-events:none; width:0; height:0;" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <input type="password" style="position:absolute; opacity:0; pointer-events:none; width:0; height:0;" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+            <div class="form-group" style="margin-bottom:10px;">
+              <label style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-solid fa-user-tie text-indigo-400"></i> Nama Kepala Sekolah</label>
+              <input type="text" id="settingPrincipalName" name="field_ks_name_no_history_rnd" oninput="autoSavePrincipalSettings()" placeholder="Wajib Diisi" style="font-size:0.82rem;" autocomplete="one-time-code" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-form-type="other">
+            </div>
+            
+            <div class="form-row" style="margin-bottom:10px;">
+              <div class="form-group" style="margin-bottom:0;">
+                <label style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-solid fa-id-card text-emerald-400"></i> NIP Kepala Sekolah</label>
+                <input type="text" id="settingPrincipalNip" name="field_ks_nip_no_history_rnd" oninput="autoSavePrincipalSettings()" placeholder="Wajib Diisi" style="font-size:0.82rem;" autocomplete="one-time-code" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-form-type="other">
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-solid fa-school text-sky-400"></i> Nama Sekolah / Instansi</label>
+                <input type="text" id="settingSchoolName" name="field_ks_school_no_history_rnd" oninput="autoSavePrincipalSettings()" placeholder="Wajib Diisi" style="font-size:0.82rem;" autocomplete="one-time-code" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-form-type="other">
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom:14px;">
+              <label style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-solid fa-location-dot text-amber-400"></i> Kota Pengesahan</label>
+              <input type="text" id="settingCityName" name="field_ks_city_no_history_rnd" oninput="autoSavePrincipalSettings()" placeholder="Wajib Diisi" style="font-size:0.82rem;" autocomplete="one-time-code" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-form-type="other">
+            </div>
+
+            <!-- Jabatan Tambahan untuk Cetak Lengkap (Admin) -->
+            <div class="form-row" style="margin-bottom:10px;">
+              <div class="form-group" style="margin-bottom:0;">
+                <label style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-solid fa-user-shield text-purple-400"></i> Nama Waka Humas</label>
+                <input type="text" id="settingWakaHumasName" name="field_waka_name_rnd" oninput="autoSavePrincipalSettings()" placeholder="Wajib Diisi" style="font-size:0.82rem;" autocomplete="one-time-code" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-form-type="other">
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-solid fa-id-card text-purple-300"></i> NIP Waka Humas</label>
+                <input type="text" id="settingWakaHumasNip" name="field_waka_nip_rnd" oninput="autoSavePrincipalSettings()" placeholder="Wajib Diisi" style="font-size:0.82rem;" autocomplete="one-time-code" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-form-type="other">
+              </div>
+            </div>
+            <div class="form-row" style="margin-bottom:14px;">
+              <div class="form-group" style="margin-bottom:0;">
+                <label style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-solid fa-briefcase text-cyan-400"></i> Nama Ketua Pokja PKL</label>
+                <input type="text" id="settingPokjaName" name="field_pokja_name_rnd" oninput="autoSavePrincipalSettings()" placeholder="Wajib Diisi" style="font-size:0.82rem;" autocomplete="one-time-code" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-form-type="other">
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-solid fa-id-card text-cyan-300"></i> NIP Ketua Pokja PKL</label>
+                <input type="text" id="settingPokjaNip" name="field_pokja_nip_rnd" oninput="autoSavePrincipalSettings()" placeholder="Wajib Diisi" style="font-size:0.82rem;" autocomplete="one-time-code" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-form-type="other">
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary full-width" style="margin-top:6px;">
+              <i class="fa-solid fa-floppy-disk"></i> Simpan Data Kepala Sekolah
+            </button>
+          </form>
+        </div>
+
+        <!-- Sub Tabs Nav: Kelola User vs Persetujuan vs Reset Data -->
+        <div class="admin-sub-tabs mb-3" style="display:flex; flex-wrap:wrap; gap:8px;">
+          <button class="sub-tab hidden" id="btnTabMonitoring" onclick="switchAdminSubTab('monitoring')">
+            <i class="fa-solid fa-chart-line"></i> Realtime Monitoring
+          </button>
+          <button class="sub-tab active" id="btnTabUsers" onclick="switchAdminSubTab('users')">
+            <i class="fa-solid fa-users-gear"></i> Kelola Siswa & Guru
+          </button>
+          <button class="sub-tab hidden" id="btnTabApprovals" onclick="switchAdminSubTab('approvals')">
+            <i class="fa-solid fa-clipboard-check text-amber-400"></i> Menu Persetujuan Pembimbing <span id="pendingApprovalBadge" style="background:#ef4444; color:#fff; padding:2px 7px; border-radius:10px; font-size:0.7rem; display:none; margin-left:4px;">0</span>
+          </button>
+          <button class="sub-tab hidden" id="btnTabReset" onclick="switchAdminSubTab('reset')">
+            <i class="fa-solid fa-rotate text-rose-400"></i> Tab Reset Data & System
+          </button>
+        </div>
+
+        <!-- Sub View 1: Real-time Monitoring -->
+        <div id="subViewMonitoring">
+          <!-- Guru Approval Report Feed (Guru Pembimbing Only) -->
+          <div id="guruApprovalReportCard" class="card form-card mb-3 hidden" style="border-left:4px solid #10b981; background: rgba(16, 185, 129, 0.05);">
+            <h4><i class="fa-solid fa-square-check text-emerald-400"></i> Laporan Hasil Persetujuan Master Admin</h4>
+            <p class="text-xs text-muted mb-2">Riwayat hasil keputusan persetujuan Master Admin untuk pengajuan Anda (Akun Siswa, Edit Tempat PKL, Hapus Siswa, dll).</p>
+            <div id="guruApprovalReportList" class="mt-2">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Admin Table: Today's Student Log (Master Admin Only) -->
+          <div id="adminStudentLogSection">
+            <div class="section-title space-between mb-2">
+              <h3><i class="fa-solid fa-list-check text-indigo-400"></i> Log Presensi Hari Ini</h3>
+              <span class="badge-count" id="todayLogCount">Live Feed</span>
+            </div>
+
+            <!-- Quick Filters Row: Semua Guru Pembimbing, Per Bulan, & Pilihan Nama Pembimbing -->
+            <div class="card p-2 mb-2" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between;">
+              <div style="display:flex; gap:8px; flex:1; flex-wrap:wrap; min-width:260px;">
+                <select id="filterDashboardGuru" onchange="renderAdminDashboard()" style="background:#1e293b; color:#fff; border:1px solid #4f46e5; padding:6px 10px; border-radius:6px; font-size:0.78rem; flex:2; min-width:160px; outline:none;">
+                  <option value="ALL">All Siswa beserta pembimbing</option>
+                  <option value="ALL_SCHOOL">Semua Siswa Sekolah (Master List)</option>
+                  <option value="CUSTOM_SELECT">-- Pilihan Nama Pembimbing --</option>
+                </select>
+                <select id="filterDashboardMonth" onchange="renderAdminDashboard()" style="background:#1e293b; color:#fff; border:1px solid #4f46e5; padding:6px 10px; border-radius:6px; font-size:0.78rem; flex:1; min-width:110px; outline:none;">
+                  <option value="ALL" selected>Semua Bulan</option>
+                  <option value="1">Januari</option>
+                  <option value="2">Februari</option>
+                  <option value="3">Maret</option>
+                  <option value="4">April</option>
+                  <option value="5">Mei</option>
+                  <option value="6">Juni</option>
+                  <option value="7">Juli</option>
+                  <option value="8">Agustus</option>
+                  <option value="9">September</option>
+                  <option value="10">Oktober</option>
+                  <option value="11">November</option>
+                  <option value="12">Desember</option>
+                </select>
+                <select id="filterDashboardStatus" onchange="renderAdminDashboard()" style="background:#1e293b; color:#fff; border:1px solid #4f46e5; padding:6px 10px; border-radius:6px; font-size:0.78rem; width:110px; outline:none;">
+                  <option value="ALL">Semua Status</option>
+                  <option value="Hadir">Hadir</option>
+                  <option value="Izin">Izin</option>
+                  <option value="Sakit">Sakit</option>
+                  <option value="Alpa">Alpa</option>
+                </select>
+              </div>
+              <button type="button" class="btn-sm btn-outline" onclick="refreshAdminDashboardFeed()" style="font-size:0.75rem; padding:6px 12px; cursor:pointer;">
+                <i class="fa-solid fa-arrows-rotate text-emerald-400"></i> Refresh Feed Realtime
+              </button>
+            </div>
+
+            <div class="card table-card">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="width:35px; text-align:center;">No</th>
+                      <th>Siswa &amp; Instansi PKL</th>
+                      <th style="white-space:nowrap; width:80px;">Tanggal</th>
+                      <th style="white-space:nowrap; width:68px;">Jam Masuk</th>
+                      <th style="white-space:nowrap; width:68px;">Jam Pulang</th>
+                      <th>Lokasi GPS / Keterangan</th>
+                      <th style="text-align:center; width:60px;">Foto Selfie</th>
+                      <th style="text-align:center; width:70px;">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adminStudentLogTable">
+                    <!-- Populated by JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Arsip Laporan Rekap Bulanan Tersimpan -->
+          <div class="card mt-3" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 16px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px;">
+              <h4 style="font-size:0.88rem; margin:0; color:#fff;"><i class="fa-solid fa-box-archive text-emerald-400"></i> Arsip Laporan Rekap Bulanan Tersimpan (Database System)</h4>
+              <button type="button" class="btn-sm btn-outline" style="font-size:0.7rem; padding:4px 10px; border-color:#10b981; color:#34d399; cursor:pointer;" onclick="renderMonthlyReportsArchive()"><i class="fa-solid fa-rotate"></i> Refresh Arsip</button>
+            </div>
+            <p class="text-xs text-muted mb-2">Daftar file & riwayat laporan rekapitulasi bulanan yang telah dicetak dan otomatis tersimpan permanen di database sistem.</p>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th style="width:35px; text-align:center;">No</th>
+                    <th>Judul Laporan Bulanan</th>
+                    <th>Bulan / Tahun</th>
+                    <th>Pembimbing / Skala</th>
+                    <th>Dicetak Oleh</th>
+                    <th>Waktu Simpan</th>
+                    <th style="text-align:center;">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="monthlyReportsArchiveTable">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub View 2: User Management (Create Password & Batch CSV Upload) -->
+        <div id="subViewUsers" class="hidden">
+          <!-- Upload Batch CSV Box (Master Admin Only) -->
+          <div class="card import-card" id="csvImportCard">
+            <h4 id="csvCardTitle"><i class="fa-solid fa-file-csv text-emerald-400"></i> Import Data Massal Siswa & Guru (Master Admin)</h4>
+            <p class="text-xs text-muted mb-2" id="csvCardDesc">Upload file `.csv` atau `.xls` berisi kolom: `role, nama, nomor_induk, username, password, kelas, sekolah, lokasi_pkl, guru_pembimbing`</p>
+
+            <div class="file-upload-box" onclick="document.getElementById('csvFileInput').click()">
+              <i class="fa-solid fa-cloud-arrow-up text-xl"></i>
+              <p id="csvFileNamePreview">Pilih / Drag & Drop File Excel (.xls) atau CSV Data Massal Siswa & Guru</p>
+              <input type="file" id="csvFileInput" accept=".csv,.xls,.xlsx" class="hidden" onchange="handleCSVFileSelect(this)">
+            </div>
+            
+            <div style="display:flex; gap:8px; margin-top:8px;">
+              <button type="button" class="btn-sm btn-success flex-1" onclick="downloadSampleExcel()" style="font-size:0.75rem; padding:8px 12px; font-weight:600; display:inline-flex; align-items:center; justify-content:center; gap:6px;">
+                <i class="fa-solid fa-file-excel"></i> Download Template Excel Rapi (.xls)
+              </button>
+              <button type="button" class="btn-sm btn-outline flex-1" onclick="downloadSampleCSV()" style="font-size:0.75rem; padding:8px 12px; font-weight:600; display:inline-flex; align-items:center; justify-content:center; gap:6px;">
+                <i class="fa-solid fa-file-csv"></i> Download Template CSV (.csv)
+              </button>
+            </div>
+
+            <!-- Tabel Preview Format Template CSV Massal -->
+            <div class="mt-3" style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <span style="font-size:0.75rem; font-weight:bold; color:#a5b4fc;"><i class="fa-solid fa-table"></i> Struktur 9 Kolom Template (Praktis & Otomatis):</span>
+                <span style="font-size:0.7rem; color:#34d399;"><i class="fa-solid fa-wand-magic-sparkles"></i> GPS PKL Otomatis Terdeteksi</span>
+              </div>
+              <div class="table-responsive" style="max-height:200px; overflow-y:auto;">
+                <table class="data-table" style="font-size:0.72rem;">
+                  <thead>
+                    <tr>
+                      <th style="min-width:80px;">role</th>
+                      <th style="min-width:150px;">nama</th>
+                      <th style="min-width:130px;">nomor_induk</th>
+                      <th style="min-width:110px;">username</th>
+                      <th style="min-width:100px;">password</th>
+                      <th style="min-width:100px;">kelas</th>
+                      <th style="min-width:120px;">sekolah</th>
+                      <th style="min-width:180px;">lokasi_pkl</th>
+                      <th style="min-width:150px;">guru_pembimbing</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="background:rgba(99,102,241,0.1);">
+                      <td>siswa</td>
+                      <td>Budi Santoso</td>
+                      <td>0054819203</td>
+                      <td>budi</td>
+                      <td>123456</td>
+                      <td>XII RPL 1</td>
+                      <td>SMK Negeri 9 Malang</td>
+                      <td>PT. Tech Solution</td>
+                      <td>Gigih Perkasa</td>
+                    </tr>
+                    <tr style="background:rgba(79,70,229,0.08);">
+                      <td>guru</td>
+                      <td>Ahmad Hidayat, S.Pd.</td>
+                      <td>198505151235</td>
+                      <td>ahmad</td>
+                      <td>123456</td>
+                      <td style="color:#94a3b8; font-style:italic;">-</td>
+                      <td>SMK Negeri 9 Malang</td>
+                      <td style="color:#94a3b8; font-style:italic;">kosongkan</td>
+                      <td style="color:#94a3b8; font-style:italic;">-</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <!-- Keterangan Field -->
+              <div style="margin-top:10px; padding:10px; background:rgba(79,70,229,0.1); border-left:3px solid #6366f1; border-radius:6px;">
+                <p style="font-size:0.75rem; color:#cbd5e1; margin-bottom:6px; font-weight:600;">
+                  <i class="fa-solid fa-info-circle text-indigo-400"></i> Panduan Pengisian:
+                </p>
+                <ul style="font-size:0.72rem; color:#94a3b8; margin:0; padding-left:20px; line-height:1.6;">
+                  <li><strong style="color:#a5b4fc;">kelas:</strong> Wajib diisi untuk siswa (contoh: XII RPL 1), kosongkan atau isi "-" untuk guru</li>
+                  <li><strong style="color:#a5b4fc;">lokasi_pkl:</strong> <span style="color:#fbbf24;">Kosongkan atau isi "SMK Negeri 9 Malang" jika role sebagai guru</span></li>
+                  <li><strong style="color:#a5b4fc;">guru_pembimbing:</strong> Wajib diisi untuk siswa, kosongkan atau isi "-" untuk guru</li>
+                  <li><strong style="color:#34d399;">GPS Koordinat:</strong> Otomatis terdeteksi dari nama lokasi_pkl (presisi tinggi)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Batch Geocode Koordinat PKL (Master Admin Only) -->
+          <div class="card mb-3" id="batchGeocodeCard" style="background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(5,150,105,0.05));border:1px solid rgba(16,185,129,0.3);">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+              <div>
+                <h4 style="color:#34d399;font-size:0.88rem;margin:0 0 4px 0;">
+                  <i class="fa-solid fa-location-crosshairs"></i> Geocode Koordinat PKL Otomatis
+                </h4>
+                <p style="font-size:0.74rem;color:#94a3b8;margin:0;line-height:1.5;">
+                  Cari koordinat GPS presisi untuk siswa yang belum punya koordinat valid,
+                  menggunakan <strong>alamat lengkap</strong> dari nama PKL via Nominatim/OpenStreetMap.
+                </p>
+              </div>
+              <div style="display:flex;gap:8px;flex-shrink:0;">
+                <button type="button" id="btnBatchGeocode" onclick="runBatchGeocode(false)"
+                  style="background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;padding:8px 14px;border-radius:8px;font-size:0.78rem;font-weight:700;cursor:pointer;white-space:nowrap;">
+                  <i class="fa-solid fa-magnifying-glass-location"></i> Geocode Belum Valid
+                </button>
+                <button type="button" id="btnBatchGeocodeAll" onclick="runBatchGeocode(true)"
+                  style="background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.4);padding:8px 14px;border-radius:8px;font-size:0.78rem;font-weight:700;cursor:pointer;white-space:nowrap;">
+                  <i class="fa-solid fa-rotate"></i> Geocode Ulang Semua
+                </button>
+              </div>
+            </div>
+            <div id="batchGeocodeStatus" style="display:none;margin-top:10px;padding:10px 12px;background:rgba(15,23,42,0.6);border-radius:8px;border:1px solid rgba(255,255,255,0.08);font-size:0.78rem;color:#94a3b8;"></div>
+          </div>
+
+          <!-- Card Hasil Validasi / Warning Error Import CSV -->
+          <div class="card hidden mb-3" id="csvValidationResultCard" style="border-left: 4px solid #f59e0b; background: rgba(15, 23, 42, 0.95); margin-top: 15px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <h4 style="margin:0; font-size:0.95rem; color:#f59e0b;" id="csvResultTitle">
+                <i class="fa-solid fa-triangle-exclamation"></i> Laporan Validasi Import Data Massal
+              </h4>
+              <button type="button" onclick="document.getElementById('csvValidationResultCard').classList.add('hidden')" style="background:none; border:none; color:#94a3b8; cursor:pointer; font-size:1.1rem;" title="Tutup Laporan">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+            
+            <div id="csvResultSummary" class="mb-2" style="font-size:0.82rem;"></div>
+
+            <div id="csvErrorsContainer" class="table-responsive" style="max-height:260px; overflow-y:auto; border-radius:6px; border:1px solid rgba(245,158,11,0.2);">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Form Tambah User Manual & Create Password -->
+          <div class="card form-card">
+            <h4><i class="fa-solid fa-user-plus"></i> Tambah User / Buat Password Baru</h4>
+            
+            <p class="text-xs mb-2 hidden" id="guruAddUserNotice" style="background:rgba(245, 158, 11, 0.15); color:#f59e0b; padding:10px 12px; border-left:4px solid #f59e0b; border-radius:8px;">
+              <i class="fa-solid fa-clock-rotate-left"></i> <strong>Catatan Pengajuan Guru:</strong> Sebagai Guru Pembimbing, pembuatan Siswa Baru & Password Baru akan berstatus <strong>Pending</strong> dan membutuhkan <strong>Persetujuan Master Admin</strong> sebelum siswa dapat login.
+            </p>
+
+            <form id="addUserForm" onsubmit="handleCreateUserSubmit(event)" class="mt-2" autocomplete="off">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Role User</label>
+                  <select id="newRole" onchange="toggleFormFieldsByRole()" required>
+                    <option value="siswa">Siswa</option>
+                    <option value="guru">Guru / Pembimbing</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>NISN / NIP (Username)</label>
+                  <input type="text" id="newNomorInduk" placeholder="Nomor Induk" required autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Nama Lengkap</label>
+                <input type="text" id="newName" placeholder="Nama Lengkap User" required autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+              </div>
+
+              <div class="form-group">
+                <label>Kata Sandi / Password Baru</label>
+                <input type="text" id="newPassword" placeholder="Password (misal: 123456)" required autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false">
+              </div>
+
+              <div class="form-group">
+                <label>Sekolah</label>
+                <input type="text" id="newSchool" value="SMK Negeri 9 Malang" autocomplete="off">
+              </div>
+
+              <!-- Field KHUSUS SISWA -->
+              <div id="siswaFieldsGroup">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label><i class="fa-solid fa-chalkboard"></i> Kelas</label>
+                    <input type="text" id="newKelas" placeholder="Contoh: XII RPL 1" autocomplete="off">
+                  </div>
+                  <div class="form-group">
+                    <label><i class="fa-solid fa-user-tie"></i> Guru Pembimbing</label>
+                    <select id="newSupervisor">
+                      <option value="">-- Pilih Guru Pembimbing --</option>
+                      <!-- Will be populated by JS -->
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label><i class="fa-solid fa-building"></i> Lokasi PKL / Instansi Mitra</label>
+                  <div style="position:relative;">
+                    <input type="text" id="newPklLocation"
+                      oninput="autoPopulateFormCoords(this.value)"
+                      placeholder="Contoh: PT. Tech Solution Indonesia, Malang"
+                      autocomplete="off"
+                      style="padding-right:40px;">
+                    <button type="button" onclick="searchPklLocationOnMaps()"
+                      title="Cari di Maps"
+                      style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:#34d399; font-size:1rem; padding:4px;">
+                      <i class="fa-solid fa-magnifying-glass-location" id="pklSearchIcon"></i>
+                    </button>
+                  </div>
+
+                  <!-- Status geocoding -->
+                  <small id="coordAutoInfo" style="display:block; font-size:0.72rem; color:#34d399; margin-top:4px;">
+                    <i class="fa-solid fa-map-location-dot"></i> Ketik nama lokasi → koordinat GPS otomatis terdeteksi dari Google Maps
+                  </small>
+
+                  <!-- Mini Map Preview -->
+                  <div id="pklMiniMapContainer" style="display:none; margin-top:10px; border-radius:10px; overflow:hidden; border:1px solid rgba(52,211,153,0.4);">
+                    <div id="pklMiniMap" style="height:160px; width:100%;"></div>
+                    <div style="background:rgba(15,23,42,0.95); padding:8px 12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+                      <div style="font-size:0.72rem; color:#94a3b8;">
+                        <i class="fa-solid fa-crosshairs text-emerald-400"></i>
+                        <span id="pklMiniMapCoordText">--</span>
+                      </div>
+                      <a id="pklGoogleMapsLink" href="#" target="_blank" rel="noopener noreferrer"
+                        style="display:inline-flex; align-items:center; gap:5px; background:rgba(66,133,244,0.2); border:1px solid rgba(66,133,244,0.4); color:#60a5fa; padding:4px 10px; border-radius:5px; font-size:0.72rem; font-weight:600; text-decoration:none;">
+                        <i class="fa-brands fa-google"></i> Buka Google Maps
+                      </a>
+                    </div>
+                  </div>
+
+                  <!-- Panel input manual koordinat (muncul saat Nominatim gagal) -->
+                  <div id="pklManualCoordPanel" style="display:none; margin-top:8px; padding:10px 12px; background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.35); border-radius:8px;">
+                    <div style="font-size:0.75rem; color:#fbbf24; font-weight:600; margin-bottom:8px;">
+                      <i class="fa-solid fa-triangle-exclamation"></i> Lokasi tidak ditemukan otomatis — isi koordinat manual:
+                    </div>
+                    <div style="display:flex; gap:8px; margin-bottom:8px;">
+                      <div style="flex:1;">
+                        <label style="font-size:0.7rem; color:#94a3b8; display:block; margin-bottom:3px;">Latitude</label>
+                        <input type="number" id="pklManualLat" step="0.000001" placeholder="-7.9825"
+                          oninput="onManualCoordInput()"
+                          style="width:100%; padding:7px 10px; background:rgba(15,23,42,0.8); border:1px solid rgba(245,158,11,0.4); border-radius:6px; color:#fff; font-size:0.8rem; box-sizing:border-box;">
+                      </div>
+                      <div style="flex:1;">
+                        <label style="font-size:0.7rem; color:#94a3b8; display:block; margin-bottom:3px;">Longitude</label>
+                        <input type="number" id="pklManualLng" step="0.000001" placeholder="112.6867"
+                          oninput="onManualCoordInput()"
+                          style="width:100%; padding:7px 10px; background:rgba(15,23,42,0.8); border:1px solid rgba(245,158,11,0.4); border-radius:6px; color:#fff; font-size:0.8rem; box-sizing:border-box;">
+                      </div>
+                    </div>
+                    <div style="display:flex; gap:6px;">
+                      <button type="button" onclick="applyManualCoord()"
+                        style="flex:1; padding:7px 10px; background:linear-gradient(135deg,#f59e0b,#d97706); color:#fff; border:none; border-radius:6px; font-size:0.76rem; font-weight:700; cursor:pointer;">
+                        <i class="fa-solid fa-check"></i> Terapkan Koordinat
+                      </button>
+                      <button type="button" onclick="ambilGpsSaatIni()"
+                        style="flex:1; padding:7px 10px; background:rgba(16,185,129,0.2); color:#34d399; border:1px solid rgba(16,185,129,0.4); border-radius:6px; font-size:0.76rem; font-weight:700; cursor:pointer;">
+                        <i class="fa-solid fa-location-crosshairs"></i> GPS Saya
+                      </button>
+                      <a id="pklGmSearchLink" href="#" target="_blank" rel="noopener noreferrer"
+                        style="flex:1; padding:7px 10px; background:rgba(66,133,244,0.15); color:#60a5fa; border:1px solid rgba(66,133,244,0.35); border-radius:6px; font-size:0.76rem; font-weight:700; cursor:pointer; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:5px;">
+                        <i class="fa-brands fa-google"></i> Cari di Maps
+                      </a>
+                    </div>
+                    <p style="font-size:0.68rem; color:#64748b; margin:6px 0 0 0; line-height:1.4;">
+                      💡 <strong>Cara cepat:</strong> Klik "Cari di Maps" → cari lokasi → klik kanan → "What's here?" → copy koordinat → tempel di atas.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Field KHUSUS GURU -->
+              <div id="guruFieldsGroup" class="hidden">
+                <div class="form-group">
+                  <label><i class="fa-solid fa-school-flag"></i> Instansi Mitra (Guru)</label>
+                  <input type="text" id="newGuruInstansi" value="SMK Negeri 9 Malang" readonly style="background: rgba(99, 102, 241, 0.1); cursor: not-allowed;" autocomplete="off">
+                  <small style="display:block; font-size:0.7rem; color:#94a3b8; margin-top:3px;">
+                    <i class="fa-solid fa-info-circle"></i> Lokasi guru otomatis di SMKN 9 Malang
+                  </small>
+                </div>
+              </div>
+
+              <button type="submit" class="btn-primary full-width mt-1">
+                <i class="fa-solid fa-plus-circle"></i> Simpan User & Create Password
+              </button>
+            </form>
+          </div>
+
+          <!-- Registered Users Table -->
+          <div class="section-title space-between mt-3">
+            <h3>Daftar User Siswa & Guru</h3>
+            <span class="badge-count" id="registeredUserCount">Total: 2 User</span>
+          </div>
+
+          <!-- Kolom Pencarian User (Search Bar by Name / NISN / Role) -->
+          <div class="mb-2" style="position:relative;">
+            <i class="fa-solid fa-magnifying-glass" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:#818cf8; font-size:0.85rem;"></i>
+            <input type="text" id="adminUserSearchInput" placeholder="Cari Nama User, NISN/NIP, Username, atau Lokasi PKL..." oninput="renderAdminUsersTable()" style="width:100%; padding:10px 34px 10px 34px; background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.15); border-radius:8px; color:#fff; font-size:0.85rem; outline:none;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            <button type="button" onclick="document.getElementById('adminUserSearchInput').value=''; renderAdminUsersTable();" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; color:#94a3b8; cursor:pointer; font-size:0.85rem;" title="Bersihkan Pencarian">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+
+          <div class="card table-card">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>User / NISN</th>
+                    <th>Role</th>
+                    <th>Lokasi PKL</th>
+                    <th>Password</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="registeredUsersTable">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub View 3: Principal & School Metadata Management (Master Admin) -->
+        <div id="subViewPrincipal" class="hidden">
+          <div class="card form-card mb-3">
+            <h4><i class="fa-solid fa-file-signature text-indigo-400"></i> Input Data Kepala Sekolah & NIP (Terhubung ke PDF Rekap)</h4>
+            <p class="text-xs text-muted mb-2">Data ini diinput secara manual oleh Master Admin dan akan langsung otomatis muncul pada Kop & Lembar Pengesahan Cetak Rekap PDF.</p>
+            <form id="principalSettingsForm" onsubmit="handleSavePrincipalSettings(event)" class="mt-2" autocomplete="off">
+              <div class="form-group">
+                <label><i class="fa-solid fa-user-tie text-indigo-400"></i> Nama Lengkap Kepala Sekolah (beserta Gelar)</label>
+                <input type="text" id="settingPrincipalName2" oninput="autoSavePrincipalSettings()" placeholder="Wajib Diisi" required autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label><i class="fa-solid fa-id-card text-emerald-400"></i> NIP Kepala Sekolah</label>
+                  <input type="text" id="settingPrincipalNip2" oninput="autoSavePrincipalSettings()" placeholder="Wajib Diisi" required autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                </div>
+                <div class="form-group">
+                  <label><i class="fa-solid fa-school text-sky-400"></i> Nama Instansi / Sekolah</label>
+                  <input type="text" id="settingSchoolName2" oninput="autoSavePrincipalSettings()" placeholder="Wajib Diisi" required autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                </div>
+              </div>
+              <div class="form-group">
+                <label><i class="fa-solid fa-location-dot text-amber-400"></i> Kota Tempat Pengesahan Dokumen</label>
+                <input type="text" id="settingCityName2" oninput="autoSavePrincipalSettings()" placeholder="Wajib Diisi" required autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+              </div>
+              <button type="submit" class="btn-primary full-width mt-1">
+                <i class="fa-solid fa-floppy-disk"></i> Simpan & Hubungkan ke File PDF Rekap
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Sub View 4: Dedicated Reset Data & System Control (Master Admin) -->
+        <div id="subViewReset" class="hidden">
+          <!-- Card 1: Reset Log Presensi Only (Cyan/Indigo) -->
+          <div class="card form-card mb-3" id="resetPresensiLogsCard" style="border-left:4px solid #6366f1; background: rgba(99, 102, 241, 0.05);">
+            <h4 style="color:#818cf8;"><i class="fa-solid fa-clock-rotate-left text-indigo-400"></i> Reset Log Presensi Harian Saja</h4>
+            <p class="text-xs text-muted mb-2">Kosongkan seluruh riwayat log presensi harian (Masuk, Pulang, Pengantaran, Monitoring, Penjemputan, Foto & GPS). <strong>Surat Izin/Sakit dan Seluruh Akun User TETAP UTUH.</strong></p>
+            <button type="button" class="btn-primary full-width mt-1" style="background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); cursor:pointer;" onclick="resetPresensiLogsOnlyPrompt()">
+              <i class="fa-solid fa-list-check"></i> Kosongkan Seluruh Riwayat Log Presensi
+            </button>
+          </div>
+
+          <!-- Card 2: Reset Student Attendance Stats & Permission Requests -->
+          <div class="card form-card mb-3" id="resetAttendanceStatsCard" style="border-left:4px solid #f59e0b; background: rgba(245, 158, 11, 0.05);">
+            <h4 style="color:#fbbf24;"><i class="fa-solid fa-broom text-amber-400"></i> Reset Rekap Presensi, Izin & Statistik Grafik</h4>
+            <p class="text-xs text-muted mb-2">Kosongkan seluruh data presensi: Log Absen Masuk & Pulang, total statistik Hadir/Izin/Sakit/Alpa, surat permohonan izin/sakit, serta Statistik Grafik Kehadiran. <strong>Akun Siswa & Guru Pembimbing tetap utuh dan TIDAK dihapus.</strong></p>
+            <button type="button" class="btn-primary full-width mt-1" style="background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%); cursor:pointer;" onclick="resetStudentAttendanceStatsPrompt()">
+              <i class="fa-solid fa-chart-pie"></i> Reset Absen Masuk/Pulang, Hadir, Izin, Sakit, Alpa & Statistik Grafik
+            </button>
+          </div>
+
+          <!-- Card 3: Reset Per Siswa (amber/orange) -->
+          <div class="card form-card mb-3" id="resetPerSiswaCard" style="border-left:4px solid #f97316; background: rgba(249, 115, 22, 0.05);">
+            <h4 style="color:#fb923c;"><i class="fa-solid fa-user-xmark text-orange-400"></i> Reset Presensi Per Siswa</h4>
+            <p class="text-xs text-muted mb-2">Kosongkan seluruh riwayat presensi, izin/sakit, dan jurnal milik <strong>satu siswa tertentu</strong>. Akun siswa tidak dihapus. Berguna untuk koreksi data atau reset ulang siswa yang salah input.</p>
+            <div style="display:flex; gap:8px; align-items:center; margin-top:8px; flex-wrap:wrap;">
+              <select id="selectResetSiswa" style="flex:1; min-width:160px; background:#1e293b; color:#e2e8f0; border:1px solid rgba(249,115,22,0.4); border-radius:8px; padding:7px 10px; font-size:0.82rem;">
+                <option value="">-- Pilih Siswa --</option>
+              </select>
+              <button type="button" class="btn-primary mt-1" style="background: linear-gradient(135deg, #ea580c 0%, #f97316 100%); cursor:pointer; white-space:nowrap;" onclick="resetStudentDataPrompt()">
+                <i class="fa-solid fa-user-xmark"></i> Reset Data Siswa Ini
+              </button>
+            </div>
+          </div>
+
+          <!-- Card 4: Danger Zone: Reset Database System (Master Admin Only) -->
+          <div class="card form-card mb-3" id="resetDatabaseCard" style="border-left:4px solid #ef4444; background: rgba(239, 68, 68, 0.05);">
+            <h4 style="color:#f87171;"><i class="fa-solid fa-triangle-exclamation text-rose-500"></i> Reset Database Sistem (Master Admin)</h4>
+            <p class="text-xs text-muted mb-2">Peringatan: Menghapus seluruh riwayat log presensi, permohonan izin/sakit, serta seluruh daftar siswa & guru dari database. Akun Master Admin (admin) akan tetap aktif & aman.</p>
+            <button type="button" class="btn-primary full-width mt-1" style="background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%); cursor:pointer;" onclick="resetDatabasePrompt()">
+              <i class="fa-solid fa-trash-can"></i> Reset Database & Hapus User (Kecuali Master Admin)
+            </button>
+          </div>
+        </div>
+
+        <!-- Sub View 5: Dedicated Approval Menu for Master Admin -->
+        <div id="subViewApprovals" class="hidden">
+          <!-- Pending User Registrations, Resets, Deletions, & PKL Edits -->
+          <div id="pendingUserApprovalCard" class="card form-card mb-3 hidden" style="border-left:4px solid #f59e0b; background: rgba(245, 158, 11, 0.05);">
+            <h4><i class="fa-solid fa-clipboard-check text-amber-400"></i> Persetujuan Pengajuan dari Guru Pembimbing</h4>
+            <p class="text-xs text-muted mb-2">Daftar pengajuan akun siswa baru, reset password, hapus siswa, dan edit tempat PKL oleh Guru Pembimbing yang membutuhkan persetujuan Master Admin.</p>
+            <div id="pendingUserApprovalList" class="mt-2">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Admin Approval: Pending Permission Requests (Surat Izin / Sakit) -->
+          <div id="adminApprovalSection">
+            <div class="section-title space-between mb-2">
+              <h3><i class="fa-solid fa-file-circle-check text-amber-400"></i> Persetujuan Izin & Sakit Pending Siswa</h3>
+              <button type="button" class="btn-sm btn-outline" onclick="refreshPermissionApprovalsFeed()" style="font-size:0.75rem; padding:5px 11px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+                <i class="fa-solid fa-arrows-rotate text-emerald-400"></i> Refresh Scan Izin
+              </button>
+            </div>
+            <div class="admin-approval-list" id="adminApprovalList">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Admin Approval History Log (Audit Trail for Master Admin) -->
+          <div id="adminApprovalReportHistoryCard" class="card form-card mt-3 mb-3" style="border-left:4px solid #6366f1; background: rgba(99, 102, 241, 0.05);">
+            <h4><i class="fa-solid fa-clock-rotate-left text-indigo-400"></i> Riwayat Laporan Hasil Persetujuan Master Admin</h4>
+            <p class="text-xs text-muted mb-2">Audit trail seluruh hasil pengajuan yang telah diproses oleh Master Admin.</p>
+            <div id="adminApprovalReportHistoryList" class="mt-2">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================= TAB 5: PROFIL ================= -->
+      <section id="tab-profile" class="tab-page">
+        <div class="profile-card">
+          <div class="profile-avatar" style="position:relative; cursor:pointer;" onclick="triggerAvatarUpload()" title="Klik untuk mengubah foto profil">
+            <img src="img/admin_avatar.jpg" alt="Profile Avatar" id="profileAvatarImg">
+            <button type="button" class="edit-avatar-btn" onclick="triggerAvatarUpload(); event.stopPropagation();" title="Ubah Foto Profil">
+              <i class="fa-solid fa-camera"></i>
+            </button>
+          </div>
+          <input type="file" id="avatarFileInput" accept="image/*" style="display:none;" onchange="handleAvatarFileSelect(event)">
+          <div class="mt-1 mb-2">
+            <button type="button" class="btn-sm btn-outline" onclick="triggerAvatarUpload()" style="font-size:0.75rem; padding:4px 10px; font-weight:600;">
+              <i class="fa-solid fa-camera text-indigo-400"></i> Ubah Foto Profil
+            </button>
+          </div>
+          <h2 id="profileName">Master Administrator</h2>
+          <p class="text-muted" id="profileSubText">Master Administrator</p>
+          <div class="status-chip success" id="profileStatusBadge"><i class="fa-solid fa-circle-check"></i> Status PKL: Aktif</div>
+        </div>
+
+        <div class="card info-group-card">
+          <div class="info-item">
+            <div class="info-icon"><i class="fa-solid fa-school"></i></div>
+            <div class="info-content">
+              <span>Sekolah</span>
+              <strong id="profileSchool">SMK Negeri 1 Jakarta</strong>
+            </div>
+          </div>
+
+          <!-- Kelas item (siswa only) -->
+          <div class="info-item hidden" id="profileKelasItem">
+            <div class="info-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+            <div class="info-content">
+              <span>Kelas</span>
+              <strong id="profileKelas">--</strong>
+            </div>
+          </div>
+
+          <div class="info-item" id="profilePklItem">
+            <div class="info-icon"><i class="fa-solid fa-building"></i></div>
+            <div class="info-content">
+              <span>Lokasi Instansi / PKL</span>
+              <strong id="profilePklLocation">PT. Tech Solution Indonesia</strong>
+            </div>
+          </div>
+          <div class="info-item" id="profileSupervisorItem">
+            <div class="info-icon"><i class="fa-solid fa-user-tie"></i></div>
+            <div class="info-content">
+              <span>Pembimbing / Guru</span>
+              <strong id="profileSupervisor">Gigih Perkasa, ST., M.Pd.</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sync Data Kelas Card (Siswa Only) -->
+        <div class="card hidden" id="syncKelasCard" style="background:linear-gradient(135deg, rgba(79,70,229,0.15), rgba(99,102,241,0.1)); border:1px solid rgba(99,102,241,0.3);">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
+            <div>
+              <h4 style="color:#a5b4fc; font-size:0.9rem; margin:0 0 4px 0;">
+                <i class="fa-solid fa-rotate text-indigo-400"></i> Sync Data Kelas
+              </h4>
+              <p style="font-size:0.75rem; color:#94a3b8; margin:0;">Sinkronisasi data kelas dari database sekolah</p>
+            </div>
+            <button type="button" onclick="syncStudentKelas()" id="btnSyncKelas"
+              style="background:linear-gradient(135deg, #4f46e5, #6366f1); color:#fff; border:none; padding:8px 14px; border-radius:8px; font-size:0.78rem; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px; white-space:nowrap;">
+              <i class="fa-solid fa-rotate" id="syncKelasIcon"></i> Sync Sekarang
+            </button>
+          </div>
+          <div id="syncKelasStatus" style="padding:10px; background:rgba(15,23,42,0.6); border-radius:8px; border:1px solid rgba(255,255,255,0.08);">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+              <div>
+                <div style="font-size:0.7rem; color:#94a3b8; margin-bottom:2px;">Kelas Saat Ini</div>
+                <div style="font-size:0.85rem; font-weight:700; color:#a5b4fc;" id="syncKelasCurrentValue">--</div>
+              </div>
+              <div>
+                <div style="font-size:0.7rem; color:#94a3b8; margin-bottom:2px;">Terakhir Sync</div>
+                <div style="font-size:0.8rem; color:#64748b;" id="syncKelasLastSync">Belum pernah</div>
+              </div>
+              <div>
+                <div style="font-size:0.7rem; color:#94a3b8; margin-bottom:2px;">NIS/NISN</div>
+                <div style="font-size:0.8rem; font-weight:600; color:#e2e8f0;" id="syncKelasNisn">--</div>
+              </div>
+              <div>
+                <div style="font-size:0.7rem; color:#94a3b8; margin-bottom:2px;">Status</div>
+                <div style="font-size:0.8rem; font-weight:700;" id="syncKelasStatusText">
+                  <span style="color:#10b981;"><i class="fa-solid fa-circle-check"></i> Tersinkron</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ajukan Koordinat PKL Card (Siswa Only) — ditampilkan JS saat koordinat belum valid -->
+        <div class="card hidden" id="ajukanKoordCard" style="background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(239,68,68,0.08));border:1px solid rgba(245,158,11,0.45);margin-top:10px;">
+          <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;">
+            <div style="background:rgba(245,158,11,0.2);border-radius:8px;padding:8px;flex-shrink:0;">
+              <i class="fa-solid fa-triangle-exclamation" style="color:#f59e0b;font-size:1.1rem;"></i>
+            </div>
+            <div>
+              <h4 style="color:#fbbf24;font-size:0.88rem;margin:0 0 3px 0;font-weight:700;">
+                Koordinat Lokasi PKL Belum Ditemukan
+              </h4>
+              <p style="font-size:0.75rem;color:#cbd5e1;margin:0;line-height:1.5;" id="ajukanKoordDesc">
+                Sistem tidak dapat menemukan koordinat GPS untuk tempat PKL Anda. Ajukan titik koordinat secara langsung dari lokasi PKL Anda untuk diverifikasi admin.
+              </p>
+            </div>
+          </div>
+          <button type="button" onclick="openAjukanKoordModal()"
+            style="width:100%;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border:none;padding:10px 16px;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+            <i class="fa-solid fa-map-pin"></i> Ajukan Titik Koordinat PKL
+          </button>
+          <p id="ajukanKoordStatus" style="font-size:0.72rem;color:#94a3b8;text-align:center;margin:8px 0 0 0;display:none;"></p>
+        </div>
+
+        <!-- Tombol Ajukan Koordinat di profil saat koordinat sudah ada tapi siswa ingin revisi -->
+        <div class="card hidden" id="revisiKoordCard" style="background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.3);margin-top:6px;padding:10px 14px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+            <div style="font-size:0.78rem;color:#a5b4fc;">
+              <i class="fa-solid fa-location-crosshairs"></i> <strong>Revisi Titik Koordinat PKL</strong>
+              <div style="font-size:0.72rem;color:#64748b;margin-top:2px;">Jika posisi PKL di peta tidak akurat, ajukan revisi dari lokasi PKL Anda.</div>
+            </div>
+            <button type="button" onclick="openAjukanKoordModal()"
+              style="background:rgba(99,102,241,0.3);color:#a5b4fc;border:1px solid rgba(99,102,241,0.5);padding:6px 12px;border-radius:7px;font-size:0.75rem;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;">
+              <i class="fa-solid fa-map-pin"></i> Ajukan
+            </button>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <button class="btn-secondary full-width btn-danger-outline" onclick="handleLogout()">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar / Logout Akun
+          </button>
+        </div>
+
+        <!-- Android APK Information Card -->
+        <div class="card apk-info-card mt-3" id="proxmoxInfoCard">
+          <h4><i class="fa-brands fa-android text-emerald-500"></i> Informasi Aplikasi Android</h4>
+          <p>SIGAP v1.3.0 • Proxmox Server & Realtime DB Ready</p>
+          <div class="apk-badge-row mt-1" id="proxmoxBadgeRow">
+            <a href="PROXMOX_DEPLOYMENT.md" target="_blank" class="btn-sm btn-outline full-width" id="proxmoxGuideBtn">
+              <i class="fa-solid fa-server"></i> Panduan Deploy di Proxmox VE
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" id="navHomeBtn" onclick="switchTab('home')">
+        <i class="fa-solid fa-house"></i>
+        <span>Beranda</span>
+      </button>
+
+      <button class="nav-item" id="navHistoryBtn" onclick="switchTab('history')">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <span>Riwayat</span>
+      </button>
+
+      <!-- navPermBtn: label & visibility diatur oleh applyUserInterface()
+           Siswa → Izin/Sakit | Guru/Admin → Log Presensi -->
+      <button class="nav-item" id="navPermBtn" onclick="switchTab('permission')">
+        <i class="fa-solid fa-file-signature"></i>
+        <span>Log</span>
+      </button>
+
+      <button class="nav-item" id="navJournalBtn" onclick="switchTab('journal')" style="display:none;">
+        <i class="fa-solid fa-book-open"></i>
+        <span>Jurnal</span>
+      </button>
+
+      <button class="nav-item hidden" id="adminNavBtn" onclick="switchTab('admin')">
+        <i class="fa-solid fa-sliders"></i>
+        <span>Admin/Guru</span>
+      </button>
+
+      <button class="nav-item" id="navProfileBtn" onclick="switchTab('profile')">
+        <i class="fa-solid fa-user"></i>
+        <span>Profil</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- ================= MODAL 1: CAMERA SELFIE PRESENSI ================= -->
+  <div id="cameraModal" class="modal hidden">
+    <div class="modal-overlay" onclick="closeCameraModal()"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="cameraModalTitle">Presensi Masuk</h3>
+        <button class="close-btn" onclick="closeCameraModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <!-- 1. Kolom Layar Foto Selfie / Viewfinder Kamera (Atas) -->
+        <div class="webcam-viewport" style="position:relative; min-height:190px; height:190px; margin-bottom:10px; border-radius:12px; border:1px solid rgba(255,255,255,0.15); overflow:hidden;">
+          <video id="webcamVideo" autoplay playsinline muted></video>
+          <canvas id="capturedCanvas"></canvas>
+          <div class="photo-preview-container hidden" id="photoPreviewBox" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:5; background:#0f172a;">
+            <img id="previewImage" src="" alt="Hasil Foto Presensi" style="width:100%; height:100%; object-fit:contain; border-radius:8px;">
+          </div>
+          <div class="face-guide-overlay" style="z-index:2; pointer-events:none;"></div>
+        </div>
+
+        <!-- Mode Akses HTTP & Tombol Buka Kamera HP Selfie -->
+        <div id="httpCameraNotice" class="hidden mb-2" style="padding:8px 10px; background:rgba(99, 102, 241, 0.15); border:1px solid #6366f1; border-radius:8px; text-align:center;">
+          <p style="font-size:0.75rem; color:#c7d2fe; margin-bottom:4px;"><i class="fa-solid fa-shield-halved text-indigo-400"></i> Mode Akses HTTP: Klik tombol di bawah untuk membuka Kamera HP Selfie secara langsung.</p>
+          <button type="button" class="btn-sm btn-primary full-width" onclick="document.getElementById('cameraFileInput').click()" style="font-size:0.75rem; padding:6px 12px;">
+            <i class="fa-solid fa-camera"></i> Buka Kamera HP / Selfie
+          </button>
+        </div>
+
+        <div class="location-check-box" style="margin-bottom:8px;">
+          <i class="fa-solid fa-location-crosshairs text-indigo-500"></i>
+          <span id="modalLocationText">Memverifikasi titik koordinat GPS...</span>
+        </div>
+
+        <!-- 2. Kolom Peta GPS Interaktif Leaflet (Bawah) -->
+        <div id="modalMapContainer" style="margin-bottom:6px;">
+          <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:4px; display:flex; align-items:center; justify-content:space-between;">
+            <span><i class="fa-solid fa-map-location-dot text-indigo-400"></i> Peta Lokasi GPS Saya & Target Radius</span>
+            <span class="badge-tag" style="background:rgba(16,185,129,0.2); color:#34d399; font-size:0.65rem; padding:1px 6px; border-radius:4px;"><i class="fa-solid fa-satellite"></i> Live GPS</span>
+          </div>
+          <div id="modalMap" style="height:140px; width:100%; border-radius:10px; border:1px solid rgba(255,255,255,0.15); z-index:1;"></div>
+        </div>
+
+        <!-- Warning Alert & Mandatory Reason input when outside radius -->
+        <div id="outOfRadiusWarningBox" class="hidden" style="margin-top:8px; padding:12px; background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.5); border-radius:10px;">
+          <div style="display:flex; align-items:center; gap:8px; color:#fbbf24; font-weight:700; font-size:0.83rem; margin-bottom:6px;">
+            <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+            <span id="warningBoxTitle">Posisi Anda di luar radius izin absensi!</span>
+          </div>
+          <p style="font-size:0.72rem; color:#cbd5e1; margin-bottom:8px; line-height:1.5;">
+            Kamera tetap aktif. Isi alasan di bawah lalu klik <strong style="color:#fbbf24;">Kirim Presensi</strong>.
+          </p>
+          <label style="font-size:0.75rem; color:#fbbf24; font-weight:600; display:block; margin-bottom:4px;">
+            <i class="fa-solid fa-pen"></i> Alasan Di Luar Radius: <span style="color:#ef4444;">*</span>
+          </label>
+          <textarea id="outOfRadiusReasonInput" rows="3"
+            style="background:rgba(15,23,42,0.9); color:#f8fafc; border:1px solid rgba(245,158,11,0.4); border-radius:8px; padding:10px; font-size:0.8rem; width:100%; outline:none; resize:vertical; font-family:inherit; line-height:1.5;"
+            placeholder="Contoh: Sedang dalam perjalanan menuju lokasi PKL / Tugas luar dari pembimbing / Terjebak macet / Kondisi darurat..."
+            maxlength="300"
+            oninput="document.getElementById('outRadiusModalCharCount').textContent = this.value.length + ' / 300'"></textarea>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+            <span id="outRadiusModalCharCount" style="font-size:0.7rem; color:#94a3b8;">0 / 300</span>
+            <span style="font-size:0.7rem; color:#f87171;"><i class="fa-solid fa-circle-info"></i> Minimal 10 karakter</span>
+          </div>
+        </div>
+
+        <input type="file" id="cameraFileInput" accept="image/*" capture="user" style="display:none;" onchange="handleCameraFileUpload(event)">
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="btnRetakePhoto" onclick="retakeCameraPhoto()" style="display:none;">
+          <i class="fa-solid fa-rotate-right"></i> Foto Ulang
+        </button>
+        <button class="btn-secondary" id="btnUploadFilePhoto" onclick="document.getElementById('cameraFileInput').click()" title="Unggah Foto dari HP/Galeri">
+          <i class="fa-solid fa-folder-open"></i>
+        </button>
+        <button class="btn-primary flex-grow" id="btnCapturePhoto" onclick="takeCameraPhoto()">
+          <i class="fa-solid fa-camera"></i> Ambil Foto Dokumentasi (Full Layar)
+        </button>
+        <button class="btn-success flex-grow hidden" id="btnSubmitAttendance" onclick="submitAttendanceRecord()">
+          <i class="fa-solid fa-check-double"></i> Kirim Presensi
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 2: QR CODE SCANNER ================= -->
+  <div id="qrScannerModal" class="modal hidden">
+    <div class="modal-overlay" onclick="closeQRScannerModal()"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Pindai QR Code Lokasi</h3>
+        <button class="close-btn" onclick="closeQRScannerModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="qr-viewport">
+          <video id="qrVideo" autoplay playsinline muted></video>
+          <div class="qr-target-box">
+            <div class="qr-laser-line"></div>
+          </div>
+        </div>
+        <p class="text-center text-sm text-muted mt-2">Arahkan kamera ke QR Code kelas/kantor yang disediakan sekolah.</p>
+        <div class="mock-qr-simulation text-center mt-3">
+          <button class="btn-sm btn-outline" onclick="simulateQRScanSuccess()">
+            <i class="fa-solid fa-bolt"></i> Simulasi Scan Berhasil (Uji Coba)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 3: FULL IMAGE PREVIEW ================= -->
+  <div id="imagePreviewModal" class="modal hidden">
+    <div class="modal-overlay" onclick="closeImagePreviewModal()"></div>
+    <div class="modal-content" style="max-width:480px; text-align:center;">
+      <div class="modal-header">
+        <h3 id="imagePreviewModalTitle">Foto Dokumentasi Selfie</h3>
+        <button class="close-btn" onclick="closeImagePreviewModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" style="padding:15px;">
+        <img id="fullSizePreviewImg" src="" alt="Full Preview Foto" style="width:100%; max-height:400px; object-fit:contain; border-radius:12px; border:2px solid #6366f1;">
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary full-width" onclick="closeImagePreviewModal()">
+          <i class="fa-solid fa-xmark"></i> Tutup Preview
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 4: GANTI GURU PEMBIMBING ================= -->
+  <div id="supervisorModal" class="modal hidden">
+    <div class="modal-overlay" onclick="closeSupervisorModal()"></div>
+    <div class="modal-content" style="max-width:520px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-user-tie text-indigo-400"></i> Ganti Guru Pembimbing</h3>
+        <button class="close-btn" onclick="closeSupervisorModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" style="padding:20px;">
+        <!-- Info Siswa -->
+        <div style="background:rgba(99, 102, 241, 0.1); border:1px solid rgba(99, 102, 241, 0.3); border-radius:10px; padding:12px; margin-bottom:16px;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+            <i class="fa-solid fa-user-graduate text-indigo-400" style="font-size:1.5rem;"></i>
+            <div>
+              <strong id="supervisorModalStudentName" style="font-size:1rem; color:#fff;">-</strong><br>
+              <small id="supervisorModalStudentNISN" style="color:#94a3b8;">NISN: -</small>
+            </div>
+          </div>
+          <div style="padding-top:8px; border-top:1px solid rgba(255,255,255,0.1);">
+            <small style="color:#cbd5e1;">
+              <i class="fa-solid fa-chalkboard text-emerald-400"></i> <strong>Kelas:</strong> <span id="supervisorModalStudentKelas">-</span>
+            </small><br>
+            <small style="color:#fbbf24;">
+              <i class="fa-solid fa-user-tie text-amber-400"></i> <strong>Pembimbing Saat Ini:</strong> <span id="supervisorModalCurrentSupervisor">-</span>
+            </small>
+          </div>
+        </div>
+
+        <!-- Form Pilih Guru Baru -->
+        <form id="supervisorChangeForm" onsubmit="handleSupervisorChange(event)">
+          <div class="form-group">
+            <label style="font-size:0.9rem; margin-bottom:8px; display:block;">
+              <i class="fa-solid fa-users text-indigo-400"></i> Pilih Guru Pembimbing Baru:
+            </label>
+            <select id="supervisorModalGuruSelect" required style="width:100%; padding:10px 12px; background:rgba(15,23,42,0.8); border:1px solid rgba(99,102,241,0.5); border-radius:8px; color:#fff; font-size:0.88rem; outline:none;">
+              <option value="">-- Pilih Guru Pembimbing --</option>
+              <!-- Will be populated by JS -->
+            </select>
+            <small style="display:block; margin-top:6px; color:#94a3b8; font-size:0.75rem;">
+              <i class="fa-solid fa-info-circle"></i> Daftar guru otomatis dari database yang terdaftar
+            </small>
+          </div>
+
+          <div class="modal-footer" style="margin-top:20px; display:flex; gap:8px;">
+            <button type="button" class="btn-secondary" onclick="closeSupervisorModal()" style="flex:1;">
+              <i class="fa-solid fa-xmark"></i> Batal
+            </button>
+            <button type="submit" class="btn-primary" style="flex:2;">
+              <i class="fa-solid fa-check"></i> Simpan Perubahan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 5: EDIT DATA USER (COMPREHENSIVE) ================= -->
+  <div id="editUserModal" class="modal hidden">
+    <div class="modal-overlay" onclick="closeEditUserModal()"></div>
+    <div class="modal-content" style="max-width:680px; max-height:90vh; overflow-y:auto;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-pen-to-square text-indigo-400"></i> Edit Data User</h3>
+        <button class="close-btn" onclick="closeEditUserModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" style="padding:20px;">
+        <!-- Info User Card -->
+        <div id="editUserInfoCard" style="background:linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(79, 70, 229, 0.1)); border:1px solid rgba(99, 102, 241, 0.3); border-radius:12px; padding:16px; margin-bottom:20px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div id="editUserAvatar" style="width:56px; height:56px; border-radius:50%; background:linear-gradient(135deg, #4f46e5, #6366f1); display:flex; align-items:center; justify-content:center; font-size:1.8rem; color:#fff; font-weight:bold;">
+              <!-- Initial will be inserted by JS -->
+            </div>
+            <div style="flex:1;">
+              <h4 id="editUserName" style="margin:0; font-size:1.1rem; color:#fff;">-</h4>
+              <p id="editUserRole" style="margin:4px 0 0 0; font-size:0.85rem; color:#94a3b8;">-</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <div style="display:flex; gap:8px; margin-bottom:20px; border-bottom:2px solid rgba(255,255,255,0.1); padding-bottom:4px;">
+          <button type="button" class="edit-tab-btn active" onclick="switchEditTab('basic')" data-tab="basic">
+            <i class="fa-solid fa-user"></i> Data Dasar
+          </button>
+          <button type="button" class="edit-tab-btn" onclick="switchEditTab('location')" data-tab="location" id="editTabLocation">
+            <i class="fa-solid fa-location-dot"></i> Lokasi PKL
+          </button>
+          <button type="button" class="edit-tab-btn" onclick="switchEditTab('supervisor')" data-tab="supervisor" id="editTabSupervisor" style="display:none;">
+            <i class="fa-solid fa-user-tie"></i> Pembimbing
+          </button>
+          <button type="button" class="edit-tab-btn" onclick="switchEditTab('security')" data-tab="security">
+            <i class="fa-solid fa-shield-halved"></i> Keamanan
+          </button>
+        </div>
+
+        <!-- Tab Content: Basic Data -->
+        <div id="editTabBasic" class="edit-tab-content active">
+          <div class="form-group">
+            <label><i class="fa-solid fa-user-pen text-sky-400"></i> Username</label>
+            <input type="text" id="editUsername" placeholder="Username" style="width:100%; padding:10px 12px; background:rgba(15,23,42,0.8); border:1px solid rgba(99,102,241,0.5); border-radius:8px; color:#fff;">
+            <small style="color:#94a3b8; font-size:0.75rem; display:block; margin-top:4px;">
+              <i class="fa-solid fa-info-circle"></i> Username digunakan untuk login
+            </small>
+          </div>
+
+          <div class="form-group" id="editKelasGroup" style="display:none;">
+            <label><i class="fa-solid fa-chalkboard text-emerald-400"></i> Kelas</label>
+            <input type="text" id="editKelas" placeholder="Contoh: XII RPL 1" style="width:100%; padding:10px 12px; background:rgba(15,23,42,0.8); border:1px solid rgba(99,102,241,0.5); border-radius:8px; color:#fff;">
+            <small style="color:#94a3b8; font-size:0.75rem; display:block; margin-top:4px;">
+              <i class="fa-solid fa-info-circle"></i> Kelas siswa saat ini
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label><i class="fa-solid fa-id-card text-amber-400"></i> NISN / NIP</label>
+            <input type="text" id="editNomorInduk" readonly style="width:100%; padding:10px 12px; background:rgba(15,23,42,0.5); border:1px solid rgba(255,255,255,0.2); border-radius:8px; color:#94a3b8; cursor:not-allowed;">
+            <small style="color:#94a3b8; font-size:0.75rem; display:block; margin-top:4px;">
+              <i class="fa-solid fa-lock"></i> Nomor induk tidak dapat diubah
+            </small>
+          </div>
+        </div>
+
+        <!-- Tab Content: Location -->
+        <div id="editTabLocationContent" class="edit-tab-content" style="display:none;">
+          <div class="form-group">
+            <label><i class="fa-solid fa-building text-indigo-400"></i> Nama Lokasi PKL / Instansi</label>
+            <input type="text" id="editPklLocation" placeholder="Nama tempat PKL"
+              oninput="onEditPklLocationChange(this.value)"
+              style="width:100%; padding:10px 12px; background:rgba(15,23,42,0.8); border:1px solid rgba(99,102,241,0.5); border-radius:8px; color:#fff;">
+          </div>
+
+          <!-- Input koordinat manual via Google Maps link -->
+          <div class="form-group">
+            <label><i class="fa-brands fa-google text-sky-400"></i> Tempel Link Google Maps <span style="color:#94a3b8; font-weight:400;">(opsional, untuk presisi)</span></label>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="editGoogleMapsLink" placeholder="https://maps.google.com/?q=-7.9825,112.6867 atau klik kanan Google Maps → Salin Koordinat" style="flex:1; padding:10px 12px; background:rgba(15,23,42,0.8); border:1px solid rgba(14,165,233,0.5); border-radius:8px; color:#fff; font-size:0.8rem;">
+              <button type="button" onclick="parseGoogleMapsLinkEdit()" style="padding:10px 14px; background:linear-gradient(135deg,#0284c7,#0369a1); border:none; border-radius:8px; color:#fff; cursor:pointer; font-size:0.78rem; white-space:nowrap; font-weight:600;"><i class="fa-solid fa-map-location-dot"></i> Ambil Koordinat</button>
+            </div>
+            <small style="color:#7dd3fc; font-size:0.72rem; margin-top:4px; display:block;"><i class="fa-solid fa-lightbulb"></i> Cara: Buka Google Maps → cari lokasi PKL → klik kanan → "Salin koordinat" → tempel di sini</small>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label><i class="fa-solid fa-map-pin text-emerald-400"></i> Latitude</label>
+              <input type="text" id="editLatitude" placeholder="-7.9825" style="width:100%; padding:10px 12px; background:rgba(15,23,42,0.8); border:1px solid rgba(99,102,241,0.5); border-radius:8px; color:#fff;">
+            </div>
+            <div class="form-group">
+              <label><i class="fa-solid fa-map-pin text-sky-400"></i> Longitude</label>
+              <input type="text" id="editLongitude" placeholder="112.6867" style="width:100%; padding:10px 12px; background:rgba(15,23,42,0.8); border:1px solid rgba(99,102,241,0.5); border-radius:8px; color:#fff;">
+            </div>
+          </div>
+
+          <!-- Tombol geocode ulang dari nama -->
+          <div style="display:flex; gap:8px; margin-top:4px;">
+            <button type="button" onclick="reGeocodeEditLocation()" style="flex:1; padding:9px 12px; background:linear-gradient(135deg,#059669,#047857); border:none; border-radius:8px; color:#fff; cursor:pointer; font-size:0.78rem; font-weight:600;"><i class="fa-solid fa-arrows-rotate"></i> Geocode Ulang dari Nama PKL</button>
+            <button type="button" onclick="openGoogleMapsPreview()" style="flex:1; padding:9px 12px; background:linear-gradient(135deg,#4f46e5,#3730a3); border:none; border-radius:8px; color:#fff; cursor:pointer; font-size:0.78rem; font-weight:600;"><i class="fa-brands fa-google"></i> Cek di Google Maps</button>
+          </div>
+
+          <div id="editGeocodeFeedback" style="display:none; margin-top:10px; padding:10px 12px; border-radius:8px; font-size:0.78rem; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); color:#34d399;"></div>
+
+          <small style="color:#94a3b8; font-size:0.75rem; display:block; margin-top:8px; padding:10px; background:rgba(79, 70, 229, 0.1); border-left:3px solid #6366f1; border-radius:6px;">
+            <i class="fa-solid fa-info-circle"></i> Koordinat presisi dari Google Maps lebih akurat daripada geocoding otomatis. Gunakan tombol "Geocode Ulang" jika nama PKL sudah lengkap dan benar.
+          </small>
+        </div>
+
+        <!-- Tab Content: Supervisor (only for students) -->
+        <div id="editTabSupervisorContent" class="edit-tab-content" style="display:none;">
+          <div class="form-group">
+            <label><i class="fa-solid fa-user-tie text-indigo-400"></i> Guru Pembimbing</label>
+            <select id="editSupervisor" style="width:100%; padding:10px 12px; background:rgba(15,23,42,0.8); border:1px solid rgba(99,102,241,0.5); border-radius:8px; color:#fff; font-size:0.88rem;">
+              <option value="">-- Pilih Guru Pembimbing --</option>
+              <!-- Will be populated by JS -->
+            </select>
+            <small style="color:#94a3b8; font-size:0.75rem; display:block; margin-top:4px;">
+              <i class="fa-solid fa-info-circle"></i> Pilih guru pembimbing dari daftar yang terdaftar
+            </small>
+          </div>
+
+          <div id="currentSupervisorInfo" style="margin-top:12px; padding:12px; background:rgba(79, 70, 229, 0.1); border-left:3px solid #6366f1; border-radius:6px;">
+            <small style="color:#cbd5e1; font-size:0.8rem;">
+              <i class="fa-solid fa-user-tie text-amber-400"></i> <strong>Pembimbing Saat Ini:</strong> <span id="currentSupervisorName">-</span>
+            </small>
+          </div>
+        </div>
+
+        <!-- Tab Content: Security -->
+        <div id="editTabSecurityContent" class="edit-tab-content" style="display:none;">
+          <div class="form-group">
+            <label><i class="fa-solid fa-key text-purple-400"></i> Password Baru</label>
+            <div class="password-input-wrapper">
+              <input type="password" id="editPassword" placeholder="Masukkan password baru" style="width:100%; padding:10px 12px; background:rgba(15,23,42,0.8); border:1px solid rgba(99,102,241,0.5); border-radius:8px; color:#fff;">
+              <button type="button" class="toggle-pwd-btn" onclick="toggleEditPasswordVisibility()" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:#94a3b8; cursor:pointer;">
+                <i class="fa-solid fa-eye" id="editPwdEyeIcon"></i>
+              </button>
+            </div>
+            <small style="color:#94a3b8; font-size:0.75rem; display:block; margin-top:4px;">
+              <i class="fa-solid fa-info-circle"></i> Kosongkan jika tidak ingin mengubah password
+            </small>
+          </div>
+
+          <div style="margin-top:12px; padding:12px; background:rgba(245, 158, 11, 0.1); border-left:3px solid #f59e0b; border-radius:6px;">
+            <small style="color:#fbbf24; font-size:0.8rem;">
+              <i class="fa-solid fa-triangle-exclamation"></i> <strong>Perhatian:</strong> Pastikan user mencatat password baru jika diubah.
+            </small>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="modal-footer" style="margin-top:24px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.1); display:flex; gap:8px; flex-wrap:wrap;">
+          <button type="button" class="btn-secondary" onclick="closeEditUserModal()" style="flex:1; min-width:120px;">
+            <i class="fa-solid fa-xmark"></i> Batal
+          </button>
+          <button type="button" class="btn-primary" onclick="saveAllUserChanges()" style="flex:2; min-width:180px;">
+            <i class="fa-solid fa-floppy-disk"></i> Simpan Semua Perubahan
+          </button>
+          <button type="button" class="btn-danger-outline" onclick="confirmDeleteUserFromModal()" id="btnDeleteFromModal" style="flex:1; min-width:120px;">
+            <i class="fa-solid fa-trash"></i> Hapus User
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- JS Libraries -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- SheetJS — parse file Excel (.xlsx/.xls) langsung di browser -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  
+  <!-- html2pdf.js — generate PDF di HP tanpa server -->
+  <script src="js/html2pdf.bundle.min.js"></script>
+
+  <!-- ================= MODAL: AJUKAN KOORDINAT PKL ================= -->
+  <div id="ajukanKoordModal" class="modal hidden">
+    <div class="modal-overlay" onclick="closeAjukanKoordModal()"></div>
+    <div class="modal-content" style="max-width:420px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-map-pin" style="color:#f59e0b;"></i> Ajukan Titik Koordinat PKL</h3>
+        <button class="close-btn" onclick="closeAjukanKoordModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" style="padding:16px;">
+
+        <!-- Info langkah -->
+        <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:0.78rem;color:#fde68a;line-height:1.6;">
+          <i class="fa-solid fa-circle-info"></i>
+          <strong>Petunjuk:</strong> Pastikan Anda <strong>sedang berada di lokasi PKL</strong> saat mengajukan koordinat. GPS HP akan digunakan sebagai titik koordinat yang Anda ajukan.
+        </div>
+
+        <!-- Nama PKL (read-only) -->
+        <div style="margin-bottom:12px;">
+          <label style="font-size:0.75rem;color:#94a3b8;display:block;margin-bottom:4px;">Nama Tempat PKL</label>
+          <div id="ajukanKoordPklName" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:7px;padding:9px 12px;font-size:0.84rem;color:#e2e8f0;font-weight:600;">
+            --
+          </div>
+        </div>
+
+        <!-- Status GPS & koordinat yang terdeteksi -->
+        <div style="margin-bottom:14px;">
+          <label style="font-size:0.75rem;color:#94a3b8;display:block;margin-bottom:6px;">
+            <i class="fa-solid fa-satellite-dish"></i> Koordinat GPS Anda Saat Ini
+          </label>
+          <div id="ajukanKoordGpsBox" style="background:rgba(15,23,42,0.7);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:12px;text-align:center;">
+            <div id="ajukanKoordGpsStatus" style="color:#f59e0b;font-size:0.8rem;"><i class="fa-solid fa-spinner fa-spin"></i> Mendeteksi GPS...</div>
+            <div id="ajukanKoordGpsValue" style="color:#34d399;font-size:0.88rem;font-weight:700;margin-top:6px;display:none;"></div>
+            <div id="ajukanKoordGpsAccuracy" style="color:#94a3b8;font-size:0.72rem;margin-top:3px;display:none;"></div>
+          </div>
+          <!-- Mini map preview -->
+          <div id="ajukanKoordMapBox" style="margin-top:8px;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,0.12);display:none;">
+            <div id="ajukanKoordMap" style="height:150px;width:100%;"></div>
+          </div>
+        </div>
+
+        <!-- Catatan opsional -->
+        <div style="margin-bottom:14px;">
+          <label style="font-size:0.75rem;color:#94a3b8;display:block;margin-bottom:4px;">Catatan (opsional)</label>
+          <textarea id="ajukanKoordCatatan" rows="2" placeholder="Mis: Lantai 2 gedung utama, dekat lobi..."
+            style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:7px;padding:9px 12px;font-size:0.8rem;color:#e2e8f0;resize:none;box-sizing:border-box;"></textarea>
+        </div>
+
+        <!-- Tombol aksi -->
+        <div style="display:flex;gap:8px;">
+          <button type="button" id="btnDeteksiUlangGps" onclick="deteksiUlangGpsAjukan()"
+            style="flex:0 0 auto;background:rgba(99,102,241,0.2);color:#a5b4fc;border:1px solid rgba(99,102,241,0.4);padding:10px 14px;border-radius:8px;font-size:0.78rem;font-weight:700;cursor:pointer;">
+            <i class="fa-solid fa-rotate"></i> Deteksi Ulang
+          </button>
+          <button type="button" id="btnKirimKoord" onclick="submitKoordPKL()" disabled
+            style="flex:1;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border:none;padding:10px 16px;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;opacity:0.5;transition:opacity 0.2s;">
+            <i class="fa-solid fa-paper-plane"></i> Kirim Pengajuan
+          </button>
+        </div>
+
+        <p id="ajukanKoordModalStatus" style="font-size:0.72rem;color:#94a3b8;text-align:center;margin:10px 0 0 0;display:none;"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom App Logic -->
+  <script src="js/app.js?v=2.1.50"></script>
+</body>
+</html>

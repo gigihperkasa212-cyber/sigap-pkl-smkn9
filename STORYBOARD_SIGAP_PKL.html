@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Storyboard SIGAP PKL — SMK Negeri 9 Malang</title>
+<style>
+  /* ── Reset & Base ─────────────────────────────────────── */
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Segoe UI',Arial,sans-serif; background:#f1f5f9; color:#1e293b; font-size:11pt; }
+
+  /* ── Cover ────────────────────────────────────────────── */
+  .cover {
+    background:linear-gradient(135deg,#0f172a 0%,#0891b2 60%,#0f172a 100%);
+    color:#fff; text-align:center; padding:80px 40px 60px;
+    page-break-after:always;
+  }
+  .cover h1 { font-size:2.8rem; font-weight:900; letter-spacing:3px; margin-bottom:6px; }
+  .cover h2 { font-size:1.3rem; font-weight:400; opacity:.85; margin-bottom:4px; }
+  .cover .sub { opacity:.7; font-size:.95rem; margin-top:16px; }
+  .cover .ver { display:inline-block; margin-top:24px; background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.3); border-radius:20px; padding:6px 24px;
+    font-size:.9rem; font-weight:600; }
+  .cover-icon { font-size:5rem; margin-bottom:20px; }
+
+  /* ── TOC ──────────────────────────────────────────────── */
+  .toc-page { background:#fff; max-width:800px; margin:40px auto; padding:40px;
+    border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.08); page-break-after:always; }
+  .toc-page h2 { color:#0891b2; margin-bottom:20px; font-size:1.2rem;
+    border-bottom:2px solid #e2e8f0; padding-bottom:10px; }
+  .toc-role { margin-bottom:16px; }
+  .toc-role h4 { font-size:.9rem; color:#64748b; text-transform:uppercase;
+    letter-spacing:1px; margin-bottom:6px; }
+  .toc-role a { display:flex; justify-content:space-between; padding:5px 0;
+    border-bottom:1px dashed #e2e8f0; text-decoration:none; color:#0f172a;
+    font-size:.9rem; }
+  .toc-role a:hover { color:#0891b2; }
+
+  /* ── Section Header ───────────────────────────────────── */
+  .section-divider {
+    page-break-before:always;
+    background:linear-gradient(135deg,#0f172a,#1e40af);
+    color:#fff; padding:40px; text-align:center;
+    page-break-after:avoid;
+  }
+  .section-divider .role-icon { font-size:3rem; margin-bottom:10px; }
+  .section-divider h2 { font-size:1.8rem; font-weight:900; }
+  .section-divider p  { opacity:.8; margin-top:6px; }
+
+  /* ── Storyboard Frame ─────────────────────────────────── */
+  .sb-page { background:#fff; max-width:800px; margin:24px auto;
+    border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.08);
+    overflow:hidden; page-break-inside:avoid; }
+
+  .sb-header {
+    display:flex; align-items:center; gap:12px;
+    padding:14px 20px; border-bottom:2px solid #e2e8f0;
+  }
+  .sb-num {
+    width:36px; height:36px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:900; font-size:.9rem; color:#fff; flex-shrink:0;
+  }
+  .num-admin  { background:#dc2626; }
+  .num-guru   { background:#2563eb; }
+  .num-siswa  { background:#059669; }
+  .num-umum   { background:#7c3aed; }
+
+  .sb-header-text { flex:1; }
+  .sb-header-text h3 { font-size:1rem; color:#0f172a; }
+  .sb-header-text .step-label { font-size:.75rem; color:#94a3b8; margin-top:2px; }
+
+  .sb-role-badge {
+    font-size:.7rem; font-weight:700; padding:3px 10px;
+    border-radius:20px; flex-shrink:0;
+  }
+  .badge-admin  { background:#fef2f2; color:#dc2626; border:1px solid #fca5a5; }
+  .badge-guru   { background:#eff6ff; color:#2563eb; border:1px solid #93c5fd; }
+  .badge-siswa  { background:#f0fdf4; color:#059669; border:1px solid #6ee7b7; }
+  .badge-umum   { background:#faf5ff; color:#7c3aed; border:1px solid #c4b5fd; }
+
+  /* ── Body Layout: 2 kolom ─────────────────────────────── */
+  .sb-body { display:grid; grid-template-columns:1fr 1fr; }
+
+  .sb-screenshot {
+    border-right:2px solid #e2e8f0;
+    min-height:280px;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    padding:16px; background:#f8fafc;
+  }
+  .photo-placeholder {
+    width:100%; min-height:220px;
+    border:2.5px dashed #cbd5e1;
+    border-radius:10px;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    color:#94a3b8; gap:8px;
+    background:#fff;
+    cursor:pointer;
+  }
+  .photo-placeholder .ph-icon { font-size:2.5rem; }
+  .photo-placeholder .ph-text { font-size:.78rem; text-align:center; line-height:1.5; }
+  .ph-label { font-size:.72rem; color:#64748b; margin-top:8px; text-align:center; }
+
+  .sb-desc { padding:20px; }
+  .sb-desc h4 { font-size:.95rem; color:#0f172a; margin-bottom:8px; }
+  .sb-desc p  { font-size:.82rem; color:#475569; line-height:1.6; margin-bottom:10px; }
+
+  .steps-list { list-style:none; }
+  .steps-list li {
+    display:flex; gap:8px; margin-bottom:6px;
+    font-size:.8rem; color:#475569; line-height:1.5;
+  }
+  .steps-list li::before {
+    content:attr(data-n); min-width:20px; height:20px;
+    background:#0891b2; color:#fff; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:.65rem; font-weight:700; flex-shrink:0; margin-top:1px;
+  }
+
+  .note-box {
+    background:#f0f9ff; border-left:3px solid #0891b2;
+    border-radius:0 6px 6px 0; padding:8px 12px;
+    font-size:.78rem; color:#0369a1; margin-top:10px;
+  }
+  .warn-box {
+    background:#fffbeb; border-left:3px solid #f59e0b;
+    border-radius:0 6px 6px 0; padding:8px 12px;
+    font-size:.78rem; color:#92400e; margin-top:10px;
+  }
+  .result-box {
+    background:#f0fdf4; border:1px solid #6ee7b7;
+    border-radius:6px; padding:8px 12px;
+    font-size:.78rem; color:#065f46; margin-top:10px;
+  }
+
+  /* ── Print Styles ─────────────────────────────────────── */
+  @media print {
+    body { background:#fff; }
+    .sb-page, .toc-page { box-shadow:none; margin:0 auto; page-break-inside:avoid; }
+    .section-divider { page-break-before:always; }
+    @page { margin:1.5cm; size:A4; }
+  }
+
+  /* ── Responsive ───────────────────────────────────────── */
+  @media(max-width:600px) {
+    .sb-body { grid-template-columns:1fr; }
+    .sb-screenshot { border-right:none; border-bottom:2px solid #e2e8f0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════
+     COVER
+     ════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-icon">📱</div>
+  <h1>STORYBOARD</h1>
+  <h2>SIGAP PKL — Sistem Informasi & Geofencing Absensi PKL</h2>
+  <h2>SMK Negeri 9 Malang</h2>
+  <div class="sub">Dokumen ini berisi storyboard alur penggunaan aplikasi per peran pengguna</div>
+  <div class="sub" style="margin-top:8px;">Kolom kanan pada setiap frame disediakan untuk menempelkan screenshot aplikasi</div>
+  <div class="ver">📋 Versi 2.1.63 • September 2026</div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     DAFTAR ISI
+     ════════════════════════════════════════════ -->
+<div class="toc-page">
+  <h2>📋 Daftar Isi Storyboard</h2>
+
+  <div class="toc-role">
+    <h4>🔵 Alur Umum (Semua Peran)</h4>
+    <a href="#sb-u1">U-1 · Splash Screen & Loading Awal<span>–</span></a>
+    <a href="#sb-u2">U-2 · Halaman Login<span>–</span></a>
+    <a href="#sb-u3">U-3 · Login Berhasil — Routing ke Dashboard<span>–</span></a>
+    <a href="#sb-u4">U-4 · Ganti Tema Siang / Malam<span>–</span></a>
+    <a href="#sb-u5">U-5 · Logout<span>–</span></a>
+  </div>
+
+  <div class="toc-role">
+    <h4>🟢 Alur Siswa PKL</h4>
+    <a href="#sb-s1">S-1 · Dashboard Siswa — Tampilan Awal<span>–</span></a>
+    <a href="#sb-s2">S-2 · Peta Lokasi PKL & Status GPS<span>–</span></a>
+    <a href="#sb-s3">S-3 · Absen Masuk — Buka Modal Kamera<span>–</span></a>
+    <a href="#sb-s4">S-4 · Absen Masuk — Foto Selfie & Konfirmasi<span>–</span></a>
+    <a href="#sb-s5">S-5 · Absen Pulang<span>–</span></a>
+    <a href="#sb-s6">S-6 · Tab Log Presensi<span>–</span></a>
+    <a href="#sb-s7">S-7 · Pengajuan Izin / Sakit<span>–</span></a>
+    <a href="#sb-s8">S-8 · Isi Jurnal Harian<span>–</span></a>
+    <a href="#sb-s9">S-9 · Tab Profil Siswa<span>–</span></a>
+  </div>
+
+  <div class="toc-role">
+    <h4>🔵 Alur Guru Pembimbing</h4>
+    <a href="#sb-g1">G-1 · Dashboard Guru — Tampilan Awal<span>–</span></a>
+    <a href="#sb-g2">G-2 · Absen Monitoring Kunjungan PKL<span>–</span></a>
+    <a href="#sb-g3">G-3 · Daftar Siswa Bimbingan<span>–</span></a>
+    <a href="#sb-g4">G-4 · Persetujuan Izin / Sakit Siswa<span>–</span></a>
+    <a href="#sb-g5">G-5 · Cetak Laporan — Pilih Filter<span>–</span></a>
+    <a href="#sb-g6">G-6 · Preview & Simpan PDF<span>–</span></a>
+  </div>
+
+  <div class="toc-role">
+    <h4>🔴 Alur Master Admin</h4>
+    <a href="#sb-a1">A-1 · Dashboard Admin — Statistik Realtime<span>–</span></a>
+    <a href="#sb-a2">A-2 · Tab Kelola Siswa & Guru — Daftar User<span>–</span></a>
+    <a href="#sb-a3">A-3 · Import Data Massal — Upload CSV<span>–</span></a>
+    <a href="#sb-a4">A-4 · Import CSV — Hasil Validasi<span>–</span></a>
+    <a href="#sb-a5">A-5 · Edit Data User<span>–</span></a>
+    <a href="#sb-a6">A-6 · Persetujuan Akun Guru Baru<span>–</span></a>
+    <a href="#sb-a7">A-7 · Persetujuan Edit Lokasi PKL<span>–</span></a>
+    <a href="#sb-a8">A-8 · Pengaturan Sekolah & TTD<span>–</span></a>
+    <a href="#sb-a9">A-9 · Cetak Lengkap — Per Siswa<span>–</span></a>
+    <a href="#sb-a10">A-10 · Cetak Statistik PDF<span>–</span></a>
+    <a href="#sb-a11">A-11 · Cetak Rekap PDF<span>–</span></a>
+    <a href="#sb-a12">A-12 · Reset Database<span>–</span></a>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     SEKSI: ALUR UMUM
+     ════════════════════════════════════════════ -->
+<div class="section-divider">
+  <div class="role-icon">🔷</div>
+  <h2>ALUR UMUM</h2>
+  <p>Semua Peran Pengguna</p>
+</div>
+
+<!-- U-1 -->
+<div class="sb-page" id="sb-u1">
+  <div class="sb-header">
+    <div class="sb-num num-umum">U1</div>
+    <div class="sb-header-text">
+      <h3>Splash Screen & Loading Awal</h3>
+      <div class="step-label">Langkah pertama saat aplikasi dibuka</div>
+    </div>
+    <span class="sb-role-badge badge-umum">SEMUA</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Splash Screen</strong><br>di sini</div>
+      </div>
+      <div class="ph-label">Screenshot: tampilan splash screen animasi logo SIGAP PKL</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Splash Screen & Inisialisasi</h4>
+      <p>Saat pertama kali dibuka, aplikasi menampilkan splash screen dengan logo SIGAP PKL dan animasi loading.</p>
+      <ul class="steps-list">
+        <li data-n="1">Aplikasi dibuka (APK diklik atau URL diakses)</li>
+        <li data-n="2">Splash screen muncul dengan logo dan animasi</li>
+        <li data-n="3">Sistem memeriksa sesi yang tersimpan (<em>checkAuthSession</em>)</li>
+        <li data-n="4">Jika ada sesi valid → langsung ke dashboard</li>
+        <li data-n="5">Jika tidak ada sesi → tampil halaman login</li>
+      </ul>
+      <div class="note-box">💡 Splash screen sekaligus memuat data dari server secara background (startup sync)</div>
+    </div>
+  </div>
+</div>
+
+<!-- U-2 -->
+<div class="sb-page" id="sb-u2">
+  <div class="sb-header">
+    <div class="sb-num num-umum">U2</div>
+    <div class="sb-header-text">
+      <h3>Halaman Login</h3>
+      <div class="step-label">Masuk ke aplikasi dengan username & password</div>
+    </div>
+    <span class="sb-role-badge badge-umum">SEMUA</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Halaman Login</strong><br>di sini</div>
+      </div>
+      <div class="ph-label">Screenshot: form login dengan field username, password, dan checkbox ingat saya</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Proses Login</h4>
+      <p>Pengguna memasukkan username dan password untuk masuk ke sistem.</p>
+      <ul class="steps-list">
+        <li data-n="1">Ketik <strong>Username</strong> pada kolom pertama</li>
+        <li data-n="2">Ketik <strong>Password</strong> pada kolom kedua</li>
+        <li data-n="3">Centang <strong>"Ingat Saya"</strong> jika ingin tetap login setelah browser ditutup</li>
+        <li data-n="4">Klik tombol <strong>[🔐 MASUK]</strong></li>
+        <li data-n="5">Sistem memverifikasi ke server</li>
+      </ul>
+      <div class="warn-box">⚠️ Jangan centang "Ingat Saya" jika HP digunakan bersama orang lain</div>
+    </div>
+  </div>
+</div>
+
+<!-- U-3 -->
+<div class="sb-page" id="sb-u3">
+  <div class="sb-header">
+    <div class="sb-num num-umum">U3</div>
+    <div class="sb-header-text">
+      <h3>Login Berhasil — Routing ke Dashboard</h3>
+      <div class="step-label">Sistem mengarahkan ke tampilan sesuai peran</div>
+    </div>
+    <span class="sb-role-badge badge-umum">SEMUA</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Toast Login Berhasil</strong><br>+ tampilan dashboard awal</div>
+      </div>
+      <div class="ph-label">Screenshot: notifikasi "Login berhasil" dan tampilan dashboard pertama</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Routing Berdasarkan Peran</h4>
+      <p>Setelah login berhasil, sistem otomatis menampilkan UI yang sesuai dengan peran pengguna.</p>
+      <ul class="steps-list">
+        <li data-n="1">Muncul toast notifikasi <strong>"Login berhasil"</strong></li>
+        <li data-n="2">Halaman login tersembunyi</li>
+        <li data-n="3">Dashboard tampil sesuai peran:<br>
+          🟢 Siswa → Tab Absensi + Peta<br>
+          🔵 Guru → Tab Monitoring<br>
+          🔴 Admin → Tab Dashboard Admin</li>
+        <li data-n="4">Data pengguna dimuat dari server</li>
+      </ul>
+      <div class="result-box">✅ Nama, peran, dan data PKL pengguna tampil di bagian atas layar</div>
+    </div>
+  </div>
+</div>
+
+<!-- U-4 -->
+<div class="sb-page" id="sb-u4">
+  <div class="sb-header">
+    <div class="sb-num num-umum">U4</div>
+    <div class="sb-header-text">
+      <h3>Ganti Tema Siang / Malam</h3>
+      <div class="step-label">Toggle mode tampilan aplikasi</div>
+    </div>
+    <span class="sb-role-badge badge-umum">SEMUA</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Mode Siang & Mode Malam</strong><br>(2 gambar berdampingan)</div>
+      </div>
+      <div class="ph-label">Screenshot: perbandingan tampilan mode siang (terang) dan mode malam (gelap)</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Toggle Tema</h4>
+      <p>Aplikasi mendukung dua mode tampilan yang bisa diganti kapan saja.</p>
+      <ul class="steps-list">
+        <li data-n="1">Klik ikon <strong>🌙 / ☀️</strong> di pojok kanan atas header</li>
+        <li data-n="2">Tema berganti: Malam (gelap) ↔ Siang (terang)</li>
+        <li data-n="3">Preferensi tersimpan otomatis</li>
+        <li data-n="4">Berlaku untuk semua halaman dan grafik</li>
+      </ul>
+      <div class="note-box">💡 Mode Malam (gelap) adalah tampilan default aplikasi</div>
+    </div>
+  </div>
+</div>
+
+<!-- U-5 -->
+<div class="sb-page" id="sb-u5">
+  <div class="sb-header">
+    <div class="sb-num num-umum">U5</div>
+    <div class="sb-header-text">
+      <h3>Logout</h3>
+      <div class="step-label">Keluar dari aplikasi</div>
+    </div>
+    <span class="sb-role-badge badge-umum">SEMUA</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Tombol Logout</strong><br>dan konfirmasi</div>
+      </div>
+      <div class="ph-label">Screenshot: lokasi tombol logout di profil dan halaman login setelah logout</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Proses Logout</h4>
+      <p>Pengguna bisa keluar dari aplikasi melalui tab Profil.</p>
+      <ul class="steps-list">
+        <li data-n="1">Buka tab <strong>Profil</strong> di menu navigasi</li>
+        <li data-n="2">Klik tombol <strong>[🚪 Logout]</strong></li>
+        <li data-n="3">Konfirmasi logout</li>
+        <li data-n="4">Sesi dihapus dari browser</li>
+        <li data-n="5">Kembali ke halaman login</li>
+      </ul>
+      <div class="result-box">✅ Setelah logout, membuka link kembali akan menampilkan halaman login (tidak auto-masuk)</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     SEKSI: ALUR SISWA
+     ════════════════════════════════════════════ -->
+<div class="section-divider">
+  <div class="role-icon">🎓</div>
+  <h2>ALUR SISWA PKL</h2>
+  <p>Panduan penggunaan untuk Siswa PKL</p>
+</div>
+
+<!-- S-1 -->
+<div class="sb-page" id="sb-s1">
+  <div class="sb-header">
+    <div class="sb-num num-siswa">S1</div>
+    <div class="sb-header-text">
+      <h3>Dashboard Siswa — Tampilan Awal</h3>
+      <div class="step-label">Tampilan utama setelah siswa login</div>
+    </div>
+    <span class="sb-role-badge badge-siswa">SISWA</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Dashboard Utama Siswa</strong><br>di sini</div>
+      </div>
+      <div class="ph-label">Screenshot: halaman utama siswa dengan nama, info PKL, peta, dan tombol absen</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Komponen Dashboard Siswa</h4>
+      <p>Setelah login, siswa melihat halaman utama dengan semua informasi absensi PKL.</p>
+      <ul class="steps-list">
+        <li data-n="1">Header: nama siswa, NISN, nama PKL</li>
+        <li data-n="2">Status kehadiran hari ini (Hadir/Belum/Alpa)</li>
+        <li data-n="3">Peta Leaflet lokasi PKL dengan geofence circle</li>
+        <li data-n="4">Tombol [ABSEN MASUK] dan [ABSEN PULANG]</li>
+        <li data-n="5">Menu navigasi bawah: Absensi | Log | Izin | Jurnal | Profil</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- S-2 -->
+<div class="sb-page" id="sb-s2">
+  <div class="sb-header">
+    <div class="sb-num num-siswa">S2</div>
+    <div class="sb-header-text">
+      <h3>Peta Lokasi PKL & Status GPS</h3>
+      <div class="step-label">Tampilan peta dan informasi posisi</div>
+    </div>
+    <span class="sb-role-badge badge-siswa">SISWA</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Peta Leaflet</strong><br>dengan marker PKL & posisi siswa</div>
+      </div>
+      <div class="ph-label">Screenshot: peta dengan titik merah (PKL), lingkaran geofence, dan titik biru (posisi siswa)</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Peta & Geofencing GPS</h4>
+      <p>Peta interaktif menampilkan posisi siswa dan lokasi PKL secara realtime.</p>
+      <ul class="steps-list">
+        <li data-n="1">📍 Marker merah = Lokasi PKL terdaftar</li>
+        <li data-n="2">🔵 Titik biru = Posisi siswa saat ini</li>
+        <li data-n="3">⭕ Lingkaran = Radius geofence (default 350m)</li>
+        <li data-n="4">Badge GPS: <strong>Dalam Radius</strong> (hijau) / <strong>Luar Radius Xm</strong> (merah)</li>
+        <li data-n="5">Koordinat PKL otomatis dari database</li>
+      </ul>
+      <div class="note-box">💡 GPS perlu beberapa detik untuk akurasi optimal. Aktifkan mode akurasi tinggi di HP.</div>
+    </div>
+  </div>
+</div>
+
+<!-- S-3 -->
+<div class="sb-page" id="sb-s3">
+  <div class="sb-header">
+    <div class="sb-num num-siswa">S3</div>
+    <div class="sb-header-text">
+      <h3>Absen Masuk — Buka Modal Kamera</h3>
+      <div class="step-label">Membuka kamera untuk foto selfie absen masuk</div>
+    </div>
+    <span class="sb-role-badge badge-siswa">SISWA</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Modal Kamera Absen Masuk</strong><br>di sini</div>
+      </div>
+      <div class="ph-label">Screenshot: modal kamera terbuka dengan tampilan live kamera, info GPS, dan tombol foto</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Modal Kamera Selfie</h4>
+      <p>Setelah klik [ABSEN MASUK], modal kamera terbuka untuk mengambil foto selfie wajib.</p>
+      <ul class="steps-list">
+        <li data-n="1">Klik tombol <strong>[▶ ABSEN MASUK]</strong></li>
+        <li data-n="2">Browser meminta izin kamera → klik <strong>Izinkan</strong></li>
+        <li data-n="3">Tampilan kamera live muncul di modal</li>
+        <li data-n="4">Info GPS tampil: koordinat + jarak dari PKL</li>
+        <li data-n="5">Arahkan kamera ke wajah Anda</li>
+      </ul>
+      <div class="warn-box">⚠️ Jika kamera tidak terbuka, beri izin kamera di pengaturan browser/HP</div>
+    </div>
+  </div>
+</div>
+
+<!-- S-4 -->
+<div class="sb-page" id="sb-s4">
+  <div class="sb-header">
+    <div class="sb-num num-siswa">S4</div>
+    <div class="sb-header-text">
+      <h3>Absen Masuk — Foto Selfie & Konfirmasi</h3>
+      <div class="step-label">Mengambil foto dan menyimpan absensi</div>
+    </div>
+    <span class="sb-role-badge badge-siswa">SISWA</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Konfirmasi Absen Berhasil</strong><br>(toast notifikasi hijau)</div>
+      </div>
+      <div class="ph-label">Screenshot: notifikasi "✅ Absen Masuk berhasil!" dengan jam dan status Hadir</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Simpan Absensi Masuk</h4>
+      <p>Foto diambil dan absensi tersimpan ke server beserta data GPS.</p>
+      <ul class="steps-list">
+        <li data-n="1">Klik tombol <strong>[📸 AMBIL FOTO]</strong></li>
+        <li data-n="2">Foto selfie diambil otomatis</li>
+        <li data-n="3">Data dikirim ke server: foto, GPS, waktu, status</li>
+        <li data-n="4">Toast notifikasi muncul: <strong>"✅ Absen Masuk berhasil! HH:MM"</strong></li>
+        <li data-n="5">Status dashboard berubah menjadi <strong>Hadir</strong></li>
+        <li data-n="6">Tombol [ABSEN MASUK] nonaktif (sudah absen)</li>
+      </ul>
+      <div class="result-box">✅ Data absensi langsung tampil di dashboard admin/guru secara realtime</div>
+    </div>
+  </div>
+</div>
+
+<!-- S-5 -->
+<div class="sb-page" id="sb-s5">
+  <div class="sb-header">
+    <div class="sb-num num-siswa">S5</div>
+    <div class="sb-header-text">
+      <h3>Absen Pulang</h3>
+      <div class="step-label">Proses absen pulang di akhir jam PKL</div>
+    </div>
+    <span class="sb-role-badge badge-siswa">SISWA</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Modal Kamera Absen Pulang</strong><br>+ konfirmasi berhasil</div>
+      </div>
+      <div class="ph-label">Screenshot: modal kamera untuk absen pulang dan notifikasi berhasil</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Proses Absen Pulang</h4>
+      <p>Prosedur absen pulang identik dengan absen masuk, dilakukan di akhir jam PKL.</p>
+      <ul class="steps-list">
+        <li data-n="1">Klik tombol <strong>[▶ ABSEN PULANG]</strong></li>
+        <li data-n="2">Modal kamera terbuka</li>
+        <li data-n="3">Foto selfie diambil</li>
+        <li data-n="4">Konfirmasi: <strong>"✅ Absen Pulang berhasil! HH:MM"</strong></li>
+        <li data-n="5">Log harian lengkap: jam masuk + jam pulang + status Hadir</li>
+      </ul>
+      <div class="note-box">💡 Jika hari berakhir tanpa absen masuk dan pulang → tercatat Alpa otomatis</div>
+    </div>
+  </div>
+</div>
+
+<!-- S-6 -->
+<div class="sb-page" id="sb-s6">
+  <div class="sb-header">
+    <div class="sb-num num-siswa">S6</div>
+    <div class="sb-header-text">
+      <h3>Tab Log Presensi</h3>
+      <div class="step-label">Riwayat kehadiran harian siswa</div>
+    </div>
+    <span class="sb-role-badge badge-siswa">SISWA</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Tab Log Presensi</strong><br>dengan daftar riwayat</div>
+      </div>
+      <div class="ph-label">Screenshot: daftar log presensi dengan tanggal, jam masuk/pulang, dan status warna</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Riwayat Presensi</h4>
+      <p>Menampilkan semua riwayat kehadiran siswa selama PKL.</p>
+      <ul class="steps-list">
+        <li data-n="1">Klik tab <strong>Log Presensi</strong> di menu bawah</li>
+        <li data-n="2">Tampil daftar per hari: tanggal, jam masuk, jam pulang, status</li>
+        <li data-n="3">Warna status: 🟢 Hadir | 🔵 Izin | 🟡 Sakit | 🔴 Alpa</li>
+        <li data-n="4">Scroll ke atas untuk melihat hari ini</li>
+        <li data-n="5">Statistik ringkas di bagian atas: total hadir/izin/sakit/alpa</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- S-7 -->
+<div class="sb-page" id="sb-s7">
+  <div class="sb-header">
+    <div class="sb-num num-siswa">S7</div>
+    <div class="sb-header-text">
+      <h3>Pengajuan Izin / Sakit</h3>
+      <div class="step-label">Mengajukan izin atau keterangan sakit</div>
+    </div>
+    <span class="sb-role-badge badge-siswa">SISWA</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Form Pengajuan Izin/Sakit</strong><br>di sini</div>
+      </div>
+      <div class="ph-label">Screenshot: form izin dengan dropdown jenis, tanggal mulai-selesai, keterangan, dan tombol kirim</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Form Izin / Sakit</h4>
+      <p>Siswa mengajukan izin atau sakit yang akan disetujui oleh guru pembimbing.</p>
+      <ul class="steps-list">
+        <li data-n="1">Klik tab <strong>Izin/Sakit</strong></li>
+        <li data-n="2">Pilih jenis: <strong>Izin</strong> atau <strong>Sakit</strong></li>
+        <li data-n="3">Isi tanggal mulai dan tanggal selesai</li>
+        <li data-n="4">Tulis keterangan/alasan</li>
+        <li data-n="5">Klik <strong>[📤 KIRIM PENGAJUAN]</strong></li>
+        <li data-n="6">Status: <strong>Menunggu Persetujuan</strong></li>
+      </ul>
+      <div class="note-box">💡 Setelah disetujui guru, status Alpa otomatis berubah ke Izin/Sakit</div>
+    </div>
+  </div>
+</div>
+
+<!-- S-8 -->
+<div class="sb-page" id="sb-s8">
+  <div class="sb-header">
+    <div class="sb-num num-siswa">S8</div>
+    <div class="sb-header-text">
+      <h3>Isi Jurnal Harian</h3>
+      <div class="step-label">Mencatat kegiatan PKL harian</div>
+    </div>
+    <span class="sb-role-badge badge-siswa">SISWA</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Form Jurnal Harian</strong><br>di sini</div>
+      </div>
+      <div class="ph-label">Screenshot: form jurnal dengan textarea narasi, tombol foto, dan tombol simpan</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Jurnal Kegiatan PKL</h4>
+      <p>Siswa mengisi jurnal kegiatan harian di tempat PKL.</p>
+      <ul class="steps-list">
+        <li data-n="1">Klik tab <strong>Jurnal</strong></li>
+        <li data-n="2">Tanggal otomatis terisi hari ini</li>
+        <li data-n="3">Tulis narasi kegiatan hari ini</li>
+        <li data-n="4">Opsional: klik <strong>[📷 Tambah Foto]</strong> untuk foto kegiatan</li>
+        <li data-n="5">Klik <strong>[💾 SIMPAN JURNAL]</strong></li>
+        <li data-n="6">Jurnal tersimpan dan tampil di Cetak Lengkap</li>
+      </ul>
+      <div class="note-box">💡 Jurnal hanya bisa diisi 1 kali per hari</div>
+    </div>
+  </div>
+</div>
+
+<!-- S-9 -->
+<div class="sb-page" id="sb-s9">
+  <div class="sb-header">
+    <div class="sb-num num-siswa">S9</div>
+    <div class="sb-header-text">
+      <h3>Tab Profil Siswa</h3>
+      <div class="step-label">Informasi akun dan pengaturan siswa</div>
+    </div>
+    <span class="sb-role-badge badge-siswa">SISWA</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Tab Profil Siswa</strong><br>di sini</div>
+      </div>
+      <div class="ph-label">Screenshot: halaman profil dengan foto, data diri, info PKL, dan tombol logout</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Profil & Pengaturan Siswa</h4>
+      <p>Menampilkan informasi lengkap akun siswa dan opsi pengaturan.</p>
+      <ul class="steps-list">
+        <li data-n="1">Foto profil (avatar) siswa</li>
+        <li data-n="2">Nama lengkap, NISN, kelas, sekolah</li>
+        <li data-n="3">Nama dan koordinat GPS lokasi PKL</li>
+        <li data-n="4">Nama guru pembimbing</li>
+        <li data-n="5">Tombol ganti password (opsional)</li>
+        <li data-n="6">Tombol <strong>[🚪 Logout]</strong></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     SEKSI: ALUR GURU
+     ════════════════════════════════════════════ -->
+<div class="section-divider">
+  <div class="role-icon">👨‍🏫</div>
+  <h2>ALUR GURU PEMBIMBING</h2>
+  <p>Panduan penggunaan untuk Guru Pembimbing PKL</p>
+</div>
+
+<!-- G-1 -->
+<div class="sb-page" id="sb-g1">
+  <div class="sb-header">
+    <div class="sb-num num-guru">G1</div>
+    <div class="sb-header-text">
+      <h3>Dashboard Guru — Tampilan Awal</h3>
+      <div class="step-label">Halaman utama setelah guru login</div>
+    </div>
+    <span class="sb-role-badge badge-guru">GURU</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Dashboard Utama Guru</strong><br>di sini</div>
+      </div>
+      <div class="ph-label">Screenshot: dashboard guru dengan statistik siswa bimbingan, tombol monitoring, dan menu navigasi</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Komponen Dashboard Guru</h4>
+      <p>Guru melihat ringkasan kehadiran siswa bimbingannya secara realtime.</p>
+      <ul class="steps-list">
+        <li data-n="1">Nama guru dan NIP di header</li>
+        <li data-n="2">Statistik: total siswa, hadir hari ini, belum absen, alpa</li>
+        <li data-n="3">Grafik kehadiran mingguan/bulanan</li>
+        <li data-n="4">Tombol besar <strong>[🔍 ABSEN MONITORING]</strong></li>
+        <li data-n="5">Menu: Monitoring | Log Presensi | Persetujuan | Daftar Siswa</li>
+      </ul>
+      <div class="note-box">💡 Data dashboard update otomatis setiap 8 detik via polling server</div>
+    </div>
+  </div>
+</div>
+
+<!-- G-2 -->
+<div class="sb-page" id="sb-g2">
+  <div class="sb-header">
+    <div class="sb-num num-guru">G2</div>
+    <div class="sb-header-text">
+      <h3>Absen Monitoring Kunjungan PKL</h3>
+      <div class="step-label">Guru mencatat kunjungan ke lokasi PKL siswa</div>
+    </div>
+    <span class="sb-role-badge badge-guru">GURU</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Modal Monitoring Guru</strong><br>di sini</div>
+      </div>
+      <div class="ph-label">Screenshot: modal kamera monitoring dengan dropdown pilih siswa/PKL dan tombol ambil foto</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Absen Monitoring Kunjungan</h4>
+      <p>Guru menggunakan fitur ini saat mengunjungi tempat PKL siswa untuk monitoring langsung.</p>
+      <ul class="steps-list">
+        <li data-n="1">Pergi ke lokasi PKL siswa yang dikunjungi</li>
+        <li data-n="2">Klik <strong>[🔍 ABSEN MONITORING]</strong></li>
+        <li data-n="3">Modal kamera terbuka, foto selfie guru</li>
+        <li data-n="4">Pilih nama siswa/PKL yang dikunjungi dari dropdown</li>
+        <li data-n="5">Tulis catatan kunjungan (opsional)</li>
+        <li data-n="6">Klik <strong>[📸 AMBIL FOTO & SIMPAN]</strong></li>
+      </ul>
+      <div class="result-box">✅ Log monitoring tampil di Cetak Lengkap sebagai bukti kunjungan</div>
+    </div>
+  </div>
+</div>
+
+<!-- G-3 -->
+<div class="sb-page" id="sb-g3">
+  <div class="sb-header">
+    <div class="sb-num num-guru">G3</div>
+    <div class="sb-header-text">
+      <h3>Daftar Siswa Bimbingan</h3>
+      <div class="step-label">Melihat dan mengelola data siswa bimbingan</div>
+    </div>
+    <span class="sb-role-badge badge-guru">GURU</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Tabel Daftar Siswa Bimbingan</strong><br>di sini</div>
+      </div>
+      <div class="ph-label">Screenshot: tabel daftar siswa dengan kolom nama, peran, lokasi PKL (link GPS), dan tombol edit</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Tabel Siswa Bimbingan</h4>
+      <p>Menampilkan hanya siswa yang dibimbing oleh guru yang sedang login.</p>
+      <ul class="steps-list">
+        <li data-n="1">Klik tab <strong>Daftar Siswa & Guru</strong></li>
+        <li data-n="2">Tampil tabel dengan nama, username, lokasi PKL</li>
+        <li data-n="3">Klik link GPS untuk buka Google Maps lokasi PKL siswa</li>
+        <li data-n="4">Gunakan kotak pencarian untuk filter siswa</li>
+        <li data-n="5">Klik <strong>[Edit Data]</strong> untuk melihat detail atau ajukan edit PKL</li>
+      </ul>
+      <div class="note-box">💡 Guru hanya melihat siswa dengan supervisor = nama guru tersebut</div>
+    </div>
+  </div>
+</div>
+
+<!-- G-4 -->
+<div class="sb-page" id="sb-g4">
+  <div class="sb-header">
+    <div class="sb-num num-guru">G4</div>
+    <div class="sb-header-text">
+      <h3>Persetujuan Izin / Sakit Siswa</h3>
+      <div class="step-label">Menyetujui atau menolak pengajuan izin</div>
+    </div>
+    <span class="sb-role-badge badge-guru">GURU</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Tab Persetujuan Izin</strong><br>dengan daftar pending</div>
+      </div>
+      <div class="ph-label">Screenshot: daftar pengajuan izin/sakit pending dengan tombol Setujui dan Tolak</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Persetujuan Pengajuan</h4>
+      <p>Guru memproses pengajuan izin/sakit dari siswa bimbingannya.</p>
+      <ul class="steps-list">
+        <li data-n="1">Buka tab <strong>Persetujuan Pengajuan</strong></li>
+        <li data-n="2">Tampil daftar pengajuan pending</li>
+        <li data-n="3">Baca keterangan: nama siswa, jenis, tanggal, alasan</li>
+        <li data-n="4">Klik <strong>[✅ Setujui]</strong> → status berubah "Disetujui"</li>
+        <li data-n="5">Atau klik <strong>[❌ Tolak]</strong> → status berubah "Ditolak"</li>
+        <li data-n="6">Log absensi siswa otomatis diperbarui</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- G-5 -->
+<div class="sb-page" id="sb-g5">
+  <div class="sb-header">
+    <div class="sb-num num-guru">G5</div>
+    <div class="sb-header-text">
+      <h3>Cetak Laporan — Pilih Filter</h3>
+      <div class="step-label">Memilih filter sebelum mencetak laporan</div>
+    </div>
+    <span class="sb-role-badge badge-guru">GURU</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Filter Cetak Laporan</strong><br>(dropdown bulan + tombol cetak)</div>
+      </div>
+      <div class="ph-label">Screenshot: dropdown filter bulan dan 3 tombol cetak (Statistik, Rekap, Lengkap)</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Pilih Filter Laporan</h4>
+      <p>Guru memilih periode sebelum mencetak laporan siswa bimbingannya.</p>
+      <ul class="steps-list">
+        <li data-n="1">Buka tab <strong>Dashboard</strong> atau <strong>Log Presensi</strong></li>
+        <li data-n="2">Pilih bulan dari dropdown filter</li>
+        <li data-n="3">Pilih jenis cetak:
+          <br>📊 <strong>Cetak Statistik</strong> — grafik kehadiran
+          <br>📋 <strong>Cetak Rekap</strong> — tabel semua siswa
+          <br>📄 <strong>Cetak Lengkap</strong> — per siswa detail</li>
+        <li data-n="4">Klik tombol cetak yang diinginkan</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- G-6 -->
+<div class="sb-page" id="sb-g6">
+  <div class="sb-header">
+    <div class="sb-num num-guru">G6</div>
+    <div class="sb-header-text">
+      <h3>Preview & Simpan PDF</h3>
+      <div class="step-label">Modal preview laporan dan opsi simpan</div>
+    </div>
+    <span class="sb-role-badge badge-guru">GURU</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Modal Preview Laporan PDF</strong><br>dengan toolbar atas</div>
+      </div>
+      <div class="ph-label">Screenshot: modal fullscreen preview laporan dengan tombol Kembali dan Simpan PDF</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Preview & Simpan PDF</h4>
+      <p>Laporan tampil dalam modal fullscreen sebelum disimpan.</p>
+      <ul class="steps-list">
+        <li data-n="1">Modal preview muncul (tunggu beberapa detik)</li>
+        <li data-n="2">Toolbar atas: [← Kembali] | Judul File | [💾 Simpan PDF]</li>
+        <li data-n="3">Isi laporan tampil di area bawah (scrollable)</li>
+        <li data-n="4">Klik <strong>[💾 Simpan PDF]</strong> untuk menyimpan file</li>
+        <li data-n="5">File tersimpan ke folder Downloads</li>
+        <li data-n="6">Atau tekan Ctrl+P untuk cetak langsung</li>
+      </ul>
+      <div class="result-box">✅ File PDF berisi kop surat resmi, data lengkap, dan TTD 3 kolom</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     SEKSI: ALUR ADMIN
+     ════════════════════════════════════════════ -->
+<div class="section-divider">
+  <div class="role-icon">⚙️</div>
+  <h2>ALUR MASTER ADMIN</h2>
+  <p>Panduan penggunaan untuk Master Administrator</p>
+</div>
+
+<!-- A-1 -->
+<div class="sb-page" id="sb-a1">
+  <div class="sb-header">
+    <div class="sb-num num-admin">A1</div>
+    <div class="sb-header-text">
+      <h3>Dashboard Admin — Statistik Realtime</h3>
+      <div class="step-label">Tampilan utama setelah admin login</div>
+    </div>
+    <span class="sb-role-badge badge-admin">ADMIN</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Dashboard Admin Realtime</strong><br>di sini</div>
+      </div>
+      <div class="ph-label">Screenshot: dashboard admin dengan kartu statistik, grafik, dan daftar absen hari ini</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Dashboard Admin</h4>
+      <p>Admin melihat statistik kehadiran seluruh siswa secara realtime.</p>
+      <ul class="steps-list">
+        <li data-n="1">Kartu statistik: total siswa, hadir, alpa, izin/sakit</li>
+        <li data-n="2">Grafik kehadiran per hari / per bulan</li>
+        <li data-n="3">Daftar absensi masuk hari ini (realtime)</li>
+        <li data-n="4">Notifikasi: akun pending, izin pending</li>
+        <li data-n="5">Update otomatis setiap 8 detik</li>
+        <li data-n="6">Filter per guru pembimbing tersedia</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- A-2 -->
+<div class="sb-page" id="sb-a2">
+  <div class="sb-header">
+    <div class="sb-num num-admin">A2</div>
+    <div class="sb-header-text">
+      <h3>Daftar User Siswa & Guru</h3>
+      <div class="step-label">Tab kelola semua pengguna sistem</div>
+    </div>
+    <span class="sb-role-badge badge-admin">ADMIN</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Tabel Daftar Semua User</strong><br>di sini</div>
+      </div>
+      <div class="ph-label">Screenshot: tabel semua user dengan badge peran, informasi PKL, link GPS, dan tombol edit</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Tabel Manajemen User</h4>
+      <p>Admin melihat dan mengelola semua pengguna sistem.</p>
+      <ul class="steps-list">
+        <li data-n="1">Klik tab <strong>Kelola Siswa & Guru</strong></li>
+        <li data-n="2">Tampil semua user: nama, username, peran, lokasi PKL</li>
+        <li data-n="3">Badge peran: 🔴 ADMIN | 🔵 GURU | 🟢 SISWA</li>
+        <li data-n="4">Klik link GPS untuk verifikasi lokasi PKL di Google Maps</li>
+        <li data-n="5">Gunakan pencarian untuk filter cepat</li>
+        <li data-n="6">Klik <strong>[Edit Data]</strong> untuk edit user tertentu</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- A-3 -->
+<div class="sb-page" id="sb-a3">
+  <div class="sb-header">
+    <div class="sb-num num-admin">A3</div>
+    <div class="sb-header-text">
+      <h3>Import Data Massal — Upload CSV</h3>
+      <div class="step-label">Mengunggah file CSV untuk import banyak user</div>
+    </div>
+    <span class="sb-role-badge badge-admin">ADMIN</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Kartu Import Data Massal</strong><br>dengan tombol upload</div>
+      </div>
+      <div class="ph-label">Screenshot: kartu import CSV dengan tombol download template dan tombol upload file</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Import CSV Massal</h4>
+      <p>Admin mengupload file CSV untuk mendaftarkan banyak siswa dan guru sekaligus.</p>
+      <ul class="steps-list">
+        <li data-n="1">Klik <strong>[📥 Download Template CSV]</strong></li>
+        <li data-n="2">Isi data di template (9 kolom per baris)</li>
+        <li data-n="3">Simpan file dengan format .csv atau .xlsx</li>
+        <li data-n="4">Klik <strong>[Pilih File]</strong> dan pilih file CSV</li>
+        <li data-n="5">Klik <strong>[🚀 Import Sekarang]</strong></li>
+        <li data-n="6">Tunggu proses validasi dan geocoding</li>
+      </ul>
+      <div class="note-box">💡 Format: role, nama, nomor_induk, username, password, kelas, sekolah, lokasi_pkl, guru_pembimbing</div>
+    </div>
+  </div>
+</div>
+
+<!-- A-4 -->
+<div class="sb-page" id="sb-a4">
+  <div class="sb-header">
+    <div class="sb-num num-admin">A4</div>
+    <div class="sb-header-text">
+      <h3>Import CSV — Hasil Validasi</h3>
+      <div class="step-label">Laporan hasil proses import</div>
+    </div>
+    <span class="sb-role-badge badge-admin">ADMIN</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Laporan Validasi Import</strong><br>(berhasil / ada error)</div>
+      </div>
+      <div class="ph-label">Screenshot: kartu hasil import dengan jumlah berhasil dan tabel baris yang gagal beserta keterangannya</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Laporan Hasil Import</h4>
+      <p>Sistem menampilkan laporan detail setelah proses import selesai.</p>
+      <ul class="steps-list">
+        <li data-n="1">✅ Jumlah siswa dan guru yang berhasil diimpor</li>
+        <li data-n="2">⚠️ Tabel baris yang gagal + keterangan error</li>
+        <li data-n="3">Penyebab umum: username duplikat, role tidak valid</li>
+        <li data-n="4">Perbaiki file CSV sesuai saran</li>
+        <li data-n="5">Upload ulang untuk baris yang gagal</li>
+        <li data-n="6">Geocoding koordinat PKL berjalan di background</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- A-5 -->
+<div class="sb-page" id="sb-a5">
+  <div class="sb-header">
+    <div class="sb-num num-admin">A5</div>
+    <div class="sb-header-text">
+      <h3>Edit Data User</h3>
+      <div class="step-label">Modal edit data lengkap user</div>
+    </div>
+    <span class="sb-role-badge badge-admin">ADMIN</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Modal Edit User</strong><br>dengan semua field</div>
+      </div>
+      <div class="ph-label">Screenshot: modal edit user dengan field nama, password, kelas, lokasi PKL, GPS, dan guru pembimbing</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Edit Data User Lengkap</h4>
+      <p>Admin bisa mengubah semua data user termasuk koordinat PKL secara langsung.</p>
+      <ul class="steps-list">
+        <li data-n="1">Klik <strong>[Edit Data]</strong> pada baris user</li>
+        <li data-n="2">Modal edit terbuka dengan semua field terisi</li>
+        <li data-n="3">Ubah field yang diperlukan</li>
+        <li data-n="4">Untuk lokasi PKL: ketik nama → klik <strong>[🔍 Cari di Maps]</strong></li>
+        <li data-n="5">Mini peta preview muncul dengan koordinat baru</li>
+        <li data-n="6">Klik <strong>[💾 Simpan Perubahan]</strong></li>
+      </ul>
+      <div class="result-box">✅ Perubahan langsung tersimpan ke database dan berlaku untuk semua perangkat</div>
+    </div>
+  </div>
+</div>
+
+<!-- A-6 -->
+<div class="sb-page" id="sb-a6">
+  <div class="sb-header">
+    <div class="sb-num num-admin">A6</div>
+    <div class="sb-header-text">
+      <h3>Persetujuan Akun Guru Baru</h3>
+      <div class="step-label">Menyetujui akun guru yang baru didaftarkan</div>
+    </div>
+    <span class="sb-role-badge badge-admin">ADMIN</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Daftar Akun Pending</strong><br>di tab Persetujuan</div>
+      </div>
+      <div class="ph-label">Screenshot: kartu akun guru baru yang menunggu persetujuan dengan tombol Setujui dan Tolak</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Persetujuan Akun Baru</h4>
+      <p>Akun guru yang baru didaftarkan perlu disetujui admin sebelum bisa login.</p>
+      <ul class="steps-list">
+        <li data-n="1">Buka tab <strong>Persetujuan Pengajuan</strong></li>
+        <li data-n="2">Lihat seksi <strong>"Akun Baru Pending"</strong></li>
+        <li data-n="3">Periksa nama, username, dan peran akun</li>
+        <li data-n="4">Klik <strong>[✅ Setujui]</strong> → akun aktif, guru bisa login</li>
+        <li data-n="5">Atau klik <strong>[❌ Tolak]</strong> → akun tidak aktif</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- A-7 -->
+<div class="sb-page" id="sb-a7">
+  <div class="sb-header">
+    <div class="sb-num num-admin">A7</div>
+    <div class="sb-header-text">
+      <h3>Persetujuan Edit Lokasi PKL</h3>
+      <div class="step-label">Menyetujui pengajuan perubahan lokasi PKL dari guru</div>
+    </div>
+    <span class="sb-role-badge badge-admin">ADMIN</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Pengajuan Edit PKL Pending</strong><br>di sini</div>
+      </div>
+      <div class="ph-label">Screenshot: kartu pengajuan edit PKL dengan info lokasi lama vs baru dan tombol persetujuan</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Persetujuan Edit Lokasi PKL</h4>
+      <p>Guru bisa mengajukan perubahan lokasi PKL siswa, admin yang menyetujui.</p>
+      <ul class="steps-list">
+        <li data-n="1">Buka tab <strong>Persetujuan Pengajuan</strong></li>
+        <li data-n="2">Lihat seksi <strong>"Edit PKL Pending"</strong></li>
+        <li data-n="3">Periksa: nama siswa, lokasi lama → lokasi baru + koordinat</li>
+        <li data-n="4">Klik <strong>[✅ Setujui]</strong> → koordinat PKL siswa berubah</li>
+        <li data-n="5">Atau klik <strong>[❌ Tolak]</strong> → lokasi tidak berubah</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- A-8 -->
+<div class="sb-page" id="sb-a8">
+  <div class="sb-header">
+    <div class="sb-num num-admin">A8</div>
+    <div class="sb-header-text">
+      <h3>Pengaturan Sekolah & TTD</h3>
+      <div class="step-label">Mengisi data untuk kop surat dan tanda tangan laporan</div>
+    </div>
+    <span class="sb-role-badge badge-admin">ADMIN</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Form Pengaturan Sekolah</strong><br>di sini</div>
+      </div>
+      <div class="ph-label">Screenshot: form pengaturan dengan field kepala sekolah, waka humas, ketua pokja PKL, dan NIP masing-masing</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Pengaturan Data Sekolah</h4>
+      <p>Data ini digunakan untuk kop surat dan tanda tangan di semua laporan cetak.</p>
+      <ul class="steps-list">
+        <li data-n="1">Buka tab <strong>Profil & Pengaturan</strong></li>
+        <li data-n="2">Isi nama dan NIP <strong>Kepala Sekolah</strong></li>
+        <li data-n="3">Isi nama dan NIP <strong>Waka Humas</strong></li>
+        <li data-n="4">Isi nama dan NIP <strong>Ketua Pokja PKL</strong></li>
+        <li data-n="5">Isi nama kota untuk baris tanggal TTD</li>
+        <li data-n="6">Klik <strong>[💾 Simpan Pengaturan]</strong></li>
+      </ul>
+      <div class="warn-box">⚠️ Jika tidak diisi, TTD di laporan akan menampilkan garis kosong</div>
+    </div>
+  </div>
+</div>
+
+<!-- A-9 -->
+<div class="sb-page" id="sb-a9">
+  <div class="sb-header">
+    <div class="sb-num num-admin">A9</div>
+    <div class="sb-header-text">
+      <h3>Cetak Lengkap — Per Siswa</h3>
+      <div class="step-label">Laporan lengkap harian setiap siswa dengan peta PKL</div>
+    </div>
+    <span class="sb-role-badge badge-admin">ADMIN</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Contoh Halaman Cetak Lengkap</strong><br>(kartu per siswa dengan peta)</div>
+      </div>
+      <div class="ph-label">Screenshot: contoh output cetak lengkap: header siswa, peta OSM lokasi PKL, tabel log harian, jurnal</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Cetak Laporan Lengkap</h4>
+      <p>Laporan paling detail — setiap siswa mendapat halaman sendiri dengan peta lokasi PKL.</p>
+      <ul class="steps-list">
+        <li data-n="1">Pilih filter guru pembimbing (disarankan, bukan "Semua")</li>
+        <li data-n="2">Klik <strong>[📄 Cetak Lengkap]</strong></li>
+        <li data-n="3">Tunggu modal preview (beberapa detik)</li>
+        <li data-n="4">Setiap siswa memiliki: foto, info, statistik, peta PKL, tabel harian</li>
+        <li data-n="5">Peta OSM menampilkan titik lokasi PKL yang tepat</li>
+        <li data-n="6">TTD 3-kolom di halaman terakhir</li>
+      </ul>
+      <div class="note-box">💡 Admin cetak semua siswa sekaligus → ada dialog konfirmasi terlebih dahulu</div>
+    </div>
+  </div>
+</div>
+
+<!-- A-10 -->
+<div class="sb-page" id="sb-a10">
+  <div class="sb-header">
+    <div class="sb-num num-admin">A10</div>
+    <div class="sb-header-text">
+      <h3>Cetak Statistik PDF</h3>
+      <div class="step-label">Laporan statistik kehadiran dengan grafik</div>
+    </div>
+    <span class="sb-role-badge badge-admin">ADMIN</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Contoh Output Cetak Statistik</strong><br>(halaman grafik)</div>
+      </div>
+      <div class="ph-label">Screenshot: laporan statistik dengan grafik doughnut dan bar chart per guru pembimbing</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Laporan Statistik</h4>
+      <p>Laporan statistik kehadiran dengan grafik visual per guru pembimbing.</p>
+      <ul class="steps-list">
+        <li data-n="1">Pilih bulan dari dropdown filter</li>
+        <li data-n="2">Klik <strong>[📊 Cetak Statistik]</strong></li>
+        <li data-n="3">Halaman 1: tabel statistik per siswa + summary</li>
+        <li data-n="4">Halaman 2: grafik doughnut (overall) + bar chart (per guru)</li>
+        <li data-n="5">TTD 3-kolom di setiap halaman</li>
+        <li data-n="6">Klik <strong>[💾 Simpan PDF]</strong></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- A-11 -->
+<div class="sb-page" id="sb-a11">
+  <div class="sb-header">
+    <div class="sb-num num-admin">A11</div>
+    <div class="sb-header-text">
+      <h3>Cetak Rekap PDF</h3>
+      <div class="step-label">Laporan rekapitulasi presensi semua siswa</div>
+    </div>
+    <span class="sb-role-badge badge-admin">ADMIN</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Contoh Output Cetak Rekap</strong><br>(tabel semua siswa)</div>
+      </div>
+      <div class="ph-label">Screenshot: tabel rekap presensi dengan kolom nama, pembimbing, lokasi PKL, jam masuk/pulang, status</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Laporan Rekapitulasi</h4>
+      <p>Tabel ringkasan presensi semua siswa dalam satu bulan, dikelompokkan per guru pembimbing.</p>
+      <ul class="steps-list">
+        <li data-n="1">Pilih bulan dari filter</li>
+        <li data-n="2">Pilih guru pembimbing (atau "Semua")</li>
+        <li data-n="3">Klik <strong>[📋 Cetak Rekap]</strong></li>
+        <li data-n="4">Tabel berisi: nama, pembimbing, PKL, per tanggal: masuk/pulang/status</li>
+        <li data-n="5">Dikelompokkan per guru pembimbing (kelompok biru)</li>
+        <li data-n="6">TTD 3-kolom di akhir dan di halaman grafik</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- A-12 -->
+<div class="sb-page" id="sb-a12">
+  <div class="sb-header">
+    <div class="sb-num num-admin">A12</div>
+    <div class="sb-header-text">
+      <h3>Reset Database</h3>
+      <div class="step-label">Menghapus semua data untuk mulai dari awal</div>
+    </div>
+    <span class="sb-role-badge badge-admin">ADMIN</span>
+  </div>
+  <div class="sb-body">
+    <div class="sb-screenshot">
+      <div class="photo-placeholder">
+        <div class="ph-icon">📷</div>
+        <div class="ph-text">Tempelkan screenshot<br><strong>Dialog Konfirmasi Reset DB</strong><br>di sini</div>
+      </div>
+      <div class="ph-label">Screenshot: dialog konfirmasi reset database dengan peringatan data yang akan dihapus</div>
+    </div>
+    <div class="sb-desc">
+      <h4>Reset Database</h4>
+      <p>Menghapus semua data siswa, guru, dan log presensi. Hanya akun admin yang dipertahankan.</p>
+      <ul class="steps-list">
+        <li data-n="1">Buka tab <strong>Profil & Pengaturan</strong></li>
+        <li data-n="2">Scroll ke bagian <strong>Reset Database</strong></li>
+        <li data-n="3">Klik <strong>[🗑️ Reset Database]</strong></li>
+        <li data-n="4">Dialog konfirmasi pertama → klik OK</li>
+        <li data-n="5">Dialog konfirmasi kedua → klik OK untuk lanjutkan</li>
+        <li data-n="6">Semua data terhapus, dashboard kosong</li>
+      </ul>
+      <div class="warn-box">⚠️ TIDAK BISA DIBATALKAN. Pastikan sudah backup data sebelum reset. Cache koordinat PKL tetap tersimpan untuk keperluan import ulang.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     FOOTER
+     ════════════════════════════════════════════ -->
+<div style="text-align:center; padding:40px 20px; color:#94a3b8; font-size:.82rem;
+  border-top:2px solid #e2e8f0; margin-top:32px; background:#fff;">
+  <p><strong>STORYBOARD SIGAP PKL</strong> — SMK Negeri 9 Malang</p>
+  <p>Versi 2.1.63 • September 2026 • Total Frame: 5 Umum + 9 Siswa + 6 Guru + 12 Admin = <strong>32 Frame</strong></p>
+  <p style="margin-top:8px;">URL Aplikasi: https://103.153.190.69:8443</p>
+</div>
+
+</body>
+</html>

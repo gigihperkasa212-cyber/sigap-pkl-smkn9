@@ -1,0 +1,15 @@
+=== Semua user di DB (termasuk aktif=0) ===
+id	username	name	role	status	aktif
+usr_admin_001	admin	Master Administrator	admin	approved	1
+usr_6a87e9dd621ff9.69316208	888	guru2	guru	approved	1
+usr_6a87e9bac16df1.95920478	999	guru1	guru	approved	1
+
+=== Restore semua siswa ke aktif=1 agar tampil di admin ===
+restored
+0
+
+=== Final: semua user ===
+username	name	role	status	aktif
+admin	Master Administrator	admin	approved	1
+888	guru2	guru	approved	1
+999	guru1	guru	approved	1

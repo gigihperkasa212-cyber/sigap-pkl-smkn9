@@ -1,0 +1,5005 @@
+﻿/* ==========================================================================
+   SIGAP PKL SMKN 9 Official - Design System & Modern Styling
+   ========================================================================== */
+
+:root {
+  --primary-color: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-light: #e0e7ff;
+  --secondary-color: #6366f1;
+  --accent-color: #06b6d4;
+
+  --success-color: #10b981;
+  --success-light: #d1fae5;
+  --warning-color: #f59e0b;
+  --warning-light: #fef3c7;
+  --danger-color: #ef4444;
+  --danger-light: #fee2e2;
+
+  --bg-main: #0f172a;
+  --bg-card: rgba(30, 41, 59, 0.85);
+  --bg-card-hover: rgba(51, 65, 85, 0.9);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.35);
+}
+
+/* Reset & Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: #020617;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.15) 0px, transparent 50%);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+}
+
+/* Mobile Application Frame (Full Screen Edge-to-Edge on Mobile) */
+.app-container {
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--bg-main);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (max-width: 767px) {
+  .app-container {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .app-container {
+    max-width: 480px;
+    height: 90vh;
+    max-height: 920px;
+    border-radius: 32px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    margin: 20px auto;
+  }
+}
+
+/* ================= LOGIN SCREEN OVERLAY ================= */
+.login-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(2, 6, 23, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  background: #1e293b;
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  padding: 28px 24px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+  position: relative;
+}
+
+.app-logo {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+  font-size: 1.8rem;
+  color: #fff;
+  box-shadow: var(--shadow-glow);
+}
+
+.login-header h2 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 2px;
+  color: #fff;
+}
+
+.login-role-tabs {
+  display: flex;
+  background: rgba(15, 23, 42, 0.7);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  margin: 20px 0;
+  border: 1px solid var(--border-color);
+}
+
+.role-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  padding: 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.role-tab.active {
+  background: var(--primary-color);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+}
+
+.password-input-wrapper {
+  position: relative;
+}
+
+.password-input-wrapper input {
+  padding-right: 40px;
+}
+
+.toggle-pwd-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.login-options {
+  display: flex;
+  align-items: center;
+  font-size: 0.75rem;
+  margin: 12px 0;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.forgot-link {
+  color: #818cf8;
+  text-decoration: none;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+.demo-accounts-box {
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px;
+}
+
+.demo-btns-row {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-demo {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 8px 6px;
+  border-radius: var(--radius-sm);
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.btn-demo.siswa:hover {
+  background: rgba(79, 70, 229, 0.2);
+  border-color: var(--primary-color);
+  color: #a5b4fc;
+}
+
+.btn-demo.guru:hover {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: var(--success-color);
+  color: #6ee7b7;
+}
+
+/* Real-time SSE Live Indicator Badge */
+.live-indicator-badge {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
+  padding: 2px 7px;
+  border-radius: 20px;
+  font-size: 0.62rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  max-width: 80px;
+}
+
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--success-color);
+  border-radius: 50%;
+  animation: pulseDot 1.5s infinite;
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(0.9); opacity: 0.6; }
+  50% { transform: scale(1.4); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.6; }
+}
+
+/* Top Header */
+.app-header {
+  padding: 16px 20px;
+  /* APK Android: tambahkan safe area inset agar header tidak tertutup status bar */
+  padding-top: max(16px, env(safe-area-inset-top, 16px));
+  /* Pastikan kanan header tidak terpotong oleh notch/rounded corner */
+  padding-right: max(20px, env(safe-area-inset-right, 20px));
+  padding-left: max(20px, env(safe-area-inset-left, 20px));
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 50;
+  position: sticky;
+  top: 0;
+  /* Jangan sembunyikan overflow — tombol logout harus selalu terlihat */
+  overflow: visible;
+}
+
+.user-profile-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  /* Biarkan shrink agar header-actions (logout) punya cukup ruang */
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.user-avatar img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 10px rgba(79, 70, 229, 0.4);
+}
+
+.user-info h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  /* Potong teks panjang dengan max-width yang lebih besar karena header-actions vertikal */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+.user-info p {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.header-actions {
+  display: flex;
+  /* Stack vertikal: theme toggle di atas, logout di bawah */
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.icon-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  /* Minimum touch area 44x44px */
+  min-width: 44px;
+  min-height: 44px;
+  touch-action: manipulation;
+}
+
+.icon-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--danger-color);
+}
+
+/* Main Scrollable Content Area */
+.app-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  /* padding-bottom harus lebih dari tinggi bottom-nav + safe area */
+  padding-bottom: calc(90px + env(safe-area-inset-bottom, 0px));
+  scroll-behavior: smooth;
+}
+
+.tab-page {
+  display: none;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.tab-page.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Cards & Components */
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Admin Sub Tabs */
+.admin-sub-tabs {
+  display: flex;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.sub-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  padding: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.sub-tab.active {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+/* Live Clock Card */
+.live-clock-card {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.25) 0%, rgba(6, 182, 212, 0.2) 100%);
+  border: 1px solid rgba(129, 140, 248, 0.3);
+  text-align: center;
+}
+
+.clock-badge {
+  font-size: 0.8rem;
+  color: #a5b4fc;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.live-clock-card h1 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #ffffff;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  margin: 4px 0;
+}
+
+.location-status {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.pulse {
+  animation: pulseAnim 1.8s infinite;
+  color: var(--success-color);
+}
+
+@keyframes pulseAnim {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  50% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.7; }
+}
+
+/* Attendance Buttons */
+.attendance-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.btn-action {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+}
+
+.btn-action.primary {
+  border-color: rgba(79, 70, 229, 0.4);
+  background: linear-gradient(180deg, rgba(79, 70, 229, 0.15) 0%, rgba(30, 41, 59, 0.85) 100%);
+}
+
+.btn-action.secondary {
+  border-color: rgba(239, 68, 68, 0.4);
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0.15) 0%, rgba(30, 41, 59, 0.85) 100%);
+}
+
+.btn-action:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-glow);
+}
+
+.action-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.btn-action.primary .action-icon {
+  background: rgba(79, 70, 229, 0.2);
+  color: #818cf8;
+}
+
+.btn-action.secondary .action-icon {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
+.action-text strong {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+.action-text span {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* QR Scan Banner */
+.qr-scan-banner {
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, rgba(30, 41, 59, 0.85) 100%);
+  border: 1px dashed rgba(16, 185, 129, 0.4);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.qr-scan-banner:hover {
+  background: rgba(16, 185, 129, 0.25);
+}
+
+.qr-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #34d399;
+}
+
+.qr-info h4 {
+  font-size: 0.85rem;
+  color: var(--text-main);
+}
+
+.qr-info p {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px 6px;
+  text-align: center;
+}
+
+.stat-icon {
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.stat-card.hadir .stat-icon { color: var(--success-color); }
+.stat-card.izin .stat-icon { color: var(--accent-color); }
+.stat-card.sakit .stat-icon { color: var(--warning-color); }
+.stat-card.alpa .stat-icon { color: var(--danger-color); }
+
+.stat-number {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+/* Map Card */
+.map-card {
+  padding: 10px;
+}
+
+#map {
+  width: 100%;
+  height: 280px;
+  min-height: 220px;
+  position: relative;
+  border-radius: var(--radius-md);
+  z-index: 1;
+}
+
+.map-info {
+  margin-top: 10px;
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.map-info p {
+  margin-bottom: 4px;
+}
+
+/* Section Title */
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.section-title h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+/* Profile Card Styling */
+.profile-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.profile-avatar {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 12px;
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--primary-color);
+}
+
+.edit-avatar-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.status-chip.success {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+}
+
+.info-group-card {
+  padding: 10px 16px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(79, 70, 229, 0.15);
+  color: #818cf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info-content span {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.info-content strong {
+  font-size: 0.85rem;
+  color: var(--text-main);
+}
+
+/* History Items */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.history-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.history-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.history-badge-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.history-badge-icon.hadir { background: rgba(16, 185, 129, 0.15); color: var(--success-color); }
+.history-badge-icon.izin { background: rgba(6, 182, 212, 0.15); color: var(--accent-color); }
+.history-badge-icon.sakit { background: rgba(245, 158, 11, 0.15); color: var(--warning-color); }
+
+.history-details h4 {
+  font-size: 0.85rem;
+  color: var(--text-main);
+}
+
+.history-details p {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.status-tag {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.status-tag.hadir { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+.status-tag.izin { background: rgba(6, 182, 212, 0.2); color: #22d3ee; }
+.status-tag.sakit { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+
+/* Filter Controls */
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.filter-bar select {
+  flex: 1;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+}
+
+/* Forms & Inputs */
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+input, select, textarea {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  color: var(--text-main);
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--primary-color);
+}
+
+.file-upload-box {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text-muted);
+}
+
+.file-upload-box:hover {
+  border-color: var(--primary-color);
+  background: rgba(79, 70, 229, 0.05);
+}
+
+.file-upload-box p {
+  font-size: 0.75rem;
+  margin-top: 6px;
+}
+
+/* Buttons */
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  color: #fff;
+  border: none;
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-primary:hover {
+  opacity: 0.95;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.btn-danger-outline {
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #f87171;
+}
+
+.btn-danger-outline:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #fff;
+  border: none;
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  border-radius: var(--radius-sm);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--primary-color);
+  color: #a5b4fc;
+}
+
+.btn-light {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #fff;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* Modals */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Safe area: agar modal tidak tertutup notch atau gesture bar */
+  padding: max(16px, env(safe-area-inset-top, 16px))
+           max(16px, env(safe-area-inset-right, 16px))
+           max(16px, env(safe-area-inset-bottom, 16px))
+           max(16px, env(safe-area-inset-left, 16px));
+}
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+}
+
+.modal-content {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  /* Kurangi dari 88vh ke nilai yang aman untuk safe area */
+  max-height: calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 40px);
+  background: #1e293b;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  animation: popUp 0.15s cubic-bezier(0, 0, 0.2, 1);
+}
+
+@keyframes popUp {
+  from { transform: scale(0.94); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-header {
+  /* Padding top safe area: close button tidak tertutup status bar / notch */
+  padding: max(10px, env(safe-area-inset-top, 10px)) 14px 10px 14px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  background: #1e293b;
+}
+
+.modal-header h3 {
+  font-size: 0.9rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+  /* Area sentuh 44x44px agar mudah diklik di APK */
+  padding: 10px;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  touch-action: manipulation;
+  border-radius: 8px;
+}
+
+.modal-body {
+  padding: 12px 14px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-footer {
+  padding: 10px 14px;
+  /* Tambah padding-bottom safe area agar tombol tidak tertutup gesture bar HP */
+  padding-bottom: max(10px, calc(10px + env(safe-area-inset-bottom, 0px)));
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  background: #1e293b;
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
+}
+
+/* Webcam Viewport (Compact Desktop / Full View) */
+
+/* Tombol di modal-footer: touch area minimal 48px agar mudah diklik di APK */
+.modal-footer .btn-primary,
+.modal-footer .btn-secondary,
+.modal-footer .btn-success,
+.modal-footer button {
+  min-height: 48px;
+  font-size: 0.85rem;
+  touch-action: manipulation;
+}
+.webcam-viewport, .qr-viewport {
+  width: 100%;
+  height: 180px;
+  background: #0f172a;
+  border-radius: var(--radius-md);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.webcam-viewport video, .qr-viewport video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #090d16;
+}
+
+.webcam-viewport canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Hidden face guide to allow full scene documentation photos */
+.face-guide-overlay {
+  display: none !important;
+}
+
+/* Full Screen Camera View for Mobile Devices */
+@media (max-width: 767px) {
+  .modal {
+    padding: 0;
+  }
+  .modal-content {
+    max-width: 100vw;
+    max-height: 100dvh;
+    height: 100dvh;
+    border-radius: 0;
+    border: none;
+  }
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+  }
+  .webcam-viewport, .qr-viewport {
+    flex: 1;
+    height: 100%;
+    min-height: 260px;
+    border-radius: 16px;
+  }
+  .webcam-viewport video, .qr-viewport video {
+    object-fit: cover;
+  }
+  .photo-preview-container img {
+    max-height: 280px;
+    object-fit: cover;
+  }
+}
+
+.location-check-box {
+  margin-top: 6px;
+  background: rgba(15, 23, 42, 0.8);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+}
+
+.photo-preview-container {
+  margin-top: 6px;
+}
+
+.photo-preview-container img {
+  width: 100%;
+  max-height: 140px;
+  object-fit: contain;
+  background: #0f172a;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+/* QR Laser Animation */
+.qr-target-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 180px;
+  height: 180px;
+  border: 2px solid var(--success-color);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.qr-laser-line {
+  width: 100%;
+  height: 3px;
+  background: var(--success-color);
+  box-shadow: 0 0 10px var(--success-color);
+  animation: scanLaser 2s linear infinite;
+}
+
+@keyframes scanLaser {
+  0% { top: 0; }
+  50% { top: 100%; }
+  100% { top: 0; }
+}
+
+/* Admin Dashboard Specific */
+/* Admin Dashboard Specific - 3D Ultra Luxury Design */
+.admin-header-banner {
+  background: linear-gradient(135deg, #059669 0%, #0d9488 50%, #4f46e5 100%);
+  padding: 16px 18px;
+  border-radius: 18px;
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 
+    0 15px 35px -8px rgba(5, 150, 105, 0.45),
+    0 0 20px rgba(99, 102, 241, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: visible;
+}
+
+.admin-header-banner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -20%;
+  width: 140px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transform: skewX(-25deg);
+  pointer-events: none;
+  animation: shineBanner 4s infinite;
+}
+
+@keyframes shineBanner {
+  0% { right: -30%; }
+  30% { right: 120%; }
+  100% { right: 120%; }
+}
+
+.admin-header-banner h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 3px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.admin-header-banner p {
+  font-size: 0.78rem;
+  opacity: 0.92;
+}
+
+/* ── Admin Banner: Title + Actions layout ── */
+.admin-banner-title {
+  flex-shrink: 0;
+}
+
+.admin-banner-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Setiap baris (dropdowns / tombol) rata kiri–kanan */
+.admin-banner-row {
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+  width: 100%;
+}
+
+/* Grup icon + select */
+.admin-banner-filter-group {
+  display: flex;
+  align-items: center;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 8px;
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-banner-filter-label {
+  padding: 0 8px;
+  color: #a5f3fc;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.admin-banner-filter-group select {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 8px 6px 8px 0;
+  outline: none;
+  cursor: pointer;
+  min-width: 0;
+  width: 100%;
+}
+
+.admin-banner-filter-group select option {
+  background: #0f172a;
+  color: #fff;
+}
+
+/* Tombol aksi — 3 tombol sejajar penuh */
+.admin-banner-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 9px 4px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: normal;
+  word-break: keep-all;
+  text-align: center;
+  line-height: 1.3;
+  overflow: hidden;
+  min-width: 0;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.admin-banner-btn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.admin-banner-btn.btn-stat  { background: linear-gradient(135deg, #4f46e5, #3730a3); color: #fff; }
+.admin-banner-btn.btn-rekap { background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; }
+.admin-banner-btn.btn-csv   { background: linear-gradient(135deg, #059669, #047857); color: #fff; }
+
+/* Responsif: di mobile tumpuk vertikal */
+@media (max-width: 600px) {
+  .admin-header-banner {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .admin-banner-actions {
+    width: 100%;
+  }
+}
+
+.chart-card-3d {
+  background: linear-gradient(145deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 18px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 20px 40px -10px rgba(0, 0, 0, 0.65),
+    0 0 25px rgba(99, 102, 241, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(14px);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chart-card-3d:hover {
+  transform: translateY(-2px) scale(1.003);
+  box-shadow: 
+    0 25px 45px -10px rgba(0, 0, 0, 0.75),
+    0 0 30px rgba(99, 102, 241, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+.chart-card-3d h4 {
+  font-size: 0.88rem;
+  margin-bottom: 14px;
+  color: #e2e8f0;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chart-container-3d {
+  height: 210px;
+  position: relative;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+  text-align: left;
+}
+
+.data-table th, .data-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.data-table th {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* Bottom Navigation Bar */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;   /* selaraskan dengan max-width app-container desktop */
+  /* safe-area-inset-bottom: agar tidak tertutup gesture bar / navigation bar Android */
+  height: calc(65px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding-top: 0;
+  z-index: 100;
+}
+@media (max-width: 767px) {
+  .bottom-nav {
+    left: 0;
+    transform: none;
+    max-width: 100%;
+  }
+}
+
+.nav-item {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: color 0.2s;
+  /* Minimum touch area */
+  min-width: 48px;
+  min-height: 48px;
+  justify-content: center;
+  padding: 8px 4px 0;
+  flex: 1;
+}
+
+.nav-item i {
+  font-size: 1.15rem;
+}
+
+.nav-item.active {
+  color: #818cf8;
+}
+
+/* Utilities */
+.hidden { display: none !important; }
+.mb-1 { margin-bottom: 4px; }
+.mb-2 { margin-bottom: 8px; }
+.mb-3 { margin-bottom: 12px; }
+.mt-1 { margin-top: 4px; }
+.mt-2 { margin-top: 8px; }
+.mt-3 { margin-top: 12px; }
+.text-center { text-align: center; }
+.text-xs { font-size: 0.7rem; }
+.text-sm { font-size: 0.75rem; }
+.text-muted { color: var(--text-muted); }
+.text-xl { font-size: 1.4rem; }
+.flex-grow { flex: 1; }
+
+/* Toast Notifications */
+.toast-container {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 700;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 90%;
+  max-width: 380px;
+}
+
+.toast {
+  background: #1e293b;
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.12s cubic-bezier(0, 0, 0.2, 1);
+  transition: all 0.15s cubic-bezier(0, 0, 0.2, 1);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(12px) scale(0.95); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.toast.success { border-color: var(--success-color); }
+.toast.error { border-color: var(--danger-color); }
+.toast.info { border-color: var(--primary-color); }
+
+
+/* ==========================================================================
+   Dropdown Action Menu
+   ========================================================================== */
+
+.dropdown-action {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  cursor: pointer;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.dropdown-toggle::after {
+  content: '▼';
+  font-size: 0.7rem;
+  margin-left: 2px;
+  transition: transform 0.2s ease;
+}
+
+.dropdown-toggle:hover::after {
+  transform: translateY(2px);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 5px);
+  right: 0;
+  min-width: 220px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.98) 0%, rgba(15, 23, 42, 0.98) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(99, 102, 241, 0.2);
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px) scale(0.95);
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.dropdown-item {
+  width: 100%;
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  color: #e2e8f0;
+  font-size: 0.85rem;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+  border-radius: 0;
+}
+
+.dropdown-item:first-child {
+  border-radius: 12px 12px 0 0;
+}
+
+.dropdown-item:last-child {
+  border-radius: 0 0 12px 12px;
+}
+
+.dropdown-item:hover:not(:disabled) {
+  background: rgba(99, 102, 241, 0.2);
+  color: #fff;
+  padding-left: 20px;
+}
+
+.dropdown-item:hover:not(:disabled) i {
+  transform: scale(1.1);
+}
+
+.dropdown-item i {
+  font-size: 1rem;
+  width: 18px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.dropdown-item.danger:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+}
+
+.dropdown-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 6px 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .dropdown-menu {
+    min-width: 200px;
+    right: auto;
+    left: 0;
+  }
+}
+
+
+/* ==========================================================================
+   Edit User Modal - Tabs & Content
+   ========================================================================== */
+
+.edit-tab-btn {
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.edit-tab-btn:hover {
+  color: #e2e8f0;
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.edit-tab-btn.active {
+  color: #6366f1;
+  border-bottom-color: #6366f1;
+  background: rgba(99, 102, 241, 0.15);
+}
+
+.edit-tab-btn i {
+  font-size: 1rem;
+}
+
+.edit-tab-content {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.password-input-wrapper {
+  position: relative;
+}
+
+.password-input-wrapper input {
+  padding-right: 45px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .edit-tab-btn {
+    font-size: 0.75rem;
+    padding: 8px 12px;
+  }
+  
+  .edit-tab-btn i {
+    font-size: 0.9rem;
+  }
+}
+
+/* Modal scrollbar styling */
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.5);
+  border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.7);
+}
+
+/* Monthly Statistics Styles for Student */
+.monthly-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.monthly-stat-item {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px 4px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.monthly-stat-item:hover {
+  background: rgba(15, 23, 42, 0.8);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.monthly-stat-number {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 2px;
+  line-height: 1;
+}
+
+.monthly-stat-label {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-weight: 600;
+}
+
+/* Distance Info Styles */
+.distance-info-card {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(8, 145, 178, 0.1));
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.distance-info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.distance-info-title {
+  color: #22d3ee;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.distance-info-status {
+  background: rgba(6, 182, 212, 0.2);
+  color: #67e8f9;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.distance-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.distance-metric-item {
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+}
+
+.distance-metric-value {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #22d3ee;
+  margin-bottom: 4px;
+}
+
+.distance-metric-label {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Target Location Indicator */
+.target-location-card {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(21, 128, 61, 0.1));
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.target-location-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.target-location-icon {
+  width: 40px;
+  height: 40px;
+  background: rgba(34, 197, 94, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #22c55e;
+  font-size: 1.1rem;
+}
+
+.target-location-info h4 {
+  color: #22c55e;
+  font-size: 0.9rem;
+  margin: 0 0 4px 0;
+}
+
+.target-location-info p {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+.target-coordinates {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(34, 197, 94, 0.1);
+  border-radius: 8px;
+  padding: 10px;
+  font-family: monospace;
+}
+
+.coordinate-item {
+  text-align: center;
+}
+
+.coordinate-label {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  margin-bottom: 2px;
+}
+
+.coordinate-value {
+  font-size: 0.8rem;
+  color: #22c55e;
+  font-weight: 700;
+}
+
+/* Out of Radius Form */
+.out-radius-form {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.1));
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 16px 0;
+}
+
+.out-radius-form h4 {
+  color: #fbbf24;
+  font-size: 0.9rem;
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.out-radius-form textarea {
+  width: 100%;
+  min-height: 80px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 8px;
+  padding: 12px;
+  color: #f8fafc;
+  font-size: 0.85rem;
+  resize: vertical;
+  font-family: var(--font-sans);
+}
+
+.out-radius-form textarea::placeholder {
+  color: #94a3b8;
+}
+
+.out-radius-form textarea:focus {
+  outline: none;
+  border-color: rgba(245, 158, 11, 0.6);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+
+.out-radius-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  justify-content: flex-end;
+}
+
+.btn-out-radius {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-out-radius.primary {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #fff;
+}
+
+.btn-out-radius.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
+.btn-out-radius.secondary {
+  background: rgba(100, 116, 139, 0.3);
+  color: #cbd5e1;
+  border: 1px solid rgba(100, 116, 139, 0.5);
+}
+
+.btn-out-radius.secondary:hover {
+  background: rgba(100, 116, 139, 0.5);
+}
+
+
+/* ==========================================================================
+   LIGHT MODE — [data-theme="light"]
+   Override CSS variables + komponen utama untuk tampilan siang hari
+   Informtif, modern, teks sangat jelas, kontras tinggi
+   ========================================================================== */
+
+[data-theme="light"] {
+  /* ── Core Variables Override ──────────────────────────────── */
+  --primary-color:   #4338ca;
+  --primary-hover:   #3730a3;
+  --primary-light:   #c7d2fe;
+  --secondary-color: #4f46e5;
+  --accent-color:    #0284c7;
+
+  --success-color:   #059669;
+  --success-light:   #a7f3d0;
+  --warning-color:   #d97706;
+  --warning-light:   #fde68a;
+  --danger-color:    #dc2626;
+  --danger-light:    #fecaca;
+
+  --bg-main:         #f1f5f9;
+  --bg-card:         rgba(255, 255, 255, 0.95);
+  --bg-card-hover:   rgba(241, 245, 249, 0.98);
+  --border-color:    rgba(100, 116, 139, 0.2);
+  --text-main:       #0f172a;
+  --text-muted:      #475569;
+
+  --shadow-sm:       0 4px 16px rgba(15, 23, 42, 0.1);
+  --shadow-glow:     0 0 20px rgba(67, 56, 202, 0.2);
+}
+
+/* ── Base & Body ──────────────────────────────────────────────── */
+[data-theme="light"] body {
+  background: linear-gradient(135deg, #e0e7ff 0%, #f0f9ff 40%, #f8faff 100%);
+  color: #0f172a;
+}
+
+[data-theme="light"] .app-container {
+  background: transparent;
+}
+
+/* ── App Header ───────────────────────────────────────────────── */
+[data-theme="light"] .app-header {
+  background: rgba(255, 255, 255, 0.92) !important;
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.15) !important;
+  box-shadow: 0 2px 20px rgba(15, 23, 42, 0.08);
+}
+[data-theme="light"] .app-title {
+  color: #1e1b4b !important;
+}
+[data-theme="light"] .badge-realtime,
+[data-theme="light"] #realtimeSyncBadge {
+  background: rgba(5, 150, 105, 0.12) !important;
+  color: #065f46 !important;
+  border: 1px solid rgba(5, 150, 105, 0.3) !important;
+}
+
+/* ── Cards ───────────────────────────────────────────────────── */
+[data-theme="light"] .card,
+[data-theme="light"] .form-card,
+[data-theme="light"] .modal-content {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(99, 102, 241, 0.12) !important;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08), 0 1px 4px rgba(15,23,42,0.04) !important;
+  color: #0f172a !important;
+}
+[data-theme="light"] .card:hover {
+  background: #fff !important;
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.12) !important;
+}
+
+/* ── Tab Pages ───────────────────────────────────────────────── */
+[data-theme="light"] .tab-page {
+  background: transparent;
+}
+[data-theme="light"] .section-title h3,
+[data-theme="light"] .section-title h2 {
+  color: #1e1b4b !important;
+}
+
+/* ── Login Screen ─────────────────────────────────────────────── */
+[data-theme="light"] .login-overlay {
+  background: linear-gradient(135deg, #4338ca 0%, #4f46e5 35%, #0284c7 100%) !important;
+}
+[data-theme="light"] .login-card {
+  background: rgba(255, 255, 255, 0.97) !important;
+  border: 1px solid rgba(99, 102, 241, 0.15) !important;
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.2) !important;
+}
+[data-theme="light"] .login-card h2,
+[data-theme="light"] .login-card .text-muted {
+  color: #1e1b4b !important;
+}
+[data-theme="light"] .role-tab {
+  background: rgba(99, 102, 241, 0.08) !important;
+  color: #4338ca !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+}
+[data-theme="light"] .role-tab.active {
+  background: linear-gradient(135deg, #4338ca, #4f46e5) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+
+/* ── Form Elements ───────────────────────────────────────────── */
+[data-theme="light"] input,
+[data-theme="light"] select,
+[data-theme="light"] textarea {
+  background: #fff !important;
+  border: 1.5px solid rgba(99, 102, 241, 0.25) !important;
+  color: #0f172a !important;
+}
+[data-theme="light"] input:focus,
+[data-theme="light"] select:focus,
+[data-theme="light"] textarea:focus {
+  border-color: #4338ca !important;
+  box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.12) !important;
+}
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder {
+  color: #94a3b8 !important;
+}
+[data-theme="light"] label,
+[data-theme="light"] .form-group label {
+  color: #334155 !important;
+}
+
+/* ── Bottom Nav ──────────────────────────────────────────────── */
+[data-theme="light"] .bottom-nav {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-top: 1px solid rgba(99, 102, 241, 0.12) !important;
+  box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.08);
+}
+[data-theme="light"] .nav-item {
+  color: #64748b !important;
+}
+[data-theme="light"] .nav-item.active {
+  color: #4338ca !important;
+}
+[data-theme="light"] .nav-item span {
+  color: inherit;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────── */
+[data-theme="light"] .btn-primary {
+  background: linear-gradient(135deg, #4338ca, #4f46e5) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 16px rgba(67, 56, 202, 0.3) !important;
+}
+[data-theme="light"] .btn-secondary,
+[data-theme="light"] .btn-outline {
+  background: rgba(67, 56, 202, 0.08) !important;
+  color: #4338ca !important;
+  border: 1.5px solid rgba(67, 56, 202, 0.25) !important;
+}
+[data-theme="light"] .btn-sm {
+  background: rgba(67, 56, 202, 0.1) !important;
+  color: #3730a3 !important;
+  border: 1px solid rgba(67, 56, 202, 0.2) !important;
+}
+
+/* ── Status Tags & Badges ────────────────────────────────────── */
+[data-theme="light"] .status-tag.hadir  { background: #d1fae5 !important; color: #065f46 !important; }
+[data-theme="light"] .status-tag.izin   { background: #e0f2fe !important; color: #0369a1 !important; }
+[data-theme="light"] .status-tag.sakit  { background: #fef9c3 !important; color: #92400e !important; }
+[data-theme="light"] .status-tag.alpa   { background: #fee2e2 !important; color: #991b1b !important; }
+
+/* ── Stats & Charts ──────────────────────────────────────────── */
+[data-theme="light"] .stat-card,
+[data-theme="light"] .stats-grid > div {
+  background: #fff !important;
+  border: 1px solid rgba(99, 102, 241, 0.1) !important;
+}
+[data-theme="light"] .stat-value { color: #1e1b4b !important; }
+[data-theme="light"] .stat-label { color: #475569 !important; }
+
+/* ── History Items ───────────────────────────────────────────── */
+[data-theme="light"] .history-item {
+  background: #fff !important;
+  border: 1px solid rgba(99, 102, 241, 0.1) !important;
+}
+[data-theme="light"] .history-details h4 { color: #1e1b4b !important; }
+[data-theme="light"] .history-details p,
+[data-theme="light"] .history-details small { color: #475569 !important; }
+
+/* ── Admin Banner ────────────────────────────────────────────── */
+[data-theme="light"] .admin-header-banner {
+  background: linear-gradient(135deg, #4338ca 0%, #0284c7 60%, #0891b2 100%) !important;
+}
+
+/* ── Tables ──────────────────────────────────────────────────── */
+[data-theme="light"] table thead tr {
+  background: linear-gradient(90deg, #4338ca, #4f46e5) !important;
+}
+[data-theme="light"] table tbody tr:nth-child(even) {
+  background: rgba(99, 102, 241, 0.04) !important;
+}
+[data-theme="light"] table tbody tr:hover {
+  background: rgba(99, 102, 241, 0.08) !important;
+}
+[data-theme="light"] table tbody td {
+  color: #1e293b !important;
+  border-color: rgba(99, 102, 241, 0.1) !important;
+}
+
+/* ── Text Colors ─────────────────────────────────────────────── */
+[data-theme="light"] .text-muted { color: #64748b !important; }
+[data-theme="light"] p, [data-theme="light"] span:not([class*="status"]):not([class*="badge"]) {
+  color: inherit;
+}
+[data-theme="light"] h1,[data-theme="light"] h2,[data-theme="light"] h3,
+[data-theme="light"] h4,[data-theme="light"] h5,[data-theme="light"] h6 {
+  color: #1e1b4b;
+}
+[data-theme="light"] strong { color: #0f172a; }
+[data-theme="light"] code {
+  background: rgba(99, 102, 241, 0.1) !important;
+  color: #3730a3 !important;
+}
+
+/* ── Modal ───────────────────────────────────────────────────── */
+[data-theme="light"] .modal {
+  background: rgba(15, 23, 42, 0.5) !important;
+}
+[data-theme="light"] .modal-header {
+  background: linear-gradient(135deg, #4338ca, #4f46e5) !important;
+}
+
+/* ── Clock Card ──────────────────────────────────────────────── */
+[data-theme="light"] .clock-card {
+  background: linear-gradient(135deg, #4338ca 0%, #0284c7 100%) !important;
+  color: #fff !important;
+}
+[data-theme="light"] #currentTime { color: #fff !important; }
+[data-theme="light"] #currentDate { color: rgba(255,255,255,0.85) !important; }
+
+/* ── Map & Geofencing ────────────────────────────────────────── */
+[data-theme="light"] .map-section,
+[data-theme="light"] #geofencingMapSection {
+  background: rgba(255,255,255,0.9) !important;
+  border: 1px solid rgba(99,102,241,0.15) !important;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────── */
+[data-theme="light"] ::-webkit-scrollbar-track  { background: #f1f5f9; }
+[data-theme="light"] ::-webkit-scrollbar-thumb  { background: #a5b4fc; }
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
+
+/* ── Splash Screen (tidak diubah — selalu dark) ──────────────── */
+[data-theme="light"] #splashScreen {
+  background: linear-gradient(135deg, #080c1a 0%, #0d1230 40%, #1a1060 100%) !important;
+}
+
+/* ── Theme Toggle Button ─────────────────────────────────────── */
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  /* Padding lebih kecil agar muat di header yang sempit */
+  padding: 4px 8px;
+  border-radius: 20px;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+  touch-action: manipulation;
+}
+.theme-toggle-track {
+  width: 44px;
+  height: 24px;
+  border-radius: 12px;
+  position: relative;
+  transition: background 0.3s ease;
+  background: #334155;
+  border: 1.5px solid rgba(255,255,255,0.15);
+  flex-shrink: 0;
+}
+/* Label siang/malam lebih kecil di header vertikal */
+.theme-toggle-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.theme-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #94a3b8;
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+/* Dark mode state (default) */
+.theme-toggle-track { background: #1e3a5f; }
+.theme-toggle-thumb { background: #f8fafc; }
+.theme-toggle-thumb::after { content: '🌙'; }
+
+/* Light mode state */
+[data-theme="light"] .theme-toggle-track {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
+  border-color: rgba(251,191,36,0.4) !important;
+}
+[data-theme="light"] .theme-toggle-thumb {
+  transform: translateX(20px) !important;
+  background: #fff !important;
+}
+[data-theme="light"] .theme-toggle-thumb::after { content: '☀️'; }
+
+/* Label teks toggle */
+.theme-toggle-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+  transition: color 0.3s;
+  white-space: nowrap;
+}
+[data-theme="light"] .theme-toggle-label {
+  color: #4338ca !important;
+}
+
+
+/* ==========================================================================
+   LIGHT MODE — PATCH v2 — Kontras tinggi untuk tab Log, Admin, Profil
+   Semua selector baru, tidak mengubah yang sudah ada
+   ========================================================================== */
+
+/* ── Tab Riwayat/Log — history badge icon ────────────────────── */
+[data-theme="light"] .history-badge-icon {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+[data-theme="light"] .history-badge-icon.hadir {
+  background: #d1fae5 !important;
+  color: #065f46 !important;
+}
+[data-theme="light"] .history-badge-icon.izin {
+  background: #e0f2fe !important;
+  color: #0369a1 !important;
+}
+[data-theme="light"] .history-badge-icon.sakit {
+  background: #fef9c3 !important;
+  color: #92400e !important;
+}
+[data-theme="light"] .history-badge-icon.alpa {
+  background: #fee2e2 !important;
+  color: #991b1b !important;
+}
+
+/* ── Tab Riwayat/Log — filter bar ───────────────────────────── */
+[data-theme="light"] .filter-bar select {
+  background: #fff !important;
+  color: #1e1b4b !important;
+  border: 1.5px solid rgba(67,56,202,0.25) !important;
+  font-weight: 600;
+}
+[data-theme="light"] .history-list > * {
+  color: #0f172a;
+}
+
+/* ── Admin Sub-tabs — KRITIS ─────────────────────────────────── */
+[data-theme="light"] .admin-sub-tabs {
+  background: rgba(99, 102, 241, 0.06) !important;
+  border: 1px solid rgba(99, 102, 241, 0.18) !important;
+}
+[data-theme="light"] .sub-tab {
+  color: #374151 !important;
+  font-weight: 700 !important;
+}
+[data-theme="light"] .sub-tab:hover {
+  background: rgba(67, 56, 202, 0.1) !important;
+  color: #1e1b4b !important;
+}
+[data-theme="light"] .sub-tab.active {
+  background: linear-gradient(135deg, #4338ca, #4f46e5) !important;
+  color: #fff !important;
+  font-weight: 800 !important;
+}
+
+/* ── Admin Banner teks ──────────────────────────────────────── */
+[data-theme="light"] .admin-header-banner h3,
+[data-theme="light"] .admin-header-banner h2,
+[data-theme="light"] .admin-header-banner p {
+  color: #fff !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+[data-theme="light"] .admin-banner-filter-label {
+  color: rgba(255,255,255,0.9) !important;
+}
+[data-theme="light"] .admin-banner-filter-group select {
+  background: rgba(255,255,255,0.2) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,0.3) !important;
+}
+[data-theme="light"] .admin-banner-btn {
+  color: #fff !important;
+  font-weight: 700 !important;
+}
+
+/* ── Admin Data Table thead ──────────────────────────────────── */
+[data-theme="light"] .data-table th {
+  color: #fff !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.3px;
+}
+[data-theme="light"] .data-table td {
+  color: #1e293b !important;
+  font-weight: 500;
+}
+[data-theme="light"] .data-table tr:hover td {
+  color: #1e1b4b !important;
+  font-weight: 600;
+}
+
+/* ── Admin badge count ───────────────────────────────────────── */
+[data-theme="light"] .badge-count {
+  background: rgba(67, 56, 202, 0.12) !important;
+  color: #3730a3 !important;
+  border: 1px solid rgba(67,56,202,0.2) !important;
+  font-weight: 700;
+}
+
+/* ── Admin inline card gelap — override via ID/attr ─────────── */
+[data-theme="light"] #quickPrincipalCard {
+  background: #fff !important;
+  border: 1px solid rgba(99,102,241,0.18) !important;
+}
+[data-theme="light"] #quickPrincipalCard h4 {
+  color: #1e1b4b !important;
+}
+[data-theme="light"] #quickPrincipalCard .btn-outline {
+  border-color: rgba(99,102,241,0.4) !important;
+  color: #4338ca !important;
+}
+
+/* Card arsip laporan */
+[data-theme="light"] #subViewMonitoring > .card:not(.table-card),
+[data-theme="light"] .card[style*="rgba(15, 23, 42"],
+[data-theme="light"] .card[style*="rgba(15,23,42"] {
+  background: #fff !important;
+  border: 1px solid rgba(99,102,241,0.15) !important;
+}
+[data-theme="light"] .card[style*="rgba(15, 23, 42"] h4,
+[data-theme="light"] .card[style*="rgba(15,23,42"] h4 {
+  color: #1e1b4b !important;
+}
+[data-theme="light"] .card[style*="rgba(15, 23, 42"] p,
+[data-theme="light"] .card[style*="rgba(15,23,42"] p {
+  color: #475569 !important;
+}
+
+/* ── Profil tab ─────────────────────────────────────────────── */
+[data-theme="light"] .profile-card {
+  background: linear-gradient(135deg, #fff 0%, #f0f4ff 100%) !important;
+  border: 1px solid rgba(99,102,241,0.15) !important;
+  box-shadow: 0 8px 32px rgba(67,56,202,0.1) !important;
+}
+[data-theme="light"] .profile-card h2 {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] .profile-card .text-muted,
+[data-theme="light"] #profileSubText {
+  color: #4338ca !important;
+  font-weight: 600 !important;
+}
+[data-theme="light"] .status-chip.success,
+[data-theme="light"] #profileStatusBadge {
+  background: #d1fae5 !important;
+  color: #065f46 !important;
+  border: 1px solid rgba(5,150,105,0.3) !important;
+  font-weight: 700 !important;
+}
+[data-theme="light"] .info-group-card {
+  background: #fff !important;
+  border: 1px solid rgba(99,102,241,0.1) !important;
+}
+[data-theme="light"] .info-item {
+  border-bottom: 1px solid rgba(99,102,241,0.08) !important;
+}
+[data-theme="light"] .info-icon {
+  background: rgba(67, 56, 202, 0.1) !important;
+  color: #4338ca !important;
+}
+[data-theme="light"] .info-content span {
+  color: #64748b !important;
+  font-weight: 600 !important;
+}
+[data-theme="light"] .info-content strong {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+/* Profil — card APK info dan sync kelas */
+[data-theme="light"] .apk-info-card {
+  background: linear-gradient(135deg, #f0f4ff, #fff) !important;
+  border: 1px solid rgba(99,102,241,0.15) !important;
+}
+[data-theme="light"] .apk-info-card h4,
+[data-theme="light"] .apk-info-card p {
+  color: #1e1b4b !important;
+}
+
+/* ── Global: semua teks berwarna dark di background terang ───── */
+[data-theme="light"] .tab-page * {
+  /* Force inherit color agar tidak ada teks putih di background putih */
+  /* Hanya untuk elemen tanpa class warna spesifik */
+}
+[data-theme="light"] small { color: #64748b !important; }
+[data-theme="light"] .text-xs { color: #64748b !important; }
+[data-theme="light"] .text-sm { color: #475569; }
+
+/* Teks dengan warna terang hardcode yang umum dipakai */
+[data-theme="light"] *[style*="color:#fff"],
+[data-theme="light"] *[style*="color: #fff"],
+[data-theme="light"] *[style*="color:#ffffff"],
+[data-theme="light"] *[style*="color: #ffffff"] {
+  /* Jangan override — biarkan jika memang di atas background gelap (tombol, banner) */
+}
+/* Khusus teks yang berada di area background terang */
+[data-theme="light"] #subViewUsers *[style*="color:#a5b4fc"],
+[data-theme="light"] #subViewUsers *[style*="color: #a5b4fc"],
+[data-theme="light"] #subViewMonitoring *[style*="color:#a5b4fc"],
+[data-theme="light"] #subViewMonitoring *[style*="color: #a5b4fc"] {
+  color: #3730a3 !important;
+}
+[data-theme="light"] #subViewUsers *[style*="color:#94a3b8"],
+[data-theme="light"] #subViewUsers *[style*="color: #94a3b8"],
+[data-theme="light"] #subViewMonitoring *[style*="color:#94a3b8"],
+[data-theme="light"] #subViewMonitoring *[style*="color: #94a3b8"],
+[data-theme="light"] #tab-profile *[style*="color:#94a3b8"],
+[data-theme="light"] #tab-profile *[style*="color: #94a3b8"] {
+  color: #475569 !important;
+}
+[data-theme="light"] #subViewUsers *[style*="color:#e2e8f0"],
+[data-theme="light"] #subViewMonitoring *[style*="color:#e2e8f0"],
+[data-theme="light"] #tab-profile *[style*="color:#e2e8f0"] {
+  color: #1e293b !important;
+}
+[data-theme="light"] #tab-profile *[style*="color:#a5b4fc"] {
+  color: #4338ca !important;
+}
+
+/* ── Section titles di semua tab ─────────────────────────────── */
+[data-theme="light"] .section-title h2,
+[data-theme="light"] .section-title h3,
+[data-theme="light"] .section-title h4 {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+}
+
+/* ── Badge status di tabel (dirender JS dengan inline style) ─── */
+[data-theme="light"] .status-tag {
+  font-weight: 700 !important;
+}
+/* Override semua status-tag yang mungkin punya warna terlalu terang */
+[data-theme="light"] span.status-tag[style*="#34d399"] { color: #065f46 !important; background: #d1fae5 !important; }
+[data-theme="light"] span.status-tag[style*="#22d3ee"] { color: #0369a1 !important; background: #e0f2fe !important; }
+[data-theme="light"] span.status-tag[style*="#fbbf24"] { color: #92400e !important; background: #fef9c3 !important; }
+[data-theme="light"] span.status-tag[style*="f87171"]  { color: #991b1b !important; background: #fee2e2 !important; }
+
+
+/* ==========================================================================
+   LIGHT MODE — PATCH v3 — Kontras Komprehensif Seluruh Tab
+   Override inline style gelap, background gelap, teks tak kontras
+   Aman: semua selector baru, tidak ubah apapun yang sudah ada
+   ========================================================================== */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   1. GLOBAL — Card & Container dengan inline background gelap
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Card dengan rgba(15,23,42,...) — warna dark base app */
+[data-theme="light"] .card[style*="background: rgba(15, 23, 42"],
+[data-theme="light"] .card[style*="background:rgba(15, 23, 42"],
+[data-theme="light"] .card[style*="background: rgba(15,23,42"],
+[data-theme="light"] .card[style*="background:rgba(15,23,42"],
+[data-theme="light"] .card[style*="background: rgba(99, 102, 241, 0.05)"],
+[data-theme="light"] .card[style*="background: rgba(245, 158, 11, 0.05)"],
+[data-theme="light"] .card[style*="background: rgba(239, 68, 68, 0.05)"],
+[data-theme="light"] .card[style*="background: rgba(16, 185, 129, 0.05)"],
+[data-theme="light"] .card[style*="background: rgba(99, 102, 241, 0.1)"],
+[data-theme="light"] .form-card[style*="background: rgba(15, 23, 42"],
+[data-theme="light"] .form-card[style*="background:rgba(15, 23, 42"],
+[data-theme="light"] .import-card {
+  background: #fff !important;
+  border-color: rgba(99, 102, 241, 0.2) !important;
+  color: #0f172a !important;
+}
+
+/* Heading di dalam card gelap */
+[data-theme="light"] .card[style*="background: rgba(15, 23, 42"] h4,
+[data-theme="light"] .card[style*="background:rgba(15,23,42"] h4,
+[data-theme="light"] .card[style*="background: rgba(15,23,42"] h3,
+[data-theme="light"] .form-card[style*="background: rgba(15, 23, 42"] h4,
+[data-theme="light"] .form-card[style*="background: rgba(15, 23, 42"] h3 {
+  color: #1e1b4b !important;
+}
+
+/* Paragraf muted di card yang sebelumnya gelap */
+[data-theme="light"] .card[style*="background: rgba(15, 23, 42"] p.text-xs,
+[data-theme="light"] .card[style*="background: rgba(15, 23, 42"] .text-muted,
+[data-theme="light"] .form-card[style*="background: rgba(15, 23, 42"] p.text-xs,
+[data-theme="light"] .form-card[style*="background: rgba(15, 23, 42"] .text-muted {
+  color: #475569 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   2. TAB LOG / RIWAYAT — Filter bar & history items
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Filter bar container */
+[data-theme="light"] #tab-history .filter-bar {
+  background: #fff !important;
+  border: 1px solid rgba(99, 102, 241, 0.15) !important;
+  border-radius: 10px;
+  padding: 8px;
+}
+
+/* History list items yang dirender JS */
+[data-theme="light"] #historyListContainer .history-item,
+[data-theme="light"] #historyListContainer > div {
+  background: #fff !important;
+  border: 1px solid rgba(99, 102, 241, 0.12) !important;
+  color: #0f172a !important;
+}
+[data-theme="light"] #historyListContainer h4,
+[data-theme="light"] #historyListContainer h3,
+[data-theme="light"] #historyListContainer strong {
+  color: #1e1b4b !important;
+  font-weight: 700 !important;
+}
+[data-theme="light"] #historyListContainer p,
+[data-theme="light"] #historyListContainer span,
+[data-theme="light"] #historyListContainer small {
+  color: #475569 !important;
+}
+/* Teks yang dirender JS dengan warna terang */
+[data-theme="light"] #historyListContainer *[style*="color:#a5b4fc"],
+[data-theme="light"] #historyListContainer *[style*="color: #a5b4fc"] { color: #4338ca !important; }
+[data-theme="light"] #historyListContainer *[style*="color:#94a3b8"],
+[data-theme="light"] #historyListContainer *[style*="color: #94a3b8"] { color: #475569 !important; }
+[data-theme="light"] #historyListContainer *[style*="color:#e2e8f0"],
+[data-theme="light"] #historyListContainer *[style*="color: #e2e8f0"] { color: #1e293b !important; }
+[data-theme="light"] #historyListContainer *[style*="color:#cbd5e1"],
+[data-theme="light"] #historyListContainer *[style*="color: #cbd5e1"] { color: #334155 !important; }
+[data-theme="light"] #historyListContainer *[style*="color:#f8fafc"],
+[data-theme="light"] #historyListContainer *[style*="color: #f8fafc"] { color: #0f172a !important; }
+[data-theme="light"] #historyListContainer *[style*="color:#fff"],
+[data-theme="light"] #historyListContainer *[style*="color: #fff"] { color: #0f172a !important; }
+/* Background gelap di item history */
+[data-theme="light"] #historyListContainer *[style*="background: rgba(15, 23, 42"],
+[data-theme="light"] #historyListContainer *[style*="background:rgba(15, 23, 42"],
+[data-theme="light"] #historyListContainer *[style*="background: rgba(15,23,42"],
+[data-theme="light"] #historyListContainer *[style*="background:#0f172a"],
+[data-theme="light"] #historyListContainer *[style*="background: #0f172a"],
+[data-theme="light"] #historyListContainer *[style*="background:#1e293b"],
+[data-theme="light"] #historyListContainer *[style*="background: #1e293b"] {
+  background: #f8fafc !important;
+  border-color: rgba(99, 102, 241, 0.12) !important;
+}
+
+/* Tab Permission — Guru Log */
+[data-theme="light"] #guruLogPresensiContainer .card[style*="rgba(15, 23, 42"],
+[data-theme="light"] #guruLogPresensiContainer .card[style*="rgba(15,23,42"] {
+  background: #fff !important;
+  border: 1px solid rgba(99,102,241,0.15) !important;
+}
+
+/* Quick filter bar dalam tab log (select dengan inline style gelap) */
+[data-theme="light"] #guruLogPresensiContainer select[style*="background:#1e293b"],
+[data-theme="light"] #guruLogPresensiContainer select[style*="background: #1e293b"],
+[data-theme="light"] #tab-permission select[style*="background:#1e293b"],
+[data-theme="light"] #tab-permission select[style*="background: #1e293b"] {
+  background: #fff !important;
+  color: #1e1b4b !important;
+  border-color: rgba(67, 56, 202, 0.3) !important;
+}
+
+/* Approval list items di tab permission (guru) */
+[data-theme="light"] .admin-approval-list > div,
+[data-theme="light"] #guruTabApprovalList > div,
+[data-theme="light"] #adminApprovalList > div {
+  background: #fff !important;
+  border: 1px solid rgba(99, 102, 241, 0.15) !important;
+  color: #0f172a !important;
+}
+[data-theme="light"] .admin-approval-list *[style*="color:#a5b4fc"],
+[data-theme="light"] .admin-approval-list *[style*="color: #a5b4fc"] { color: #4338ca !important; }
+[data-theme="light"] .admin-approval-list *[style*="color:#94a3b8"],
+[data-theme="light"] .admin-approval-list *[style*="color: #94a3b8"] { color: #475569 !important; }
+[data-theme="light"] .admin-approval-list *[style*="color:#e2e8f0"],
+[data-theme="light"] .admin-approval-list *[style*="color: #e2e8f0"] { color: #1e293b !important; }
+[data-theme="light"] .admin-approval-list *[style*="color:#cbd5e1"],
+[data-theme="light"] .admin-approval-list *[style*="color: #cbd5e1"] { color: #334155 !important; }
+[data-theme="light"] .admin-approval-list *[style*="color:#fff"],
+[data-theme="light"] .admin-approval-list *[style*="color: #fff"],
+[data-theme="light"] .admin-approval-list *[style*="color:#f8fafc"] { color: #0f172a !important; }
+[data-theme="light"] .admin-approval-list *[style*="background: rgba(15, 23, 42"],
+[data-theme="light"] .admin-approval-list *[style*="background:rgba(15,23,42"] {
+  background: #f8fafc !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   3. TAB ADMIN/GURU — Semua sub-view
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* quickPrincipalCard — inline style */
+[data-theme="light"] #quickPrincipalCard {
+  background: #fff !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+}
+[data-theme="light"] #quickPrincipalCard *[style*="color:#fff"],
+[data-theme="light"] #quickPrincipalCard *[style*="color: #fff"] { color: #1e1b4b !important; }
+[data-theme="light"] #quickPrincipalCard *[style*="border-bottom:1px solid rgba(255,255,255"],
+[data-theme="light"] #quickPrincipalCard *[style*="border-bottom: 1px solid rgba(255,255,255"] {
+  border-bottom-color: rgba(99, 102, 241, 0.15) !important;
+}
+[data-theme="light"] #quickPrincipalCard label[style*="color:var(--text-muted)"] { color: #475569 !important; }
+
+/* Filter bar di dashboard admin */
+[data-theme="light"] #subViewMonitoring .card[style*="rgba(15, 23, 42, 0.6)"],
+[data-theme="light"] #subViewMonitoring .card[style*="rgba(15,23,42,0.6)"],
+[data-theme="light"] #tab-admin .card[style*="background: rgba(15, 23, 42, 0.6)"],
+[data-theme="light"] #tab-permission .card[style*="background: rgba(15, 23, 42, 0.6)"] {
+  background: rgba(241, 245, 249, 0.95) !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+}
+
+/* Select dengan inline dark style di admin */
+[data-theme="light"] #tab-admin select[style*="background:#1e293b"],
+[data-theme="light"] #tab-admin select[style*="background: #1e293b"],
+[data-theme="light"] #filterDashboardGuru,
+[data-theme="light"] #filterDashboardMonth,
+[data-theme="light"] #filterDashboardStatus,
+[data-theme="light"] #adminUserSearchInput {
+  background: #fff !important;
+  color: #1e1b4b !important;
+  border-color: rgba(67, 56, 202, 0.3) !important;
+}
+[data-theme="light"] #adminUserSearchInput {
+  background: rgba(241, 245, 249, 0.95) !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+  color: #1e1b4b !important;
+}
+[data-theme="light"] #adminUserSearchInput::placeholder { color: #94a3b8 !important; }
+
+/* Arsip laporan card */
+[data-theme="light"] #subViewMonitoring .card.mt-3[style*="rgba(15, 23, 42"],
+[data-theme="light"] #subViewMonitoring .card.mt-3[style*="rgba(15,23,42"] {
+  background: #fff !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+[data-theme="light"] #subViewMonitoring .card.mt-3 *[style*="color:#fff"],
+[data-theme="light"] #subViewMonitoring .card.mt-3 *[style*="color: #fff"] { color: #1e1b4b !important; }
+[data-theme="light"] #subViewMonitoring .card.mt-3 *[style*="border-bottom:1px solid rgba(255,255,255"],
+[data-theme="light"] #subViewMonitoring .card.mt-3 *[style*="border-bottom: 1px solid rgba(255,255,255"] {
+  border-bottom-color: rgba(99, 102, 241, 0.15) !important;
+}
+
+/* CSV Import Card */
+[data-theme="light"] #csvImportCard {
+  background: #fff !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+}
+[data-theme="light"] #csvImportCard h4,
+[data-theme="light"] #csvImportCard .text-muted,
+[data-theme="light"] #csvImportCard p { color: #334155 !important; }
+
+/* Panduan Pengisian CSV — box rgba gelap */
+[data-theme="light"] #csvImportCard > div[style*="background:rgba(15,23,42"],
+[data-theme="light"] #csvImportCard > div[style*="background: rgba(15,23,42"],
+[data-theme="light"] #csvImportCard div[style*="background:rgba(15,23,42"],
+[data-theme="light"] #csvImportCard div[style*="background: rgba(15,23,42"] {
+  background: rgba(241, 245, 249, 0.95) !important;
+  border-color: rgba(99, 102, 241, 0.2) !important;
+}
+[data-theme="light"] #csvImportCard span[style*="color:#a5b4fc"] { color: #4338ca !important; }
+[data-theme="light"] #csvImportCard span[style*="color:#34d399"] { color: #065f46 !important; }
+[data-theme="light"] #csvImportCard ul[style*="color:#94a3b8"],
+[data-theme="light"] #csvImportCard ul { color: #475569 !important; }
+[data-theme="light"] #csvImportCard li { color: #475569 !important; }
+[data-theme="light"] #csvImportCard strong[style*="color:#a5b4fc"] { color: #4338ca !important; }
+[data-theme="light"] #csvImportCard span[style*="color:#fbbf24"] { color: #92400e !important; }
+[data-theme="light"] #csvImportCard span[style*="color:#34d399"] { color: #065f46 !important; }
+
+/* Panduan Pengisian box (border-left indigo) */
+[data-theme="light"] #csvImportCard div[style*="background:rgba(79,70,229"],
+[data-theme="light"] #csvImportCard div[style*="background: rgba(79,70,229"] {
+  background: rgba(224, 231, 255, 0.6) !important;
+  border-left-color: #6366f1 !important;
+}
+[data-theme="light"] #csvImportCard p[style*="color:#cbd5e1"] { color: #334155 !important; }
+
+/* Tabel preview CSV */
+[data-theme="light"] #csvImportCard tr[style*="background:rgba(99,102,241"],
+[data-theme="light"] #csvImportCard tr[style*="background: rgba(99,102,241"] {
+  background: rgba(224, 231, 255, 0.5) !important;
+}
+[data-theme="light"] #csvImportCard tr[style*="background:rgba(79,70,229"],
+[data-theme="light"] #csvImportCard tr[style*="background: rgba(79,70,229"] {
+  background: rgba(238, 242, 255, 0.5) !important;
+}
+[data-theme="light"] #csvImportCard td[style*="color:#94a3b8"] { color: #64748b !important; }
+
+/* Form tambah user */
+[data-theme="light"] #addUserForm h4 { color: #1e1b4b !important; }
+[data-theme="light"] #guruAddUserNotice { background: rgba(253, 230, 138, 0.3) !important; color: #92400e !important; }
+[data-theme="light"] #guruFieldsGroup small[style*="color:#94a3b8"] { color: #64748b !important; }
+[data-theme="light"] #coordAutoInfo { color: #065f46 !important; }
+[data-theme="light"] #pklMiniMapContainer { border-color: rgba(16, 185, 129, 0.4) !important; }
+[data-theme="light"] #pklMiniMapContainer > div[style*="background:rgba(15,23,42"],
+[data-theme="light"] #pklMiniMapContainer > div[style*="background: rgba(15,23,42"] {
+  background: #f1f5f9 !important;
+}
+[data-theme="light"] #pklMiniMapContainer *[style*="color:#94a3b8"] { color: #475569 !important; }
+
+/* Registered users table rendered JS */
+[data-theme="light"] #registeredUsersTable tr { background: #fff !important; color: #1e1b4b !important; }
+[data-theme="light"] #registeredUsersTable td { color: #1e293b !important; }
+[data-theme="light"] #registeredUsersTable *[style*="color:#a5b4fc"] { color: #4338ca !important; }
+[data-theme="light"] #registeredUsersTable *[style*="color:#94a3b8"] { color: #475569 !important; }
+[data-theme="light"] #registeredUsersTable *[style*="color:#e2e8f0"] { color: #1e293b !important; }
+[data-theme="light"] #registeredUsersTable *[style*="color:#cbd5e1"] { color: #334155 !important; }
+[data-theme="light"] #registeredUsersTable *[style*="color:#34d399"] { color: #065f46 !important; }
+[data-theme="light"] #registeredUsersTable *[style*="color:#fbbf24"] { color: #92400e !important; }
+[data-theme="light"] #registeredUsersTable *[style*="color:#f87171"] { color: #991b1b !important; }
+
+/* Admin student log table rendered JS */
+[data-theme="light"] #adminStudentLogTable tr,
+[data-theme="light"] #guruTabStudentLogTable tr { background: #fff !important; }
+[data-theme="light"] #adminStudentLogTable td,
+[data-theme="light"] #guruTabStudentLogTable td { color: #1e293b !important; }
+[data-theme="light"] #adminStudentLogTable *[style*="color:#a5b4fc"],
+[data-theme="light"] #guruTabStudentLogTable *[style*="color:#a5b4fc"] { color: #4338ca !important; }
+[data-theme="light"] #adminStudentLogTable *[style*="color:#94a3b8"],
+[data-theme="light"] #guruTabStudentLogTable *[style*="color:#94a3b8"] { color: #475569 !important; }
+[data-theme="light"] #adminStudentLogTable *[style*="color:#e2e8f0"],
+[data-theme="light"] #guruTabStudentLogTable *[style*="color:#e2e8f0"] { color: #1e293b !important; }
+[data-theme="light"] #adminStudentLogTable *[style*="color:#cbd5e1"],
+[data-theme="light"] #guruTabStudentLogTable *[style*="color:#cbd5e1"] { color: #334155 !important; }
+[data-theme="light"] #adminStudentLogTable *[style*="color:#fff"],
+[data-theme="light"] #guruTabStudentLogTable *[style*="color:#fff"] { color: #0f172a !important; }
+
+/* Monthly archive table */
+[data-theme="light"] #monthlyReportsArchiveTable tr { background: #fff !important; }
+[data-theme="light"] #monthlyReportsArchiveTable td { color: #1e293b !important; }
+[data-theme="light"] #monthlyReportsArchiveTable *[style*="color:#a5b4fc"] { color: #4338ca !important; }
+[data-theme="light"] #monthlyReportsArchiveTable *[style*="color:#94a3b8"] { color: #475569 !important; }
+
+/* Reset data cards */
+[data-theme="light"] #resetPresensiLogsCard { background: rgba(224, 231, 255, 0.3) !important; }
+[data-theme="light"] #resetPresensiLogsCard h4[style*="color:#818cf8"] { color: #3730a3 !important; }
+[data-theme="light"] #resetAttendanceStatsCard { background: rgba(254, 243, 199, 0.4) !important; }
+[data-theme="light"] #resetAttendanceStatsCard h4[style*="color:#fbbf24"] { color: #92400e !important; }
+[data-theme="light"] #resetDatabaseCard { background: rgba(254, 226, 226, 0.4) !important; }
+[data-theme="light"] #resetDatabaseCard h4[style*="color:#f87171"] { color: #991b1b !important; }
+[data-theme="light"] #subViewReset .text-muted { color: #475569 !important; }
+
+/* Approval cards */
+[data-theme="light"] #pendingUserApprovalCard { background: rgba(254, 243, 199, 0.3) !important; }
+[data-theme="light"] #adminApprovalReportHistoryCard { background: rgba(224, 231, 255, 0.3) !important; }
+[data-theme="light"] #guruApprovalReportCard { background: rgba(209, 250, 229, 0.3) !important; }
+[data-theme="light"] #pendingUserApprovalList > div,
+[data-theme="light"] #adminApprovalReportHistoryList > div,
+[data-theme="light"] #guruApprovalReportList > div {
+  background: #fff !important;
+  border: 1px solid rgba(99, 102, 241, 0.15) !important;
+  color: #0f172a !important;
+}
+[data-theme="light"] #pendingUserApprovalList *[style*="color:#a5b4fc"],
+[data-theme="light"] #adminApprovalReportHistoryList *[style*="color:#a5b4fc"],
+[data-theme="light"] #guruApprovalReportList *[style*="color:#a5b4fc"] { color: #4338ca !important; }
+[data-theme="light"] #pendingUserApprovalList *[style*="color:#94a3b8"],
+[data-theme="light"] #adminApprovalReportHistoryList *[style*="color:#94a3b8"],
+[data-theme="light"] #guruApprovalReportList *[style*="color:#94a3b8"] { color: #475569 !important; }
+[data-theme="light"] #pendingUserApprovalList *[style*="color:#e2e8f0"],
+[data-theme="light"] #adminApprovalReportHistoryList *[style*="color:#e2e8f0"],
+[data-theme="light"] #guruApprovalReportList *[style*="color:#e2e8f0"] { color: #1e293b !important; }
+[data-theme="light"] #pendingUserApprovalList *[style*="color:#cbd5e1"],
+[data-theme="light"] #adminApprovalReportHistoryList *[style*="color:#cbd5e1"],
+[data-theme="light"] #guruApprovalReportList *[style*="color:#cbd5e1"] { color: #334155 !important; }
+[data-theme="light"] #pendingUserApprovalList *[style*="color:#34d399"],
+[data-theme="light"] #adminApprovalReportHistoryList *[style*="color:#34d399"],
+[data-theme="light"] #guruApprovalReportList *[style*="color:#34d399"] { color: #065f46 !important; }
+[data-theme="light"] #pendingUserApprovalList *[style*="color:#fbbf24"],
+[data-theme="light"] #adminApprovalReportHistoryList *[style*="color:#fbbf24"],
+[data-theme="light"] #guruApprovalReportList *[style*="color:#fbbf24"] { color: #92400e !important; }
+[data-theme="light"] #pendingUserApprovalList *[style*="color:#f87171"],
+[data-theme="light"] #adminApprovalReportHistoryList *[style*="color:#f87171"],
+[data-theme="light"] #guruApprovalReportList *[style*="color:#f87171"] { color: #991b1b !important; }
+[data-theme="light"] #pendingUserApprovalList *[style*="background: rgba(15, 23, 42"],
+[data-theme="light"] #adminApprovalReportHistoryList *[style*="background: rgba(15, 23, 42"],
+[data-theme="light"] #guruApprovalReportList *[style*="background: rgba(15, 23, 42"] {
+  background: #f8fafc !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   4. TAB JURNAL — card form jurnal & riwayat jurnal
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] #tab-journal .card,
+[data-theme="light"] #journalFormCard {
+  background: #fff !important;
+  border-color: rgba(99, 102, 241, 0.15) !important;
+}
+[data-theme="light"] #journalFormCard *[style*="color:#fff"],
+[data-theme="light"] #journalFormCard *[style*="color: #fff"] { color: #1e1b4b !important; }
+[data-theme="light"] #journalFormCard *[style*="border-bottom:1px solid rgba(255,255,255"],
+[data-theme="light"] #journalFormCard *[style*="border-bottom: 1px solid rgba(255,255,255"] {
+  border-bottom-color: rgba(99, 102, 241, 0.12) !important;
+}
+[data-theme="light"] #journalFormCard span[style*="background:rgba(16,185,129"],
+[data-theme="light"] #journalFormCard span[style*="background: rgba(16,185,129"] {
+  background: rgba(209, 250, 229, 0.8) !important;
+  color: #065f46 !important;
+  border-color: rgba(5, 150, 105, 0.4) !important;
+}
+[data-theme="light"] #journalTodayPreview {
+  background: rgba(209, 250, 229, 0.4) !important;
+  border-color: rgba(5, 150, 105, 0.3) !important;
+}
+[data-theme="light"] #journalTodayPreview p[style*="color:#34d399"] { color: #065f46 !important; }
+[data-theme="light"] #journalTodayPreview p[style*="color:#cbd5e1"] { color: #334155 !important; }
+
+/* Textarea jurnal */
+[data-theme="light"] #journalNarasi {
+  background: #fff !important;
+  border: 1.5px solid rgba(99, 102, 241, 0.25) !important;
+  color: #0f172a !important;
+}
+[data-theme="light"] #journalNarasiCount { color: #64748b !important; }
+
+/* Upload foto jurnal */
+[data-theme="light"] #journalPhotoWrap {
+  border-color: rgba(99, 102, 241, 0.4) !important;
+  background: rgba(241, 245, 249, 0.6) !important;
+}
+[data-theme="light"] #journalPhotoWrap p[style*="color:#94a3b8"] { color: #64748b !important; }
+
+/* Riwayat jurnal */
+[data-theme="light"] #tab-journal .card[style*="margin-top:16px"] {
+  background: #fff !important;
+}
+[data-theme="light"] #tab-journal .card h4[style*="color:#fff"] { color: #1e1b4b !important; }
+[data-theme="light"] #journalCountBadge {
+  background: rgba(99, 102, 241, 0.12) !important;
+  color: #4338ca !important;
+}
+[data-theme="light"] #journalListContainer > div,
+[data-theme="light"] #journalListContainer .journal-item {
+  background: #fff !important;
+  border: 1px solid rgba(99, 102, 241, 0.12) !important;
+  color: #0f172a !important;
+}
+[data-theme="light"] #journalListContainer *[style*="color:#a5b4fc"] { color: #4338ca !important; }
+[data-theme="light"] #journalListContainer *[style*="color:#94a3b8"] { color: #475569 !important; }
+[data-theme="light"] #journalListContainer *[style*="color:#cbd5e1"] { color: #334155 !important; }
+[data-theme="light"] #journalListContainer *[style*="color:#e2e8f0"] { color: #1e293b !important; }
+[data-theme="light"] #journalListContainer *[style*="color:#34d399"] { color: #065f46 !important; }
+[data-theme="light"] #journalListContainer *[style*="background: rgba(15, 23, 42"],
+[data-theme="light"] #journalListContainer *[style*="background:rgba(15,23,42"] {
+  background: #f8fafc !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   5. TAB PROFIL — Card sync kelas & inline style gelap
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Sync kelas card */
+[data-theme="light"] #syncKelasCard {
+  background: linear-gradient(135deg, rgba(224, 231, 255, 0.6), rgba(238, 242, 255, 0.5)) !important;
+  border: 1px solid rgba(99, 102, 241, 0.3) !important;
+}
+[data-theme="light"] #syncKelasCard h4[style*="color:#a5b4fc"] { color: #3730a3 !important; }
+[data-theme="light"] #syncKelasCard p[style*="color:#94a3b8"] { color: #475569 !important; }
+[data-theme="light"] #syncKelasStatus {
+  background: rgba(241, 245, 249, 0.9) !important;
+  border-color: rgba(99, 102, 241, 0.15) !important;
+}
+[data-theme="light"] #syncKelasStatus div[style*="color:#94a3b8"] { color: #64748b !important; }
+[data-theme="light"] #syncKelasCurrentValue { color: #3730a3 !important; }
+[data-theme="light"] #syncKelasLastSync { color: #64748b !important; }
+[data-theme="light"] #syncKelasNisn[style*="color:#e2e8f0"] { color: #1e293b !important; }
+
+/* APK info card */
+[data-theme="light"] #proxmoxInfoCard {
+  background: linear-gradient(135deg, #f0f4ff, #fff) !important;
+  border: 1px solid rgba(99, 102, 241, 0.15) !important;
+}
+[data-theme="light"] #proxmoxInfoCard h4 { color: #1e1b4b !important; }
+[data-theme="light"] #proxmoxInfoCard p { color: #475569 !important; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   6. GLOBAL INLINE COLOR OVERRIDE — semua tab (warna paling umum dari JS)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Area utama konten (tab-page) — semua warna teks dari JS dioverride */
+[data-theme="light"] .tab-page *[style*="color:#a5b4fc"],
+[data-theme="light"] .tab-page *[style*="color: #a5b4fc"] { color: #4338ca !important; }
+
+[data-theme="light"] .tab-page *[style*="color:#94a3b8"],
+[data-theme="light"] .tab-page *[style*="color: #94a3b8"] { color: #475569 !important; }
+
+[data-theme="light"] .tab-page *[style*="color:#e2e8f0"],
+[data-theme="light"] .tab-page *[style*="color: #e2e8f0"] { color: #1e293b !important; }
+
+[data-theme="light"] .tab-page *[style*="color:#cbd5e1"],
+[data-theme="light"] .tab-page *[style*="color: #cbd5e1"] { color: #334155 !important; }
+
+[data-theme="light"] .tab-page *[style*="color:#f8fafc"],
+[data-theme="light"] .tab-page *[style*="color: #f8fafc"] { color: #0f172a !important; }
+
+[data-theme="light"] .tab-page *[style*="color:#64748b"],
+[data-theme="light"] .tab-page *[style*="color: #64748b"] { color: #475569 !important; }
+
+/* Override background gelap di semua .tab-page */
+[data-theme="light"] .tab-page *[style*="background: rgba(15, 23, 42, 0.6)"],
+[data-theme="light"] .tab-page *[style*="background:rgba(15,23,42,0.6)"],
+[data-theme="light"] .tab-page *[style*="background: rgba(15, 23, 42, 0.7)"],
+[data-theme="light"] .tab-page *[style*="background:rgba(15,23,42,0.7)"],
+[data-theme="light"] .tab-page *[style*="background: rgba(15, 23, 42, 0.8)"],
+[data-theme="light"] .tab-page *[style*="background: rgba(15, 23, 42, 0.9)"],
+[data-theme="light"] .tab-page *[style*="background: rgba(15, 23, 42, 0.95)"],
+[data-theme="light"] .tab-page *[style*="background:rgba(15,23,42,0.95)"] {
+  background: rgba(241, 245, 249, 0.95) !important;
+  color: #0f172a !important;
+}
+[data-theme="light"] .tab-page *[style*="background:#0f172a"],
+[data-theme="light"] .tab-page *[style*="background: #0f172a"],
+[data-theme="light"] .tab-page *[style*="background:#1e293b"],
+[data-theme="light"] .tab-page *[style*="background: #1e293b"],
+[data-theme="light"] .tab-page *[style*="background:#0d1117"],
+[data-theme="light"] .tab-page *[style*="background: #0d1117"] {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+[data-theme="light"] .tab-page *[style*="border: 1px solid rgba(255,255,255,0.1)"],
+[data-theme="light"] .tab-page *[style*="border:1px solid rgba(255,255,255,0.1)"],
+[data-theme="light"] .tab-page *[style*="border-bottom: 1px solid rgba(255,255,255,0.1)"],
+[data-theme="light"] .tab-page *[style*="border-bottom:1px solid rgba(255,255,255,0.1)"],
+[data-theme="light"] .tab-page *[style*="border-bottom: 1px solid rgba(255,255,255,0.08)"],
+[data-theme="light"] .tab-page *[style*="border-bottom:1px solid rgba(255,255,255,0.08)"] {
+  border-color: rgba(99, 102, 241, 0.15) !important;
+}
+
+/* Warna teks putih hardcode di area konten (bukan di tombol/banner) */
+[data-theme="light"] .tab-page > .card *[style*="color:#fff"],
+[data-theme="light"] .tab-page > .card *[style*="color: #fff"],
+[data-theme="light"] .tab-page > .form-card *[style*="color:#fff"],
+[data-theme="light"] .tab-page > .form-card *[style*="color: #fff"] {
+  color: #1e1b4b !important;
+}
+
+/* Teks putih di dalam div yang sudah dioverride jadi putih */
+[data-theme="light"] .tab-page div[style*="background: rgba(241, 245"] *[style*="color:#fff"],
+[data-theme="light"] .tab-page div[style*="background: #f1f5f9"] *[style*="color:#fff"],
+[data-theme="light"] .tab-page div[style*="background: #f8fafc"] *[style*="color:#fff"] {
+  color: #1e1b4b !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   7. PERMISSION LIST (siswa) & STATUS PENGAJUAN
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] .permission-list > div,
+[data-theme="light"] #permissionListContainer > div {
+  background: #fff !important;
+  border: 1px solid rgba(99, 102, 241, 0.15) !important;
+  color: #0f172a !important;
+}
+[data-theme="light"] .permission-list *[style*="color:#a5b4fc"] { color: #4338ca !important; }
+[data-theme="light"] .permission-list *[style*="color:#94a3b8"] { color: #475569 !important; }
+[data-theme="light"] .permission-list *[style*="color:#e2e8f0"] { color: #1e293b !important; }
+[data-theme="light"] .permission-list *[style*="color:#cbd5e1"] { color: #334155 !important; }
+[data-theme="light"] .permission-list *[style*="background: rgba(15, 23, 42"] {
+  background: #f8fafc !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   8. BOLD TEXT — Background putih tulisan hitam bold,
+                  Background gelap tulisan putih bold
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Semua heading utama di light mode — hitam bold */
+[data-theme="light"] .tab-page h2,
+[data-theme="light"] .tab-page h3,
+[data-theme="light"] .tab-page h4 {
+  color: #1e1b4b !important;
+  font-weight: 700 !important;
+}
+
+/* Label form — hitam tegas */
+[data-theme="light"] .tab-page label {
+  color: #334155 !important;
+  font-weight: 600 !important;
+}
+
+/* Teks strong/bold di card putih */
+[data-theme="light"] .tab-page .card strong,
+[data-theme="light"] .tab-page .form-card strong {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+/* Teks di dalam tabel — kontras tinggi */
+[data-theme="light"] .tab-page table th {
+  color: #fff !important;
+  font-weight: 800 !important;
+  background: linear-gradient(90deg, #4338ca, #4f46e5) !important;
+}
+[data-theme="light"] .tab-page table td {
+  color: #1e293b !important;
+  font-weight: 500 !important;
+}
+
+/* File upload box — kontras */
+[data-theme="light"] .file-upload-box {
+  background: rgba(241, 245, 249, 0.8) !important;
+  border: 2px dashed rgba(99, 102, 241, 0.3) !important;
+  color: #475569 !important;
+}
+[data-theme="light"] .file-upload-box p { color: #475569 !important; font-weight: 600 !important; }
+[data-theme="light"] .file-upload-box i { color: #6366f1 !important; }
+
+/* Badge-count global */
+[data-theme="light"] .badge-count {
+  background: rgba(67, 56, 202, 0.1) !important;
+  color: #3730a3 !important;
+  border: 1px solid rgba(67, 56, 202, 0.2) !important;
+  font-weight: 700 !important;
+}
+
+
+/* ==========================================================================
+   LIGHT MODE — PATCH v4 — Penutup semua celah warna tersisa
+   Target: setiap pola inline style dari renderHistoryList, renderPermissionList,
+   renderJournalList, renderAdminUsersTable, renderPendingUserApprovals
+   Aman: semua selector baru, tidak ada yang diubah
+   ========================================================================== */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   A. HISTORY LIST — kartu tanggal per hari (siswa) & flat item (guru/admin)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Kartu tanggal harian — background rgba(15,23,42,.5) & rgba(99,102,241,.05) */
+[data-theme="light"] #historyListContainer > div[style*="border-radius:12px"] {
+  background: #fff !important;
+  border-color: rgba(99, 102, 241, 0.2) !important;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
+}
+/* Header tanggal dalam kartu — rgba(99,102,241,.15) atau rgba(255,255,255,.04) */
+[data-theme="light"] #historyListContainer > div[style*="border-radius:12px"] > div:first-child {
+  background: rgba(99, 102, 241, 0.08) !important;
+  border-bottom-color: rgba(99, 102, 241, 0.12) !important;
+}
+/* Teks tanggal — color:#e2e8f0 */
+[data-theme="light"] #historyListContainer span[style*="color:#e2e8f0"],
+[data-theme="light"] #historyListContainer span[style*="color: #e2e8f0"] {
+  color: #1e1b4b !important;
+  font-weight: 700 !important;
+}
+/* Badge "Hari Ini" — rgba(99,102,241,.2) color:#a5b4fc */
+[data-theme="light"] #historyListContainer span[style*="color:#a5b4fc"] {
+  color: #4338ca !important;
+  background: rgba(99, 102, 241, 0.1) !important;
+}
+
+/* Detail row — background color22 (icon circle) */
+[data-theme="light"] #historyListContainer div[style*="border-bottom:1px solid rgba(255,255,255,0.05)"],
+[data-theme="light"] #historyListContainer div[style*="border-bottom: 1px solid rgba(255,255,255,0.05)"] {
+  border-bottom-color: rgba(99, 102, 241, 0.1) !important;
+}
+/* Label uppercase kecil — color:#94a3b8 */
+[data-theme="light"] #historyListContainer div[style*="color:#94a3b8"],
+[data-theme="light"] #historyListContainer div[style*="color: #94a3b8"] {
+  color: #64748b !important;
+}
+/* Nilai row — color:#e2e8f0 */
+[data-theme="light"] #historyListContainer div[style*="font-size:0.82rem"][style*="color:#e2e8f0"],
+[data-theme="light"] #historyListContainer div[style*="font-size: 0.82rem"][style*="color:#e2e8f0"] {
+  color: #1e293b !important;
+  font-weight: 600 !important;
+}
+/* Lokasi GPS — color:#a5b4fc */
+[data-theme="light"] #historyListContainer div[style*="color:#a5b4fc"],
+[data-theme="light"] #historyListContainer div[style*="color: #a5b4fc"] {
+  color: #4338ca !important;
+}
+/* Teks jurnal — color:#cbd5e1 */
+[data-theme="light"] #historyListContainer span[style*="color:#cbd5e1"],
+[data-theme="light"] #historyListContainer span[style*="color: #cbd5e1"],
+[data-theme="light"] #historyListContainer p[style*="color:#cbd5e1"] {
+  color: #334155 !important;
+}
+/* Teks italic "Belum..." — color:#64748b */
+[data-theme="light"] #historyListContainer span[style*="color:#64748b"],
+[data-theme="light"] #historyListContainer span[style*="color: #64748b"] {
+  color: #64748b !important;
+}
+/* Teks error — color:#f87171 */
+[data-theme="light"] #historyListContainer span[style*="color:#f87171"] {
+  color: #991b1b !important; font-weight: 700 !important;
+}
+/* Teks izin — color:#c4b5fd */
+[data-theme="light"] #historyListContainer span[style*="color:#c4b5fd"] {
+  color: #4338ca !important;
+}
+/* Processed by — color:#64748b di dalam div */
+[data-theme="light"] #historyListContainer div[style*="color:#64748b"] {
+  color: #64748b !important;
+}
+
+/* history-item flat (guru/admin) — teks nama & tanggal */
+[data-theme="light"] #historyListContainer .history-details h4 small[style*="color:#94a3b8"] {
+  color: #64748b !important;
+}
+[data-theme="light"] #historyListContainer .history-details p { color: #334155 !important; }
+[data-theme="light"] #historyListContainer small[style*="color:#a5b4fc"] { color: #4338ca !important; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   B. PERMISSION LIST (siswa) — card status pengajuan izin
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] #permissionListContainer .card[style*="background:rgba(15, 23, 42, 0.6)"],
+[data-theme="light"] #permissionListContainer .card[style*="background: rgba(15, 23, 42, 0.6)"] {
+  background: #fff !important;
+}
+[data-theme="light"] #permissionListContainer strong[style*="color:#fff"] { color: #1e1b4b !important; font-weight: 700 !important; }
+[data-theme="light"] #permissionListContainer p[style*="color:#cbd5e1"] { color: #334155 !important; }
+/* Status badge — warna tetap, kontras terhadap background terang */
+[data-theme="light"] #permissionListContainer span[style*="color:#34d399"] {
+  color: #065f46 !important; background: rgba(209, 250, 229, 0.8) !important;
+  border-color: rgba(5, 150, 105, 0.4) !important;
+}
+[data-theme="light"] #permissionListContainer span[style*="color:#f87171"] {
+  color: #991b1b !important; background: rgba(254, 226, 226, 0.8) !important;
+  border-color: rgba(239, 68, 68, 0.4) !important;
+}
+[data-theme="light"] #permissionListContainer span[style*="color:#fbbf24"] {
+  color: #92400e !important; background: rgba(254, 243, 199, 0.8) !important;
+  border-color: rgba(245, 158, 11, 0.4) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   C. JOURNAL LIST — riwayat jurnal siswa
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] #journalListContainer .card[style*="border-left:3px solid #10b981"] {
+  background: #fff !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+  border-left: 3px solid #10b981 !important;
+}
+/* Tanggal jurnal — color:#34d399 */
+[data-theme="light"] #journalListContainer span[style*="color:#34d399"] {
+  color: #065f46 !important; font-weight: 700 !important;
+}
+/* Badge "Terbaru" */
+[data-theme="light"] #journalListContainer span[style*="background:rgba(16,185,129"] {
+  background: rgba(209, 250, 229, 0.8) !important;
+  color: #065f46 !important;
+  border-color: rgba(5, 150, 105, 0.3) !important;
+}
+/* Waktu — color:#64748b */
+[data-theme="light"] #journalListContainer span[style*="color:#64748b"] { color: #64748b !important; }
+/* Narasi jurnal — color:#cbd5e1 */
+[data-theme="light"] #journalListContainer p[style*="color:#cbd5e1"] { color: #334155 !important; }
+/* Gambar jurnal */
+[data-theme="light"] #journalListContainer img[style*="border:1px solid rgba(255,255,255,0.1)"] {
+  border-color: rgba(99, 102, 241, 0.2) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   D. ADMIN USERS TABLE — supervisorHtml (siswa PKL info box)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Box info siswa — background:rgba(79,70,229,0.15) */
+[data-theme="light"] #registeredUsersTable div[style*="background:rgba(79,70,229,0.15)"],
+[data-theme="light"] #registeredUsersTable div[style*="background: rgba(79,70,229,0.15)"] {
+  background: rgba(224, 231, 255, 0.5) !important;
+  border-left-color: #6366f1 !important;
+  color: #1e1b4b !important;
+}
+[data-theme="light"] #registeredUsersTable div[style*="color:#a5b4fc"] { color: #4338ca !important; }
+[data-theme="light"] #registeredUsersTable small[style*="color:#94a3b8"] { color: #475569 !important; }
+[data-theme="light"] #registeredUsersTable a[style*="color:#34d399"] { color: #065f46 !important; }
+[data-theme="light"] #registeredUsersTable a[style*="color:#94a3b8"] { color: #475569 !important; }
+[data-theme="light"] #registeredUsersTable span[style*="color:#f59e0b"] { color: #92400e !important; }
+/* Info guru */
+[data-theme="light"] #registeredUsersTable div[style*="color:#34d399"] { color: #065f46 !important; }
+/* Code password */
+[data-theme="light"] #registeredUsersTable code[style*="background:rgba(255,255,255,0.1)"] {
+  background: rgba(99, 102, 241, 0.1) !important;
+  color: #991b1b !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   E. PENDING APPROVALS — warna teks spesifik
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Delete pending — background:rgba(239,68,68,0.08) */
+[data-theme="light"] #pendingUserApprovalList div[style*="background:rgba(239, 68, 68, 0.08)"],
+[data-theme="light"] #pendingUserApprovalList div[style*="background: rgba(239, 68, 68, 0.08)"] {
+  background: rgba(254, 226, 226, 0.5) !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+}
+[data-theme="light"] #pendingUserApprovalList strong[style*="color:#f87171"] { color: #991b1b !important; }
+[data-theme="light"] #pendingUserApprovalList div[style*="color:#cbd5e1"] { color: #334155 !important; }
+
+/* Edit PKL pending — background:rgba(99,102,241,0.08) */
+[data-theme="light"] #pendingUserApprovalList div[style*="background:rgba(99, 102, 241, 0.08)"],
+[data-theme="light"] #pendingUserApprovalList div[style*="background: rgba(99, 102, 241, 0.08)"] {
+  background: rgba(224, 231, 255, 0.5) !important;
+  border-color: rgba(99, 102, 241, 0.3) !important;
+}
+[data-theme="light"] #pendingUserApprovalList strong[style*="color:#a5b4fc"] { color: #3730a3 !important; }
+[data-theme="light"] #pendingUserApprovalList div[style*="color:#94a3b8"] { color: #475569 !important; }
+[data-theme="light"] #pendingUserApprovalList strong[style*="color:#34d399"] { color: #065f46 !important; }
+
+/* Pending akun baru — background:rgba(255,255,255,0.05) */
+[data-theme="light"] #pendingUserApprovalList div[style*="background:rgba(255,255,255,0.05)"],
+[data-theme="light"] #pendingUserApprovalList div[style*="background: rgba(255,255,255,0.05)"] {
+  background: rgba(254, 243, 199, 0.3) !important;
+  border-color: rgba(245, 158, 11, 0.3) !important;
+}
+[data-theme="light"] #pendingUserApprovalList strong[style*="color:#fbbf24"] { color: #92400e !important; }
+[data-theme="light"] #pendingUserApprovalList div[style*="color:#94a3b8"] { color: #475569 !important; }
+/* code password dalam approval */
+[data-theme="light"] #pendingUserApprovalList code { background: rgba(99,102,241,0.1) !important; color: #3730a3 !important; }
+
+/* No-pending message — color:#34d399 */
+[data-theme="light"] #pendingUserApprovalList div[style*="color:#34d399"] {
+  color: #065f46 !important;
+  background: rgba(209, 250, 229, 0.4) !important;
+  border-color: rgba(5, 150, 105, 0.3) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   F. GURU APPROVAL LIST (tab permission) — sama dengan admin approval
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] #guruTabApprovalList div[style*="background:rgba(15, 23, 42"],
+[data-theme="light"] #guruTabApprovalList div[style*="background:rgba(15,23,42"] {
+  background: #fff !important;
+  border-color: rgba(99, 102, 241, 0.15) !important;
+}
+[data-theme="light"] #guruTabApprovalList strong[style*="color:#fff"] { color: #1e1b4b !important; }
+[data-theme="light"] #guruTabApprovalList div[style*="color:#cbd5e1"] { color: #334155 !important; }
+[data-theme="light"] #guruTabApprovalList div[style*="color:#94a3b8"] { color: #475569 !important; }
+[data-theme="light"] #guruTabApprovalList span[style*="color:#34d399"] { color: #065f46 !important; }
+[data-theme="light"] #guruTabApprovalList span[style*="color:#f87171"] { color: #991b1b !important; }
+[data-theme="light"] #guruTabApprovalList span[style*="color:#fbbf24"] { color: #92400e !important; }
+[data-theme="light"] #guruTabApprovalList span[style*="color:#a5b4fc"] { color: #4338ca !important; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   G. ADMIN APPROVAL LIST — izin/sakit pending
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] #adminApprovalList div[style*="background:rgba(15, 23, 42"],
+[data-theme="light"] #adminApprovalList div[style*="background:rgba(15,23,42"] {
+  background: #fff !important;
+  border-color: rgba(99, 102, 241, 0.15) !important;
+}
+[data-theme="light"] #adminApprovalList strong[style*="color:#fff"],
+[data-theme="light"] #adminApprovalList strong[style*="color: #fff"] { color: #1e1b4b !important; }
+[data-theme="light"] #adminApprovalList div[style*="color:#cbd5e1"],
+[data-theme="light"] #adminApprovalList p[style*="color:#cbd5e1"] { color: #334155 !important; }
+[data-theme="light"] #adminApprovalList div[style*="color:#94a3b8"],
+[data-theme="light"] #adminApprovalList span[style*="color:#94a3b8"] { color: #475569 !important; }
+[data-theme="light"] #adminApprovalList span[style*="color:#34d399"],
+[data-theme="light"] #adminApprovalList div[style*="color:#34d399"] { color: #065f46 !important; }
+[data-theme="light"] #adminApprovalList span[style*="color:#f87171"] { color: #991b1b !important; }
+[data-theme="light"] #adminApprovalList span[style*="color:#fbbf24"],
+[data-theme="light"] #adminApprovalList strong[style*="color:#fbbf24"] { color: #92400e !important; }
+[data-theme="light"] #adminApprovalList span[style*="color:#a5b4fc"] { color: #4338ca !important; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   H. ADMIN STUDENT LOG TABLE — tbody dari renderAdminDashboard
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] #adminStudentLogTable td strong { color: #1e1b4b !important; }
+[data-theme="light"] #adminStudentLogTable td small { color: #475569 !important; }
+[data-theme="light"] #adminStudentLogTable td span[style*="color:#a5b4fc"] { color: #4338ca !important; }
+[data-theme="light"] #adminStudentLogTable td span[style*="color:#94a3b8"] { color: #475569 !important; }
+[data-theme="light"] #adminStudentLogTable td span[style*="color:#34d399"] { color: #065f46 !important; }
+[data-theme="light"] #adminStudentLogTable td span[style*="color:#f87171"] { color: #991b1b !important; }
+[data-theme="light"] #adminStudentLogTable td a[style*="color:#34d399"] { color: #065f46 !important; }
+[data-theme="light"] #adminStudentLogTable td div[style*="color:#94a3b8"] { color: #475569 !important; }
+
+[data-theme="light"] #guruTabStudentLogTable td strong { color: #1e1b4b !important; }
+[data-theme="light"] #guruTabStudentLogTable td small { color: #475569 !important; }
+[data-theme="light"] #guruTabStudentLogTable td span[style*="color:#a5b4fc"] { color: #4338ca !important; }
+[data-theme="light"] #guruTabStudentLogTable td span[style*="color:#94a3b8"] { color: #475569 !important; }
+[data-theme="light"] #guruTabStudentLogTable td span[style*="color:#34d399"] { color: #065f46 !important; }
+[data-theme="light"] #guruTabStudentLogTable td a[style*="color:#34d399"] { color: #065f46 !important; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   I. PROFIL — inline style dari JS (profilePklLocation, profileSubText)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] #profilePklLocation span[style*="color:#fff"] { color: #1e1b4b !important; font-weight: 700 !important; }
+[data-theme="light"] #profilePklLocation span[style*="color:#94a3b8"] { color: #475569 !important; }
+[data-theme="light"] #profilePklLocation a[style*="color:#34d399"] { color: #065f46 !important; }
+[data-theme="light"] #syncKelasStatus span[style*="color:#10b981"] { color: #047857 !important; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   J. GLOBAL — semua card/div yang masih punya background terang
+      tapi teks belum gelap, dan sebaliknya
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Background terang → teks harus gelap */
+[data-theme="light"] .tab-page div[style*="background:#f0fdf4"],
+[data-theme="light"] .tab-page div[style*="background: #f0fdf4"] { color: #0f172a !important; }
+[data-theme="light"] .tab-page div[style*="background:#dbeafe"],
+[data-theme="light"] .tab-page div[style*="background: #dbeafe"] { color: #1e3a5f !important; }
+[data-theme="light"] .tab-page div[style*="background:#dcfce7"],
+[data-theme="light"] .tab-page div[style*="background: #dcfce7"] { color: #065f46 !important; }
+[data-theme="light"] .tab-page div[style*="background:#fee2e2"],
+[data-theme="light"] .tab-page div[style*="background: #fee2e2"] { color: #991b1b !important; }
+[data-theme="light"] .tab-page div[style*="background:#fef9c3"],
+[data-theme="light"] .tab-page div[style*="background: #fef9c3"] { color: #92400e !important; }
+[data-theme="light"] .tab-page div[style*="background:#e0f2fe"],
+[data-theme="light"] .tab-page div[style*="background: #e0f2fe"] { color: #0369a1 !important; }
+[data-theme="light"] .tab-page div[style*="background:#e0e7ff"],
+[data-theme="light"] .tab-page div[style*="background: #e0e7ff"] { color: #3730a3 !important; }
+[data-theme="light"] .tab-page div[style*="background:#f8fafc"],
+[data-theme="light"] .tab-page div[style*="background: #f8fafc"] { color: #0f172a !important; }
+[data-theme="light"] .tab-page div[style*="background:#f1f5f9"],
+[data-theme="light"] .tab-page div[style*="background: #f1f5f9"] { color: #0f172a !important; }
+
+/* Background gelap → teks harus terang (tombol dan badge — biarkan) */
+/* Hanya target div/card bukan tombol */
+[data-theme="light"] .tab-page div[style*="background:#0f172a"]:not(button),
+[data-theme="light"] .tab-page div[style*="background: #0f172a"]:not(button) {
+  background: #f1f5f9 !important; color: #0f172a !important;
+}
+[data-theme="light"] .tab-page div[style*="background:#1e293b"]:not(button),
+[data-theme="light"] .tab-page div[style*="background: #1e293b"]:not(button) {
+  background: #f1f5f9 !important; color: #0f172a !important;
+}
+
+/* Semua teks di heading dalam card — selalu gelap bold */
+[data-theme="light"] .tab-page .card > div > strong,
+[data-theme="light"] .tab-page .card > div > h4,
+[data-theme="light"] .tab-page .card > div > h3 {
+  color: #1e1b4b !important;
+  font-weight: 700 !important;
+}
+
+/* Semua p/span di luar tombol yang masih putih di background putih */
+[data-theme="light"] .tab-page .card p:not([class*="btn"]):not([style*="gradient"]) {
+  color: #334155;
+}
+[data-theme="light"] .tab-page .card small:not([class*="btn"]) {
+  color: #64748b !important;
+}
+
+/* Bottom nav label — kontras di kedua mode */
+[data-theme="light"] .bottom-nav .nav-item span {
+  color: inherit !important;
+  font-weight: 600 !important;
+}
+[data-theme="light"] .bottom-nav .nav-item.active span {
+  color: #4338ca !important;
+  font-weight: 700 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   K. BOLD REINFORCEMENT — heading, label, nilai penting harus selalu bold
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] .tab-page .info-content strong {
+  font-weight: 800 !important;
+  color: #0f172a !important;
+}
+[data-theme="light"] .tab-page .info-content span {
+  font-weight: 600 !important;
+  color: #475569 !important;
+}
+[data-theme="light"] .tab-page .history-details h4 {
+  font-weight: 700 !important;
+  color: #1e1b4b !important;
+}
+[data-theme="light"] .tab-page .section-title h3,
+[data-theme="light"] .tab-page .section-title h2 {
+  font-weight: 800 !important;
+}
+[data-theme="light"] .tab-page .data-table td strong {
+  font-weight: 700 !important;
+  color: #1e1b4b !important;
+}
+[data-theme="light"] .tab-page .data-table td small {
+  font-weight: 500 !important;
+  color: #475569 !important;
+}
+
+/* Nama user di tabel admin */
+[data-theme="light"] #registeredUsersTable td strong { font-weight: 700 !important; color: #1e1b4b !important; }
+[data-theme="light"] #registeredUsersTable td small { color: #475569 !important; }
+[data-theme="light"] #adminStudentLogTable td strong { font-weight: 700 !important; color: #1e1b4b !important; }
+[data-theme="light"] #guruTabStudentLogTable td strong { font-weight: 700 !important; color: #1e1b4b !important; }
+
+
+/* ==========================================================================
+   LIGHT MODE — PATCH v5 — Fix selector bug + semua elemen home tab
+   Bug fixes: .clock-card → .live-clock-card, #currentTime → #liveTime,
+              .stat-value → .stat-number
+   Gap fills: .btn-action, .monthly-stat-item, chart section, admin chart
+   Aman: semua selector baru, tidak mengubah apapun yang sudah ada
+   ========================================================================== */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   1. CLOCK CARD — Fix bug selector (HTML pakai .live-clock-card, bukan .clock-card)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] .live-clock-card {
+  background: linear-gradient(135deg, #4338ca 0%, #0284c7 100%) !important;
+  color: #fff !important;
+  border-color: rgba(67, 56, 202, 0.3) !important;
+}
+/* Fix: HTML pakai #liveTime bukan #currentTime */
+[data-theme="light"] #liveTime {
+  color: #fff !important;
+  font-weight: 800 !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25) !important;
+}
+/* Tanggal di dalam .clock-badge */
+[data-theme="light"] .clock-badge {
+  color: rgba(255, 255, 255, 0.92) !important;
+  font-weight: 700 !important;
+}
+/* Lokasi GPS status teks */
+[data-theme="light"] .live-clock-card .location-status {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+[data-theme="light"] .live-clock-card #geoText {
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-weight: 600 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   2. STAT CARDS — Fix bug selector (.stat-value → .stat-number)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] .stat-number {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] .stat-label {
+  color: #475569 !important;
+  font-weight: 600 !important;
+}
+/* Icon stat tetap kontras di background putih */
+[data-theme="light"] .stat-card.hadir .stat-icon { color: #059669 !important; }
+[data-theme="light"] .stat-card.izin  .stat-icon { color: #0284c7 !important; }
+[data-theme="light"] .stat-card.sakit .stat-icon { color: #d97706 !important; }
+[data-theme="light"] .stat-card.alpa  .stat-icon { color: #dc2626 !important; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   3. ABSEN BUTTONS (.btn-action) — tidak ada light mode rule sama sekali
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Absen Masuk — primary */
+[data-theme="light"] .btn-action.primary {
+  background: linear-gradient(180deg,
+    rgba(79, 70, 229, 0.1) 0%,
+    rgba(255, 255, 255, 0.97) 100%) !important;
+  border: 1.5px solid rgba(79, 70, 229, 0.35) !important;
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.12) !important;
+}
+[data-theme="light"] .btn-action.primary .action-icon {
+  background: rgba(79, 70, 229, 0.12) !important;
+  color: #4338ca !important;
+}
+
+/* Absen Pulang — secondary */
+[data-theme="light"] .btn-action.secondary {
+  background: linear-gradient(180deg,
+    rgba(239, 68, 68, 0.08) 0%,
+    rgba(255, 255, 255, 0.97) 100%) !important;
+  border: 1.5px solid rgba(239, 68, 68, 0.3) !important;
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.10) !important;
+}
+[data-theme="light"] .btn-action.secondary .action-icon {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #dc2626 !important;
+}
+
+/* Teks dalam btn-action */
+[data-theme="light"] .btn-action .action-text strong {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] .btn-action .action-text span {
+  color: #475569 !important;
+  font-weight: 600 !important;
+}
+
+/* Disabled state btn-action */
+[data-theme="light"] .btn-action:disabled {
+  opacity: 0.55 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   4. MONTHLY STATS — tidak ada light mode rule sama sekali
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Item card dalam grid monthly stats */
+[data-theme="light"] .monthly-stat-item {
+  background: #fff !important;
+  border: 1px solid rgba(99, 102, 241, 0.15) !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05) !important;
+}
+[data-theme="light"] .monthly-stat-item:hover {
+  background: #f8faff !important;
+  border-color: rgba(99, 102, 241, 0.25) !important;
+}
+/* Label "HADIR", "IZIN", dll */
+[data-theme="light"] .monthly-stat-label {
+  color: #475569 !important;
+  font-weight: 700 !important;
+}
+
+/* Monthly stat numbers — inline style color hardcoded di HTML, override via ID */
+[data-theme="light"] #currentMonthHadir { color: #059669 !important; font-weight: 800 !important; }
+[data-theme="light"] #currentMonthIzin  { color: #0369a1 !important; font-weight: 800 !important; }
+[data-theme="light"] #currentMonthSakit { color: #0891b2 !important; font-weight: 800 !important; }
+[data-theme="light"] #currentMonthAlpa  { color: #dc2626 !important; font-weight: 800 !important; }
+[data-theme="light"] #totalHadir  { color: #059669 !important; font-weight: 800 !important; }
+[data-theme="light"] #totalIzin   { color: #0369a1 !important; font-weight: 800 !important; }
+[data-theme="light"] #totalSakit  { color: #0891b2 !important; font-weight: 800 !important; }
+[data-theme="light"] #totalAlpa   { color: #dc2626 !important; font-weight: 800 !important; }
+
+/* Parent card monthly stats — inline style background gelap */
+[data-theme="light"] #studentMonthlyStatsSection .card {
+  background: #fff !important;
+}
+/* Header bulan — color:#a5b4fc → gelap */
+[data-theme="light"] #studentMonthlyStatsSection h4[style*="color:#a5b4fc"] {
+  color: #3730a3 !important;
+  font-weight: 800 !important;
+}
+/* Header total — color:#34d399 → gelap */
+[data-theme="light"] #studentMonthlyStatsSection h4[style*="color:#34d399"] {
+  color: #065f46 !important;
+  font-weight: 800 !important;
+}
+/* Badge "Real-time" & "Database" — color:#cbd5e1 → gelap */
+[data-theme="light"] #studentMonthlyStatsSection *[style*="color:#cbd5e1"] {
+  color: #475569 !important;
+}
+/* Background badge "Real-time" & "Database" gelap */
+[data-theme="light"] #studentMonthlyStatsSection div[style*="background:rgba(99,102,241,0.2)"],
+[data-theme="light"] #studentMonthlyStatsSection div[style*="background: rgba(99,102,241,0.2)"] {
+  background: rgba(99, 102, 241, 0.12) !important;
+  color: #3730a3 !important;
+}
+[data-theme="light"] #studentMonthlyStatsSection div[style*="background:rgba(16,185,129,0.2)"],
+[data-theme="light"] #studentMonthlyStatsSection div[style*="background: rgba(16,185,129,0.2)"] {
+  background: rgba(5, 150, 105, 0.12) !important;
+  color: #065f46 !important;
+}
+/* Info box di bagian bawah akumulasi */
+[data-theme="light"] #studentMonthlyStatsSection div[style*="background:rgba(16,185,129,0.1)"],
+[data-theme="light"] #studentMonthlyStatsSection div[style*="background: rgba(16,185,129,0.1)"] {
+  background: rgba(209, 250, 229, 0.4) !important;
+  border-left-color: #10b981 !important;
+}
+[data-theme="light"] #studentMonthlyStatsSection p[style*="color:#94a3b8"] {
+  color: #475569 !important;
+}
+/* Select filter bulan statistik */
+[data-theme="light"] #monthlyStatsFilter {
+  background: #fff !important;
+  color: #1e1b4b !important;
+  border: 1px solid rgba(99, 102, 241, 0.25) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   5. ADMIN/GURU CHART SECTION (tab home) — semua area gelap
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] #adminHomeChartSection .card,
+[data-theme="light"] #adminHomeChartSection .chart-card-3d {
+  background: #fff !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+}
+/* Header chart */
+[data-theme="light"] #adminHomeChartSection h4[style*="color:#fff"] {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] #adminHomeChartSection *[style*="border-bottom:1px solid rgba(255,255,255,0.1)"],
+[data-theme="light"] #adminHomeChartSection *[style*="border-bottom: 1px solid rgba(255,255,255,0.1)"] {
+  border-bottom-color: rgba(99, 102, 241, 0.12) !important;
+}
+
+/* Kartu perbandingan bulan H-1 dan H — background gelap */
+[data-theme="light"] #adminHomeChartSection div[style*="background:linear-gradient(145deg, rgba(30,41,59"],
+[data-theme="light"] #adminHomeChartSection div[style*="background: linear-gradient(145deg, rgba(30,41,59"] {
+  background: #f8faff !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08) !important;
+}
+/* Judul BULAN H-1 — color:#a5b4fc */
+[data-theme="light"] #adminHomeChartSection div[style*="color:#a5b4fc"] {
+  color: #3730a3 !important;
+  font-weight: 800 !important;
+}
+/* Judul BULAN H — color:#38bdf8 */
+[data-theme="light"] #adminHomeChartSection div[style*="color:#38bdf8"] {
+  color: #0369a1 !important;
+  font-weight: 800 !important;
+}
+/* Metrics container — background rgba(15,23,42,0.6) */
+[data-theme="light"] #metricsH1[style*="background:rgba(15,23,42,0.6)"],
+[data-theme="light"] #metricsH[style*="background:rgba(15,23,42,0.6)"],
+[data-theme="light"] #adminHomeChartSection div[style*="background:rgba(15,23,42,0.6)"],
+[data-theme="light"] #adminHomeChartSection div[style*="background: rgba(15,23,42,0.6)"],
+[data-theme="light"] #adminHomeChartSection div[style*="background: rgba(15, 23, 42, 0.6)"] {
+  background: rgba(241, 245, 249, 0.9) !important;
+  border: 1px solid rgba(99, 102, 241, 0.1) !important;
+  color: #1e293b !important;
+}
+[data-theme="light"] #metricsH1,
+[data-theme="light"] #metricsH {
+  background: rgba(241, 245, 249, 0.9) !important;
+  color: #1e293b !important;
+}
+[data-theme="light"] #metricsH1 *[style*="color:#cbd5e1"],
+[data-theme="light"] #metricsH *[style*="color:#cbd5e1"] { color: #334155 !important; }
+[data-theme="light"] #metricsH1 *[style*="color:#94a3b8"],
+[data-theme="light"] #metricsH *[style*="color:#94a3b8"] { color: #475569 !important; }
+
+/* Trend badge */
+[data-theme="light"] #trendIndicatorBadge span[style*="color:#34d399"] {
+  color: #065f46 !important; background: rgba(209, 250, 229, 0.8) !important;
+}
+[data-theme="light"] #trendIndicatorBadge span[style*="color:#f87171"] {
+  color: #991b1b !important; background: rgba(254, 226, 226, 0.8) !important;
+}
+[data-theme="light"] #trendIndicatorBadge span[style*="color:#94a3b8"] {
+  color: #475569 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   6. QR SCAN BANNER & SECTION TITLE
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] .qr-scan-banner {
+  background: linear-gradient(90deg, rgba(16,185,129,0.1) 0%, rgba(255,255,255,0.95) 100%) !important;
+  border-color: rgba(5, 150, 105, 0.35) !important;
+}
+[data-theme="light"] .qr-info { color: #065f46 !important; }
+[data-theme="light"] .qr-info h4 { color: #1e1b4b !important; font-weight: 700 !important; }
+[data-theme="light"] .qr-info p { color: #475569 !important; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   7. TAB PERMISSION — teks section title & student permission form
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] #tab-permission .section-title h3 {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] #studentPermissionTitleContainer .section-title h3 {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+}
+
+/* Teks "Tidak ada permohonan..." */
+[data-theme="light"] #guruTabApprovalList p.text-muted,
+[data-theme="light"] #adminApprovalList p.text-muted,
+[data-theme="light"] #permissionListContainer p.text-muted {
+  color: #475569 !important;
+  font-weight: 600 !important;
+}
+[data-theme="light"] #guruTabApprovalList div[style*="color:#34d399"],
+[data-theme="light"] #adminApprovalList div[style*="color:#34d399"] {
+  color: #065f46 !important;
+  background: rgba(209, 250, 229, 0.5) !important;
+  border-color: rgba(5, 150, 105, 0.3) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   8. UNIVERSAL — teks di elemen yang dirender JS dengan warna #555, #111, #000
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] .tab-page *[style*="color:#555"],
+[data-theme="light"] .tab-page *[style*="color: #555"] {
+  color: #334155 !important; font-weight: 600 !important;
+}
+[data-theme="light"] .tab-page *[style*="color:#111"],
+[data-theme="light"] .tab-page *[style*="color: #111"] {
+  color: #0f172a !important; font-weight: 700 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   9. ADMIN HOME — renderAdminDashboard inline (tab beranda guru/admin)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Card chart admin di beranda */
+[data-theme="light"] #tab-home .card[style*="background: rgba(15, 23, 42, 0.7)"],
+[data-theme="light"] #tab-home .card[style*="background:rgba(15,23,42,0.7)"] {
+  background: #fff !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+}
+[data-theme="light"] #tab-home .card[style*="background: rgba(15, 23, 42, 0.7)"] h4,
+[data-theme="light"] #tab-home .card[style*="background:rgba(15,23,42,0.7)"] h4 {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+}
+
+/* Section header di tab home */
+[data-theme="light"] #tab-home .section-title h3 {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+}
+
+/* Nama bulan di header monthly stats section */
+[data-theme="light"] #currentMonthName {
+  color: #3730a3 !important;
+  font-weight: 700 !important;
+}
+
+
+/* ==========================================================================
+   LIGHT MODE — PATCH v6 — Chart kontras: canvas background, container, label
+   ========================================================================== */
+
+/* Canvas chart — background putih bersih agar bar/line terlihat jelas */
+[data-theme="light"] #attendanceChartH1,
+[data-theme="light"] #attendanceChartH,
+[data-theme="light"] #attendanceComparisonBarChart,
+[data-theme="light"] #attendanceChart {
+  background: #ffffff !important;
+  border-radius: 8px;
+}
+
+/* Container canvas — pastikan tidak ada latar gelap di belakang chart */
+[data-theme="light"] #adminHomeChartSection canvas,
+[data-theme="light"] #tab-home canvas {
+  background: #ffffff !important;
+  border-radius: 8px;
+}
+
+/* Kartu perbandingan H-1 vs H — background terang */
+[data-theme="light"] #adminHomeChartSection > .card,
+[data-theme="light"] #adminHomeChartSection .chart-card-3d {
+  background: #fff !important;
+}
+
+/* Grid komparasi dua kartu — pastikan background putih */
+[data-theme="light"] #adminHomeChartSection div[style*="grid-template-columns"] > div {
+  background: #f8faff !important;
+  border: 1px solid rgba(99, 102, 241, 0.18) !important;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.07) !important;
+}
+
+/* Judul kartu BULAN H-1 dan BULAN H — hitam bold */
+[data-theme="light"] #adminHomeChartSection #labelMonthH1,
+[data-theme="light"] #adminHomeChartSection #labelMonthH {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+}
+
+/* Metrics row (span angka hadir/izin/sakit/alpa) */
+[data-theme="light"] #metricsH1,
+[data-theme="light"] #metricsH {
+  background: rgba(241, 245, 249, 0.95) !important;
+  border: 1px solid rgba(99, 102, 241, 0.12) !important;
+  border-radius: 8px;
+}
+[data-theme="light"] #metricsH1 span,
+[data-theme="light"] #metricsH span {
+  color: #1e293b !important;
+  font-weight: 700 !important;
+}
+[data-theme="light"] #metricsH1 strong,
+[data-theme="light"] #metricsH strong {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+}
+
+/* Trend badge — tetap jelas */
+[data-theme="light"] #trendIndicatorBadge .badge {
+  font-weight: 700 !important;
+}
+[data-theme="light"] #trendIndicatorBadge span[style*="background:#10b981"] {
+  background: #059669 !important;
+  color: #fff !important;
+}
+[data-theme="light"] #trendIndicatorBadge span[style*="background:#ef4444"] {
+  background: #dc2626 !important;
+  color: #fff !important;
+}
+
+/* Chart title di atas (h4 "Statistik Kehadiran Real-time...") */
+[data-theme="light"] #adminHomeChartSection h4 {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+}
+
+/* Section chart card header divider */
+[data-theme="light"] #adminHomeChartSection div[style*="border-bottom"] {
+  border-bottom-color: rgba(99, 102, 241, 0.15) !important;
+}
+
+
+/* ==========================================================================
+   LIGHT MODE — PATCH v7 — Fix chart-card-3d, section titles semua tab,
+   chart axis/legend kontras, tab-page app-content background solid
+   ========================================================================== */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   1. APP CONTENT & TAB-PAGE — background solid putih agar teks selalu terlihat
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] .app-content {
+  background: #f1f5f9 !important;
+}
+[data-theme="light"] .tab-page {
+  background: #f1f5f9 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   2. SECTION TITLES — semua tab, putih bold dengan bg kontras
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Section title wrapper — background putih agar teks gelap terbaca */
+[data-theme="light"] .section-title {
+  background: transparent !important;
+}
+
+/* Semua h3 di section-title di semua tab — hitam bold */
+[data-theme="light"] .section-title h3,
+[data-theme="light"] .section-title h2,
+[data-theme="light"] .section-title h4 {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+  text-shadow: none !important;
+}
+
+/* Spesifik per tab untuk specificity lebih tinggi */
+[data-theme="light"] #tab-permission .section-title h3,
+[data-theme="light"] #tab-journal .section-title h3,
+[data-theme="light"] #tab-history .section-title h3,
+[data-theme="light"] #tab-home .section-title h3,
+[data-theme="light"] #tab-admin .section-title h3,
+[data-theme="light"] #tab-profile .section-title h3,
+[data-theme="light"] #guruLogPresensiContainer .section-title h3,
+[data-theme="light"] #studentPermissionTitleContainer .section-title h3,
+[data-theme="light"] #studentPermissionFormCard .section-title h3 {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   3. CHART-CARD-3D — fix background gelap (class selector, bukan inline style)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] .chart-card-3d {
+  background: #ffffff !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08) !important;
+  backdrop-filter: none !important;
+}
+[data-theme="light"] .chart-card-3d:hover {
+  background: #f8faff !important;
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.12) !important;
+  transform: translateY(-1px) !important;
+}
+[data-theme="light"] .chart-card-3d h4 {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   4. CHART BAR CONTAINER — kartu H-1 vs H yang dirender langsung di HTML
+      (tidak pakai class, hanya inline style grid)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Kartu H-1 dan H langsung targetkan via elemen canvas parent */
+[data-theme="light"] #attendanceChartH1,
+[data-theme="light"] #attendanceChartH,
+[data-theme="light"] #attendanceComparisonBarChart {
+  background: #ffffff !important;
+  border-radius: 10px !important;
+}
+
+/* Canvas parent div yang merupakan wrapper chart */
+[data-theme="light"] #adminHomeChartSection div[style*="height:230px"],
+[data-theme="light"] #adminHomeChartSection div[style*="height: 230px"] {
+  background: #ffffff !important;
+  border-radius: 8px !important;
+  padding: 4px !important;
+}
+
+/* Semua div dengan background linear-gradient gelap dalam chart section */
+[data-theme="light"] #adminHomeChartSection div[style*="linear-gradient(145deg"] {
+  background: #f8faff !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Judul BULAN H-1 dan BULAN H (div dengan font-size:0.8rem, font-weight:800) */
+[data-theme="light"] #adminHomeChartSection div[style*="font-weight:800"][style*="text-transform:uppercase"],
+[data-theme="light"] #adminHomeChartSection div[style*="font-weight: 800"][style*="text-transform: uppercase"] {
+  color: #1e1b4b !important;
+}
+[data-theme="light"] #adminHomeChartSection div[style*="color:#a5b4fc"] { color: #3730a3 !important; font-weight: 800 !important; }
+[data-theme="light"] #adminHomeChartSection div[style*="color: #a5b4fc"] { color: #3730a3 !important; font-weight: 800 !important; }
+[data-theme="light"] #adminHomeChartSection div[style*="color:#38bdf8"] { color: #0369a1 !important; font-weight: 800 !important; }
+[data-theme="light"] #adminHomeChartSection div[style*="color: #38bdf8"] { color: #0369a1 !important; font-weight: 800 !important; }
+
+/* Metrics spans teks */
+[data-theme="light"] #metricsH1 span,
+[data-theme="light"] #metricsH span {
+  color: #1e293b !important;
+  font-weight: 700 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   5. TAB PERMISSION — Log, Izin, Status Pengajuan — teks hitam bold
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Judul "Pengajuan Izin / Sakit" */
+[data-theme="light"] #studentPermissionFormCard .section-title h3 {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+}
+/* Card form izin siswa */
+[data-theme="light"] #studentPermissionFormCard .card,
+[data-theme="light"] #studentPermissionFormCard .form-card {
+  background: #ffffff !important;
+}
+
+/* Judul "Status Pengajuan Saya" */
+[data-theme="light"] #studentPermissionTitleContainer h3 {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+}
+
+/* Tombol "Cek Status Pengajuan" — tetap terbaca */
+[data-theme="light"] #studentPermissionTitleContainer .btn-sm,
+[data-theme="light"] #studentPermissionTitleContainer button {
+  background: rgba(67, 56, 202, 0.1) !important;
+  color: #3730a3 !important;
+  border-color: rgba(67, 56, 202, 0.3) !important;
+  font-weight: 700 !important;
+}
+
+/* Badge count "1 Total Presensi Hari Ini" */
+[data-theme="light"] #guruTodayLogCount,
+[data-theme="light"] #todayLogCount {
+  background: rgba(67, 56, 202, 0.12) !important;
+  color: #3730a3 !important;
+  border: 1px solid rgba(67, 56, 202, 0.25) !important;
+  font-weight: 800 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   6. TAB JURNAL — Judul "Jurnal Harian PKL" hitam bold
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] #tab-journal .section-title h3 {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+}
+/* Semua teks di tab jurnal yang dirender dengan warna terang */
+[data-theme="light"] #tab-journal .card h4[style*="color:#fff"],
+[data-theme="light"] #tab-journal .form-card h4[style*="color:#fff"] {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   7. TAB HISTORY (Riwayat) — section title hitam bold
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] #tab-history .section-title h3 {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   8. GLOBAL SECTION TITLE ICON — icon warna tetap indigo/emerald tapi gelap
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] .section-title .text-indigo-400 { color: #4338ca !important; }
+[data-theme="light"] .section-title .text-emerald-400 { color: #059669 !important; }
+[data-theme="light"] .section-title .text-sky-400 { color: #0284c7 !important; }
+[data-theme="light"] .section-title .text-amber-400 { color: #d97706 !important; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   9. BADGE COUNT di section-title — semua tab
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] .section-title .badge-count,
+[data-theme="light"] .section-title + .badge-count,
+[data-theme="light"] .space-between .badge-count {
+  background: rgba(67, 56, 202, 0.1) !important;
+  color: #3730a3 !important;
+  border: 1px solid rgba(67, 56, 202, 0.2) !important;
+  font-weight: 800 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   10. TOMBOL-TOMBOL di section-title area — Refresh, Export, dll
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] .section-title .btn-sm,
+[data-theme="light"] .section-title .btn-outline,
+[data-theme="light"] .space-between .btn-sm {
+  background: rgba(67, 56, 202, 0.08) !important;
+  color: #3730a3 !important;
+  border: 1px solid rgba(67, 56, 202, 0.25) !important;
+  font-weight: 700 !important;
+}
+[data-theme="light"] .section-title .btn-sm i,
+[data-theme="light"] .space-between .btn-sm i {
+  color: inherit !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   11. SECTION TITLE WRAPPER — mb-2 spacing tetap terjaga, pastikan tidak ada
+       background gelap yang menutup teks
+   ══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] .mb-2.section-title,
+[data-theme="light"] .section-title.mb-2,
+[data-theme="light"] .section-title.space-between.mb-2 {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+
+/* ==========================================================================
+   PATCH v8 — Garis tabel & border tombol kontras di mode siang dan malam
+   Aman: semua selector baru, tidak ubah apapun yang sudah ada
+   ========================================================================== */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   A. MODE MALAM (dark, default) — garis putih bold
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Tabel — garis putih bold */
+.data-table th,
+.data-table td {
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.18) !important;
+}
+.data-table thead tr {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3) !important;
+}
+/* Mode malam — table-responsive: border putih, tetap scrollable */
+.table-responsive {
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 10px;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+}
+.data-table {
+  border: none !important;
+}
+
+/* Tombol — border putih bold */
+.btn-primary {
+  border: 2px solid rgba(255, 255, 255, 0.25) !important;
+}
+.btn-secondary {
+  border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
+}
+.btn-success {
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+}
+.btn-sm {
+  border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+}
+.btn-outline {
+  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+}
+.btn-action.primary {
+  border: 2px solid rgba(129, 140, 248, 0.5) !important;
+}
+.btn-action.secondary {
+  border: 2px solid rgba(239, 68, 68, 0.5) !important;
+}
+.btn-danger-outline {
+  border: 1.5px solid rgba(248, 113, 113, 0.6) !important;
+}
+
+/* Sub-tab — border putih bold */
+.sub-tab {
+  border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
+}
+.sub-tab.active {
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Role-tab login — border putih */
+.role-tab {
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+}
+.role-tab.active {
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Bottom nav — border top putih */
+.bottom-nav {
+  border-top: 2px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Admin sub-tabs container */
+.admin-sub-tabs {
+  border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 12px;
+  padding: 4px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   B. MODE SIANG — garis hitam bold, tombol border hitam bold
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Tabel — garis hitam bold */
+[data-theme="light"] .data-table th,
+[data-theme="light"] .data-table td {
+  border-bottom: 1.5px solid rgba(15, 23, 42, 0.2) !important;
+}
+[data-theme="light"] .data-table thead tr {
+  border-bottom: 2px solid rgba(15, 23, 42, 0.35) !important;
+}
+[data-theme="light"] .table-responsive {
+  border: 2px solid rgba(15, 23, 42, 0.2) !important;
+  border-radius: 10px;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+}
+
+/* Garis vertikal antar kolom tabel */
+[data-theme="light"] .data-table th,
+[data-theme="light"] .data-table td {
+  border-right: 1px solid rgba(15, 23, 42, 0.08) !important;
+}
+[data-theme="light"] .data-table th:last-child,
+[data-theme="light"] .data-table td:last-child {
+  border-right: none !important;
+}
+
+/* Tombol utama — border hitam bold */
+[data-theme="light"] .btn-primary {
+  border: 2px solid rgba(67, 56, 202, 0.5) !important;
+}
+[data-theme="light"] .btn-secondary {
+  border: 1.5px solid rgba(15, 23, 42, 0.25) !important;
+}
+[data-theme="light"] .btn-success {
+  border: 2px solid rgba(5, 150, 105, 0.4) !important;
+}
+[data-theme="light"] .btn-sm {
+  border: 1.5px solid rgba(67, 56, 202, 0.3) !important;
+  color: #3730a3 !important;
+  font-weight: 700 !important;
+}
+[data-theme="light"] .btn-outline {
+  border: 1.5px solid rgba(67, 56, 202, 0.45) !important;
+  color: #3730a3 !important;
+}
+[data-theme="light"] .btn-danger-outline {
+  border: 1.5px solid rgba(220, 38, 38, 0.5) !important;
+  color: #991b1b !important;
+}
+
+/* Tombol Absen Masuk/Pulang */
+[data-theme="light"] .btn-action.primary {
+  border: 2px solid rgba(67, 56, 202, 0.45) !important;
+}
+[data-theme="light"] .btn-action.secondary {
+  border: 2px solid rgba(220, 38, 38, 0.4) !important;
+}
+
+/* Sub-tab — border hitam bold */
+[data-theme="light"] .sub-tab {
+  border: 1.5px solid rgba(15, 23, 42, 0.15) !important;
+  color: #374151 !important;
+  font-weight: 700 !important;
+}
+[data-theme="light"] .sub-tab:hover {
+  border-color: rgba(67, 56, 202, 0.35) !important;
+  background: rgba(67, 56, 202, 0.07) !important;
+}
+[data-theme="light"] .sub-tab.active {
+  border: 2px solid rgba(67, 56, 202, 0.6) !important;
+  background: linear-gradient(135deg, #4338ca, #4f46e5) !important;
+  color: #fff !important;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 14px rgba(67, 56, 202, 0.3) !important;
+}
+
+/* Role-tab login */
+[data-theme="light"] .role-tab {
+  border: 1.5px solid rgba(67, 56, 202, 0.3) !important;
+  color: #4338ca !important;
+  font-weight: 700 !important;
+}
+[data-theme="light"] .role-tab.active {
+  border: 2px solid rgba(67, 56, 202, 0.6) !important;
+  color: #fff !important;
+}
+
+/* Admin sub-tabs container */
+[data-theme="light"] .admin-sub-tabs {
+  border: 1.5px solid rgba(67, 56, 202, 0.2) !important;
+  background: rgba(241, 245, 249, 0.8) !important;
+}
+
+/* Bottom nav border hitam */
+[data-theme="light"] .bottom-nav {
+  border-top: 2px solid rgba(15, 23, 42, 0.12) !important;
+  background: rgba(255, 255, 255, 0.97) !important;
+}
+
+/* Modal footer tombol */
+[data-theme="light"] .modal-footer .btn-primary {
+  border: 2px solid rgba(67, 56, 202, 0.5) !important;
+}
+[data-theme="light"] .modal-footer .btn-secondary {
+  border: 1.5px solid rgba(15, 23, 42, 0.25) !important;
+}
+
+/* Inline tombol yang dibuat JS (background warna solid — border putih/hitam menyesuaikan) */
+/* Tombol hijau */
+[data-theme="light"] button[style*="background:#10b981"],
+[data-theme="light"] button[style*="background: #10b981"] {
+  border: 2px solid rgba(5, 150, 105, 0.5) !important;
+  font-weight: 700 !important;
+}
+/* Tombol merah */
+[data-theme="light"] button[style*="background:#ef4444"],
+[data-theme="light"] button[style*="background: #ef4444"] {
+  border: 2px solid rgba(185, 28, 28, 0.5) !important;
+  font-weight: 700 !important;
+}
+/* Tombol abu/slate */
+[data-theme="light"] button[style*="background:#64748b"],
+[data-theme="light"] button[style*="background: #64748b"] {
+  border: 2px solid rgba(51, 65, 85, 0.4) !important;
+  font-weight: 700 !important;
+}
+/* Tombol indigo */
+[data-theme="light"] button[style*="background:#4f46e5"],
+[data-theme="light"] button[style*="background: #4f46e5"] {
+  border: 2px solid rgba(55, 48, 163, 0.5) !important;
+  font-weight: 700 !important;
+}
+
+/* Filter bar admin — select border hitam */
+[data-theme="light"] .tab-page select {
+  border: 1.5px solid rgba(67, 56, 202, 0.35) !important;
+  outline: none !important;
+}
+[data-theme="light"] .tab-page select:focus {
+  border-color: #4338ca !important;
+  box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.12) !important;
+}
+
+
+/* ==========================================================================
+   PATCH v9 — Border kotak kontras: putih bold di malam, hitam bold di siang
+   Semua class container kotak: card, stat-card, modal, profile, history,
+   info-group, monthly-stat-item, chart-card, file-upload-box, dll
+   Aman: semua selector baru, tidak mengubah yang sudah ada
+   ========================================================================== */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MODE MALAM — border putih/terang bold pada semua kotak
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Card utama */
+.card {
+  border: 1.5px solid rgba(255, 255, 255, 0.18) !important;
+}
+.card:hover {
+  border-color: rgba(255, 255, 255, 0.28) !important;
+}
+
+/* Form card */
+.form-card {
+  border: 1.5px solid rgba(255, 255, 255, 0.18) !important;
+}
+
+/* Stat cards */
+.stat-card {
+  border: 1.5px solid rgba(255, 255, 255, 0.18) !important;
+}
+.stat-card.hadir { border-color: rgba(16, 185, 129, 0.4) !important; }
+.stat-card.izin  { border-color: rgba(6, 182, 212, 0.4) !important; }
+.stat-card.sakit { border-color: rgba(245, 158, 11, 0.4) !important; }
+.stat-card.alpa  { border-color: rgba(239, 68, 68, 0.4) !important; }
+
+/* Profile card */
+.profile-card {
+  border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Info group card */
+.info-group-card {
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+}
+.info-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+/* History item */
+.history-item {
+  border: 1.5px solid rgba(255, 255, 255, 0.18) !important;
+}
+
+/* Modal */
+.modal-content {
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+}
+.modal-header {
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Chart card */
+.chart-card-3d {
+  border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Monthly stat item */
+.monthly-stat-item {
+  border: 1.5px solid rgba(255, 255, 255, 0.18) !important;
+}
+
+/* File upload box */
+.file-upload-box {
+  border: 2px dashed rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Apk info card / import card */
+.apk-info-card,
+.import-card {
+  border: 1.5px solid rgba(255, 255, 255, 0.18) !important;
+}
+
+/* Distance info card */
+.distance-info-card {
+  border: 1.5px solid rgba(6, 182, 212, 0.4) !important;
+}
+
+/* QR scan banner */
+.qr-scan-banner {
+  border: 2px dashed rgba(16, 185, 129, 0.45) !important;
+}
+
+/* Live clock card */
+.live-clock-card {
+  border: 1.5px solid rgba(129, 140, 248, 0.45) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MODE SIANG — border hitam/gelap bold pada semua kotak
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Card utama */
+[data-theme="light"] .card {
+  border: 2px solid rgba(15, 23, 42, 0.18) !important;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.08), 0 0 0 0.5px rgba(15, 23, 42, 0.1) !important;
+}
+[data-theme="light"] .card:hover {
+  border-color: rgba(67, 56, 202, 0.35) !important;
+  box-shadow: 0 6px 24px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(67, 56, 202, 0.15) !important;
+}
+
+/* Form card */
+[data-theme="light"] .form-card {
+  border: 2px solid rgba(15, 23, 42, 0.15) !important;
+}
+
+/* Stat cards — border warna sesuai jenis, lebih tegas */
+[data-theme="light"] .stat-card {
+  border: 2px solid rgba(15, 23, 42, 0.15) !important;
+}
+[data-theme="light"] .stat-card.hadir { border-color: rgba(5, 150, 105, 0.45) !important; }
+[data-theme="light"] .stat-card.izin  { border-color: rgba(2, 132, 199, 0.45) !important; }
+[data-theme="light"] .stat-card.sakit { border-color: rgba(217, 119, 6, 0.45) !important; }
+[data-theme="light"] .stat-card.alpa  { border-color: rgba(220, 38, 38, 0.45) !important; }
+
+/* Profile card */
+[data-theme="light"] .profile-card {
+  border: 2px solid rgba(67, 56, 202, 0.25) !important;
+}
+
+/* Info group card */
+[data-theme="light"] .info-group-card {
+  border: 2px solid rgba(15, 23, 42, 0.15) !important;
+}
+[data-theme="light"] .info-item {
+  border-bottom: 1.5px solid rgba(15, 23, 42, 0.1) !important;
+}
+
+/* History item */
+[data-theme="light"] .history-item {
+  border: 2px solid rgba(67, 56, 202, 0.18) !important;
+}
+[data-theme="light"] .history-item:hover {
+  border-color: rgba(67, 56, 202, 0.35) !important;
+}
+
+/* Modal */
+[data-theme="light"] .modal-content {
+  border: 2px solid rgba(15, 23, 42, 0.2) !important;
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.2) !important;
+}
+[data-theme="light"] .modal-header {
+  border-bottom: 2px solid rgba(15, 23, 42, 0.12) !important;
+}
+
+/* Chart card */
+[data-theme="light"] .chart-card-3d {
+  border: 2px solid rgba(67, 56, 202, 0.2) !important;
+}
+
+/* Monthly stat item */
+[data-theme="light"] .monthly-stat-item {
+  border: 2px solid rgba(15, 23, 42, 0.12) !important;
+}
+[data-theme="light"] .monthly-stat-item:hover {
+  border-color: rgba(67, 56, 202, 0.3) !important;
+}
+
+/* File upload box */
+[data-theme="light"] .file-upload-box {
+  border: 2px dashed rgba(67, 56, 202, 0.4) !important;
+  background: rgba(241, 245, 249, 0.8) !important;
+}
+[data-theme="light"] .file-upload-box:hover {
+  border-color: rgba(67, 56, 202, 0.6) !important;
+  background: rgba(224, 231, 255, 0.3) !important;
+}
+
+/* Apk info / import card */
+[data-theme="light"] .apk-info-card,
+[data-theme="light"] .import-card {
+  border: 2px solid rgba(15, 23, 42, 0.15) !important;
+}
+
+/* Distance info card */
+[data-theme="light"] .distance-info-card {
+  border: 2px solid rgba(2, 132, 199, 0.35) !important;
+}
+
+/* QR scan banner */
+[data-theme="light"] .qr-scan-banner {
+  border: 2px dashed rgba(5, 150, 105, 0.5) !important;
+}
+
+/* Live clock card — biarkan gradient biru, border lebih tegas */
+[data-theme="light"] .live-clock-card {
+  border: 2px solid rgba(67, 56, 202, 0.5) !important;
+}
+
+/* Table card wrapper */
+[data-theme="light"] .table-card {
+  border: 2px solid rgba(15, 23, 42, 0.18) !important;
+}
+
+/* Table responsive container */
+[data-theme="light"] .table-responsive {
+  border: 2px solid rgba(15, 23, 42, 0.2) !important;
+  border-radius: 10px !important;
+}
+
+/* Data-table garis sel */
+[data-theme="light"] .data-table {
+  border-collapse: collapse !important;
+}
+[data-theme="light"] .data-table th,
+[data-theme="light"] .data-table td {
+  border-bottom: 1.5px solid rgba(15, 23, 42, 0.15) !important;
+  border-right: 1px solid rgba(15, 23, 42, 0.08) !important;
+}
+[data-theme="light"] .data-table th:last-child,
+[data-theme="light"] .data-table td:last-child {
+  border-right: none !important;
+}
+[data-theme="light"] .data-table thead tr {
+  border-bottom: 2px solid rgba(15, 23, 42, 0.3) !important;
+}
+
+/* Card dengan inline style yang umum (dirender JS) */
+[data-theme="light"] .tab-page .card[style],
+[data-theme="light"] .tab-page .form-card[style] {
+  border-width: 2px !important;
+}
+
+/* Info box / sync kelas / apk info */
+[data-theme="light"] #syncKelasCard {
+  border: 2px solid rgba(67, 56, 202, 0.3) !important;
+}
+[data-theme="light"] #proxmoxInfoCard {
+  border: 2px solid rgba(67, 56, 202, 0.2) !important;
+}
+[data-theme="light"] #quickPrincipalCard {
+  border: 2px solid rgba(67, 56, 202, 0.25) !important;
+}
+
+/* CSV validation result card */
+[data-theme="light"] #csvValidationResultCard {
+  border-left: 4px solid #d97706 !important;
+  border-top: 2px solid rgba(15, 23, 42, 0.12) !important;
+  border-right: 2px solid rgba(15, 23, 42, 0.12) !important;
+  border-bottom: 2px solid rgba(15, 23, 42, 0.12) !important;
+}
+
+/* Reset cards */
+[data-theme="light"] #resetPresensiLogsCard,
+[data-theme="light"] #resetAttendanceStatsCard,
+[data-theme="light"] #resetDatabaseCard,
+[data-theme="light"] #pendingUserApprovalCard,
+[data-theme="light"] #adminApprovalReportHistoryCard,
+[data-theme="light"] #guruApprovalReportCard {
+  border-right: 2px solid rgba(15, 23, 42, 0.12) !important;
+  border-top: 2px solid rgba(15, 23, 42, 0.12) !important;
+  border-bottom: 2px solid rgba(15, 23, 42, 0.12) !important;
+}
+
+/* Card siswa PKL info box di tabel */
+[data-theme="light"] #registeredUsersTable div[style*="border-left:3px solid"] {
+  border-right: 1px solid rgba(15, 23, 42, 0.1) !important;
+  border-top: 1px solid rgba(15, 23, 42, 0.1) !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.1) !important;
+}
+
+
+/* ==========================================================================
+   PATCH v10 — Fix logo login: .app-logo tidak memotong img
+   ========================================================================== */
+
+/* Override CSS .app-logo agar img di dalamnya tidak terpotong */
+.app-logo {
+  width: 68px !important;
+  height: auto !important;
+  min-height: 56px !important;
+  overflow: visible !important;
+  background: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+.app-logo img {
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+  object-fit: contain !important;
+}
+
+/* Mode siang — logo tetap terlihat jelas (filter shadow lebih terang) */
+[data-theme="light"] .app-logo img {
+  filter: drop-shadow(0 2px 8px rgba(67, 56, 202, 0.25)) !important;
+}
+
+/* ==========================================================================
+   PATCH v11 — Toast notification kontras di mode siang
+   ========================================================================== */
+
+/* Mode siang — toast background putih, teks hitam bold, border warna */
+[data-theme="light"] .toast {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 1.5px solid rgba(15, 23, 42, 0.2) !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.15), 0 2px 8px rgba(15, 23, 42, 0.1) !important;
+  font-weight: 600 !important;
+}
+[data-theme="light"] .toast span {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+[data-theme="light"] .toast.success {
+  border-color: rgba(5, 150, 105, 0.5) !important;
+  border-left: 4px solid #059669 !important;
+}
+[data-theme="light"] .toast.success i {
+  color: #059669 !important;
+}
+[data-theme="light"] .toast.error {
+  border-color: rgba(220, 38, 38, 0.5) !important;
+  border-left: 4px solid #dc2626 !important;
+}
+[data-theme="light"] .toast.error i {
+  color: #dc2626 !important;
+}
+[data-theme="light"] .toast.info {
+  border-color: rgba(67, 56, 202, 0.4) !important;
+  border-left: 4px solid #4338ca !important;
+}
+[data-theme="light"] .toast.info i {
+  color: #4338ca !important;
+}
+
+/* Mode malam — pastikan toast tetap terbaca (teks putih) */
+.toast {
+  color: #f8fafc !important;
+}
+.toast.success i { color: #34d399; }
+.toast.error   i { color: #f87171; }
+.toast.info    i { color: #818cf8; }
+
+/* ==========================================================================
+   PATCH v12 — Tombol Absen Monitoring (guru/admin) — full width
+   ========================================================================== */
+
+/* Tombol monitoring lebar penuh, menggantikan 2 tombol masuk+pulang */
+.attendance-actions:has(.full-monitoring-btn) {
+  grid-template-columns: 1fr !important;
+}
+.full-monitoring-btn {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  justify-content: center !important;
+  gap: 14px !important;
+}
+
+/* Mode siang — monitoring button */
+[data-theme="light"] .full-monitoring-btn {
+  background: linear-gradient(180deg,
+    rgba(16, 185, 129, 0.12) 0%,
+    rgba(255, 255, 255, 0.97) 100%) !important;
+  border: 2px solid rgba(5, 150, 105, 0.4) !important;
+}
+[data-theme="light"] .full-monitoring-btn .action-icon {
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #059669 !important;
+}
+[data-theme="light"] .full-monitoring-btn .action-text strong {
+  color: #065f46 !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] .full-monitoring-btn .action-text span {
+  color: #047857 !important;
+  font-weight: 600 !important;
+}
+
+/* ==========================================================================
+   PATCH v13 — Fix tombol monitoring guru/admin: grid 1 kolom lebar penuh
+   ========================================================================== */
+
+/* Override grid saat container hanya punya 1 tombol monitoring */
+#attendanceActionsContainer:has(.full-monitoring-btn) {
+  grid-template-columns: 1fr !important;
+  display: grid !important;
+}
+#attendanceActionsContainer .full-monitoring-btn {
+  width: 100% !important;
+  grid-column: 1 / -1 !important;
+  justify-content: center !important;
+  gap: 14px !important;
+  padding: 18px 20px !important;
+}
+
+/* Mode siang — monitoring button guru/admin */
+[data-theme="light"] #attendanceActionsContainer .full-monitoring-btn {
+  background: linear-gradient(180deg,
+    rgba(16, 185, 129, 0.12) 0%,
+    rgba(255, 255, 255, 0.97) 100%) !important;
+  border: 2px solid rgba(5, 150, 105, 0.45) !important;
+  box-shadow: 0 4px 16px rgba(5, 150, 105, 0.15) !important;
+}
+[data-theme="light"] #attendanceActionsContainer .full-monitoring-btn .action-icon {
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #059669 !important;
+}
+[data-theme="light"] #attendanceActionsContainer .full-monitoring-btn .action-text strong {
+  color: #065f46 !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] #attendanceActionsContainer .full-monitoring-btn .action-text span {
+  color: #047857 !important;
+  font-weight: 600 !important;
+}
+
+/* ==========================================================================
+   PATCH v14 — Chart kontras mode siang: canvas bg putih, teks gelap bold
+   ========================================================================== */
+
+/* Background canvas putih di mode siang */
+[data-theme="light"] #attendanceChartH1,
+[data-theme="light"] #attendanceChartH,
+[data-theme="light"] #attendanceComparisonBarChart,
+[data-theme="light"] #attendanceChart {
+  background: #ffffff !important;
+  border-radius: 8px !important;
+}
+
+/* Container wrapper chart — background putih */
+[data-theme="light"] #adminHomeChartSection canvas {
+  background: #ffffff !important;
+}
+
+/* Chart card admin di beranda — background putih bersih */
+[data-theme="light"] #adminHomeChartSection .card,
+[data-theme="light"] #adminHomeChartSection .chart-card-3d {
+  background: #ffffff !important;
+  border: 2px solid rgba(99, 102, 241, 0.2) !important;
+}
+
+/* Judul chart — hitam bold */
+[data-theme="light"] #adminHomeChartSection h4 {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+  font-size: 0.9rem !important;
+}
+
+/* Wrapper kartu H-1 dan H — putih bersih */
+[data-theme="light"] #adminHomeChartSection div[style*="linear-gradient(145deg"] {
+  background: #f8faff !important;
+  border: 1.5px solid rgba(99, 102, 241, 0.2) !important;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.07) !important;
+}
+
+/* Label judul BULAN H-1 dan BULAN H */
+[data-theme="light"] #adminHomeChartSection div[style*="font-weight:800"][style*="letter-spacing"] {
+  color: #1e1b4b !important;
+}
+[data-theme="light"] #labelMonthH1,
+[data-theme="light"] #labelMonthH {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+}
+
+/* Metrics row */
+[data-theme="light"] #metricsH1,
+[data-theme="light"] #metricsH {
+  background: rgba(241, 245, 249, 0.95) !important;
+  border: 1px solid rgba(99, 102, 241, 0.15) !important;
+  border-radius: 8px !important;
+}
+[data-theme="light"] #metricsH1 span,
+[data-theme="light"] #metricsH span {
+  color: #1e293b !important;
+  font-weight: 700 !important;
+}
+
+/* Trend badge */
+[data-theme="light"] #trendIndicatorBadge .badge,
+[data-theme="light"] #trendIndicatorBadge span {
+  font-weight: 700 !important;
+}
+
+/* Divider header chart */
+[data-theme="light"] #adminHomeChartSection div[style*="border-bottom"] {
+  border-bottom-color: rgba(99, 102, 241, 0.15) !important;
+}
+
+/* ==========================================================================
+   PATCH v15 — Tombol absen dikontrol via CSS body[data-role]
+   Tidak bergantung pada JavaScript timing — langsung dari attribute
+   ========================================================================== */
+
+/* Default: sembunyikan semua tombol absen sampai role diset */
+#attendanceActionsContainer { display: none !important; }
+.attendance-siswa            { display: none !important; }
+.attendance-guru-admin       { display: none !important; }
+
+/* Role siswa: tampilkan masuk+pulang, sembunyikan monitoring */
+body[data-role="siswa"] #attendanceActionsContainer {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+}
+body[data-role="siswa"] .attendance-siswa    { display: flex !important; }
+body[data-role="siswa"] .attendance-guru-admin { display: none !important; }
+
+/* Role guru: tampilkan monitoring penuh, sembunyikan masuk/pulang */
+body[data-role="guru"] #attendanceActionsContainer {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+}
+body[data-role="guru"] .attendance-guru-admin { display: flex !important; }
+body[data-role="guru"] .attendance-siswa      { display: none !important; }
+
+/* Role admin: tampilkan monitoring penuh, sembunyikan masuk/pulang */
+body[data-role="admin"] #attendanceActionsContainer {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+}
+body[data-role="admin"] .attendance-guru-admin { display: flex !important; }
+body[data-role="admin"] .attendance-siswa      { display: none !important; }
+
+/* Styling tombol monitoring saat mode siang */
+[data-theme="light"] body[data-role="guru"] .attendance-guru-admin,
+[data-theme="light"] body[data-role="admin"] .attendance-guru-admin {
+  background: linear-gradient(180deg,
+    rgba(16,185,129,0.12) 0%,
+    rgba(255,255,255,0.97) 100%) !important;
+  border: 2px solid rgba(5,150,105,0.45) !important;
+}
+[data-theme="light"] body[data-role="guru"] .attendance-guru-admin .action-icon,
+[data-theme="light"] body[data-role="admin"] .attendance-guru-admin .action-icon {
+  background: rgba(16,185,129,0.12) !important;
+  color: #059669 !important;
+}
+[data-theme="light"] body[data-role="guru"] .attendance-guru-admin .action-text strong,
+[data-theme="light"] body[data-role="admin"] .attendance-guru-admin .action-text strong {
+  color: #065f46 !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] body[data-role="guru"] .attendance-guru-admin .action-text span,
+[data-theme="light"] body[data-role="admin"] .attendance-guru-admin .action-text span {
+  color: #047857 !important;
+}
+
+/* ==========================================================================
+   PATCH v16 — Chart mode siang: wrapper background putih, teks hitam bold
+   ========================================================================== */
+
+/* Wrapper bar chart komparasi — mode siang: background putih bersih */
+[data-theme="light"] #compBarChartWrapper {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(67, 56, 202, 0.2) !important;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.07) !important;
+}
+/* Judul chart — mode siang: hitam bold */
+[data-theme="light"] #compBarChartTitle {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+  font-size: 0.82rem !important;
+}
+
+/* Dua kartu doughnut (H-1 dan H) — override background gelap */
+[data-theme="light"] #adminHomeChartSection div[style*="linear-gradient(145deg"] {
+  background: #f8faff !important;
+  border: 1.5px solid rgba(99, 102, 241, 0.2) !important;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.07) !important;
+}
+
+/* Judul BULAN H-1 dan BULAN H dalam kartu */
+[data-theme="light"] #adminHomeChartSection div[style*="color:#a5b4fc"],
+[data-theme="light"] #adminHomeChartSection div[style*="color: #a5b4fc"] {
+  color: #3730a3 !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] #adminHomeChartSection div[style*="color:#38bdf8"],
+[data-theme="light"] #adminHomeChartSection div[style*="color: #38bdf8"] {
+  color: #0369a1 !important;
+  font-weight: 800 !important;
+}
+
+/* Metrics row background gelap */
+[data-theme="light"] #metricsH1,
+[data-theme="light"] #metricsH {
+  background: rgba(241, 245, 249, 0.95) !important;
+  border: 1px solid rgba(99, 102, 241, 0.12) !important;
+  color: #1e293b !important;
+}
+[data-theme="light"] #metricsH1 span,
+[data-theme="light"] #metricsH span {
+  color: #1e293b !important;
+  font-weight: 700 !important;
+}
+
+/* Canvas chart — background putih transparan agar terlihat */
+[data-theme="light"] #attendanceComparisonBarChart {
+  background: transparent !important;
+}
+[data-theme="light"] #attendanceChartH1,
+[data-theme="light"] #attendanceChartH {
+  background: transparent !important;
+}
+
+/* Outer card chart-card-3d — putih bersih */
+[data-theme="light"] #adminHomeChartSection .chart-card-3d {
+  background: #ffffff !important;
+  border: 2px solid rgba(99, 102, 241, 0.15) !important;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08) !important;
+  backdrop-filter: none !important;
+}
+[data-theme="light"] #adminHomeChartSection .chart-card-3d h4,
+[data-theme="light"] #adminHomeChartSection .chart-card-3d > div > h4 {
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+}
+
+/* Section title chart */
+[data-theme="light"] #adminHomeChartSection h4[style*="color:#fff"] {
+  color: #1e1b4b !important;
+}
+[data-theme="light"] #adminHomeChartSection div[style*="border-bottom:1px solid rgba(255,255,255"] {
+  border-bottom-color: rgba(99, 102, 241, 0.15) !important;
+}
+
+/* ==========================================================================
+   PATCH v17 — Tabel: header kolom tidak wrap, 1 baris
+   ========================================================================== */
+
+.data-table th {
+  white-space: nowrap !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Kolom jam — lebar tetap agar tidak wrap */
+.data-table th:nth-child(4),
+.data-table th:nth-child(5) {
+  min-width: 68px !important;
+  width: 68px !important;
+}
+
+/* Kolom tanggal */
+.data-table th:nth-child(3) {
+  min-width: 80px !important;
+  width: 80px !important;
+}
+
+/* Mode siang — th tetap tidak wrap */
+[data-theme="light"] .data-table th {
+  white-space: nowrap !important;
+}

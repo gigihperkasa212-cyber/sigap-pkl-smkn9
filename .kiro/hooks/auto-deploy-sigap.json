@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Auto Deploy + Build APK SIGAP PKL",
+      "trigger": "PostFileSave",
+      "description": "Upload file ke server, push ke container web, lalu trigger build APK otomatis di background",
+      "matcher": "(app\\.js|index\\.html|api\\.php)$",
+      "action": {
+        "type": "command",
+        "command": "powershell.exe -ExecutionPolicy Bypass -NoProfile -Command \"$key='$env:USERPROFILE\\.ssh\\sigap_pkl_key'; $srv='root@103.153.190.69'; $scp='C:\\Windows\\System32\\OpenSSH\\scp.exe'; $ssh='C:\\Windows\\System32\\OpenSSH\\ssh.exe'; $f=$env:KIRO_FILE_PATH; if(-not $f){exit 0}; $name=Split-Path $f -Leaf; $opt=@('-o','StrictHostKeyChecking=no','-o','ConnectTimeout=10','-i',$key); $ok=$false; if($name -eq 'app.js'){$r=& $scp @opt $f \\\"${srv}:/opt/sigap-build/js/app.js\\\"; $ok=$true}elseif($name -eq 'index.html'){$r=& $scp @opt $f \\\"${srv}:/opt/sigap-build/index.html\\\"; $ok=$true}elseif($name -eq 'api.php'){$r=& $scp @opt $f \\\"${srv}:/opt/sigap-build/api.php\\\"; $ok=$true}; if(-not $ok){exit 0}; & $ssh @opt $srv 'bash /opt/sigap-build/deploy_and_build.sh' 2>&1\""
+      }
+    }
+  ]
+}

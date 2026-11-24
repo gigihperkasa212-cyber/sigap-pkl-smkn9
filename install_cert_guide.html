@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Install Certificate SIGAP</title>
+<style>
+body{background:#0f172a;color:#e2e8f0;font-family:sans-serif;padding:16px;max-width:480px;margin:0 auto;}
+h2{color:#6366f1;font-size:1.1rem;}
+.step{background:#1e293b;border-radius:10px;padding:14px;margin:10px 0;border-left:3px solid #6366f1;}
+.step h3{color:#94a3b8;font-size:0.85rem;margin:0 0 6px;text-transform:uppercase;}
+.step p{margin:4px 0;font-size:0.9rem;line-height:1.5;}
+.btn{display:block;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;text-decoration:none;padding:12px;border-radius:8px;text-align:center;font-weight:600;margin:16px 0;}
+.warn{background:rgba(245,158,11,0.1);border:1px solid #f59e0b;border-radius:8px;padding:10px;font-size:0.85rem;color:#fbbf24;}
+.ok{color:#34d399;}
+</style>
+</head>
+<body>
+<h2>📜 Install Certificate SSL SIGAP</h2>
+<p style="font-size:0.85rem;color:#94a3b8;">Diperlukan agar APK dan browser dapat berkomunikasi dengan server SIGAP secara aman.</p>
+
+<div class="warn">
+⚠️ Lakukan sekali saja per device. Setelah install, semua fitur sync akan berjalan normal.
+</div>
+
+<a href="/sigap_cert.crt" class="btn" download="sigap_cert.crt">
+  ⬇️ Download Certificate SIGAP
+</a>
+
+<div class="step">
+  <h3>Langkah 1 — Download</h3>
+  <p>Tap tombol di atas untuk download file <strong>sigap_cert.crt</strong></p>
+</div>
+
+<div class="step">
+  <h3>Langkah 2 — Install di Android</h3>
+  <p>1. Buka <strong>Pengaturan</strong> HP</p>
+  <p>2. Cari <strong>"Keamanan"</strong> atau <strong>"Security"</strong></p>
+  <p>3. Pilih <strong>"Enkripsi & Kredensial"</strong> atau <strong>"Credential Storage"</strong></p>
+  <p>4. Pilih <strong>"Install Certificate"</strong> → <strong>"CA Certificate"</strong></p>
+  <p>5. Pilih file <strong>sigap_cert.crt</strong> yang sudah didownload</p>
+  <p>6. Konfirmasi dengan PIN/password HP</p>
+</div>
+
+<div class="step">
+  <h3>Langkah 3 — Install di Browser Chrome (PC)</h3>
+  <p>1. Buka Chrome → Settings → Privacy and Security</p>
+  <p>2. <strong>Security</strong> → <strong>Manage Certificates</strong></p>
+  <p>3. Tab <strong>Trusted Root Certification Authorities</strong> → Import</p>
+  <p>4. Pilih file <strong>sigap_cert.crt</strong></p>
+  <p>5. Restart Chrome</p>
+</div>
+
+<div class="step">
+  <h3>Alternatif: Accept di Browser</h3>
+  <p>Buka <a href="https://103.153.190.69:8443" style="color:#6366f1;">https://103.153.190.69:8443</a> di browser</p>
+  <p>Klik <strong>"Advanced"</strong> → <strong>"Proceed to site (unsafe)"</strong></p>
+  <p class="ok">✅ Browser akan accept certificate untuk sesi ini</p>
+</div>
+
+<script>
+// Auto redirect ke app setelah 30 detik
+setTimeout(function(){ window.location.href='/'; }, 30000);
+</script>
+</body>
+</html>

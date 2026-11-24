@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Auto Build APK SIGAP PKL",
+      "trigger": "PostFileSave",
+      "description": "Otomatis trigger build APK di server setiap kali build.gradle disimpan",
+      "matcher": "build\\.gradle$",
+      "action": {
+        "type": "command",
+        "command": "powershell.exe -ExecutionPolicy Bypass -NoProfile -Command \"$key='$env:USERPROFILE\\.ssh\\sigap_pkl_key'; $scp='C:\\Windows\\System32\\OpenSSH\\scp.exe'; $ssh='C:\\Windows\\System32\\OpenSSH\\ssh.exe'; $srv='root@103.153.190.69'; $f=$env:KIRO_FILE_PATH; if(-not $f){exit 0}; & $scp -o StrictHostKeyChecking=no -i $key $f ${srv}:/opt/sigap-build/android/app/build.gradle 2>&1; & $ssh -o StrictHostKeyChecking=no -o ConnectTimeout=120 -o ServerAliveInterval=20 -i $key $srv 'bash /tmp/server_build.sh > /tmp/build_log.txt 2>&1 &' 2>&1; Write-Host 'APK build dimulai di server background'\""
+      }
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+apply plugin: 'com.android.application'
+
+// Baca signing config dari github.properties (lokal, tidak di-commit)
+// Jika tidak ada (GitHub Actions), baca dari environment variable (GitHub Secrets)
+def signingProps = new Properties()
+def signingPropsFile = rootProject.file('github.properties')
+if (signingPropsFile.exists()) {
+    signingProps.load(new FileInputStream(signingPropsFile))
+}
+
+android {
+    namespace = "com.smkn9.sigappkl"
+    compileSdk = rootProject.ext.compileSdkVersion
+    defaultConfig {
+        applicationId "com.smkn9.sigappkl"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 208
+        versionName "2.2.8"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        aaptOptions {
+            ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+        }
+    }
+    signingConfigs {
+        release {
+            storeFile file(signingProps['storeFile'] ?: '../release.keystore')
+            storePassword signingProps['storePassword'] ?: System.getenv('KEYSTORE_PASSWORD') ?: ''
+            keyAlias     signingProps['keyAlias']       ?: System.getenv('KEY_ALIAS')          ?: 'sigap_key'
+            keyPassword  signingProps['keyPassword']    ?: System.getenv('KEY_PASSWORD')        ?: ''
+            // APK Signature Scheme: v1 + v2 + v3
+            enableV1Signing true
+            enableV2Signing true
+            enableV3Signing true
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+repositories {
+    flatDir{
+        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
+    implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
+    implementation project(':capacitor-android')
+    // OkHttp untuk SSL bypass pada request ke server self-signed
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+    implementation project(':capacitor-cordova-android-plugins')
+}
+
+apply from: 'capacitor.build.gradle'
+
+try {
+    def servicesJSON = file('google-services.json')
+    if (servicesJSON.text) {
+        apply plugin: 'com.google.gms.google-services'
+    }
+} catch(Exception e) {
+    logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
+}

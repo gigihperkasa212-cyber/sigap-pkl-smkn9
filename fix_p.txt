@@ -1,0 +1,29 @@
+=== Restore user pending ke aktif=1 ===
+rows_updated
+0
+username	name	role	status	aktif
+admin	Master Administrator	admin	approved	1
+888	guru2	guru	approved	0
+999	guru1	guru	approved	0
+guru8	suga	guru	approved	1
+guru9	agus	guru	approved	1
+1010101	saya8	siswa	pending	1
+siswa1	budi	siswa	approved	0
+siswa2	opseh	siswa	approved	0
+siswa8	etik	siswa	approved	1
+siswa9	kite	siswa	approved	1
+siswa99	sopoaku	siswa	approved	1
+
+=== Push api.php baru ===
+PUSH_DONE
+  <script src="js/app.js?v=1.7.7"></script>
+
+=== Verifikasi API setelah fix ===
+Total: 7
+ - guru9 | guru | approved
+ - guru8 | guru | approved
+ - siswa8 | siswa | approved
+ - siswa9 | siswa | approved
+ - siswa99 | siswa | approved
+ - 1010101 | siswa | pending
+ - admin | admin | approved
