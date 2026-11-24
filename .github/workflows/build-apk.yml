@@ -127,12 +127,20 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           cd android
+          # Debug: tampilkan info environment
+          echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
+          echo "KEYSTORE_PATH: $KEYSTORE_PATH"
+          ls -la "$KEYSTORE_PATH" 2>/dev/null || echo "KEYSTORE tidak ada di $KEYSTORE_PATH"
+          ls -la release.keystore 2>/dev/null || echo "release.keystore tidak ada di android/"
+          echo "--- Gradle version ---"
+          ./gradlew --version
+          echo "--- Build ---"
           ./gradlew assembleRelease \
-            -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/android/release.keystore \
+            -Pandroid.injected.signing.store.file=$KEYSTORE_PATH \
             -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD \
             -Pandroid.injected.signing.key.alias=$KEY_ALIAS \
             -Pandroid.injected.signing.key.password=$KEY_PASSWORD \
-            --no-daemon --stacktrace
+            --no-daemon --info 2>&1 | tail -100
           echo "✅ Build selesai"
 
       # ── 9. Rename APK ────────────────────────────────────────────
