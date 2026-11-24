@@ -8,6 +8,11 @@ if (signingPropsFile.exists()) {
     signingProps.load(new FileInputStream(signingPropsFile))
 }
 
+// Tentukan path keystore: CI pakai path absolut dari env, lokal pakai relative
+def keystorePath = System.getenv('KEYSTORE_PATH') ?:
+    (signingProps['storeFile'] ? rootProject.file(signingProps['storeFile']).absolutePath : null) ?:
+    new File(rootProject.projectDir, 'release.keystore').absolutePath
+
 android {
     namespace = "com.smkn9.sigappkl"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -24,11 +29,10 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file(signingProps['storeFile'] ?: '../release.keystore')
+            storeFile file(keystorePath)
             storePassword signingProps['storePassword'] ?: System.getenv('KEYSTORE_PASSWORD') ?: ''
             keyAlias     signingProps['keyAlias']       ?: System.getenv('KEY_ALIAS')          ?: 'sigap_key'
             keyPassword  signingProps['keyPassword']    ?: System.getenv('KEY_PASSWORD')        ?: ''
-            // APK Signature Scheme: v1 + v2 + v3
             enableV1Signing true
             enableV2Signing true
             enableV3Signing true

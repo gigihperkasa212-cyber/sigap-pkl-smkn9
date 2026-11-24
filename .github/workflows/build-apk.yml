@@ -77,15 +77,16 @@ jobs:
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
         run: |
-          echo "$KEYSTORE_BASE64" | base64 --decode > android/release.keystore
-          # Verifikasi ukuran keystore (harus > 1KB)
-          SIZE=$(wc -c < android/release.keystore)
+          KEYSTORE_FILE="$GITHUB_WORKSPACE/android/release.keystore"
+          echo "$KEYSTORE_BASE64" | base64 --decode > "$KEYSTORE_FILE"
+          SIZE=$(wc -c < "$KEYSTORE_FILE")
           echo "Keystore size: $SIZE bytes"
           if [ "$SIZE" -lt 100 ]; then
-            echo "ERROR: Keystore terlalu kecil ($SIZE bytes) — KEYSTORE_BASE64 mungkin salah"
+            echo "ERROR: Keystore terlalu kecil — KEYSTORE_BASE64 mungkin salah"
             exit 1
           fi
           echo "✅ Keystore decoded OK ($SIZE bytes)"
+          echo "KEYSTORE_PATH=$KEYSTORE_FILE" >> $GITHUB_ENV
 
       # ── 7. Auto bump versionCode berdasarkan run number ──────────
       - name: Auto bump version
