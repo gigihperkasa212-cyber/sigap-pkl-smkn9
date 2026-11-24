@@ -6,7 +6,6 @@ android/app/build/
 android/.gradle/
 android/.idea/
 android/.kotlin/
-android/capacitor-cordova-android-plugins/
 
 # ── Keystore (JANGAN pernah commit!) ──────────────
 android/release.keystore
