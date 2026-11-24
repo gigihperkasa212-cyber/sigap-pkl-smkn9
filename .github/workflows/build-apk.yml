@@ -149,17 +149,26 @@ jobs:
             -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD \
             -Pandroid.injected.signing.key.alias=$KEY_ALIAS \
             -Pandroid.injected.signing.key.password=$KEY_PASSWORD \
-            --no-daemon --info 2>&1 | tail -100
+            --no-daemon
           echo "✅ Build selesai"
 
       # ── 9. Rename APK ────────────────────────────────────────────
       - name: Rename APK
         run: |
           VER=${{ steps.version.outputs.version_name }}
-          SRC=$(find android/app/build/outputs/apk/release/ -name "*.apk" | head -1)
+          echo "Mencari APK..."
+          find android/ -name "*.apk" 2>/dev/null | head -10 || echo "Tidak ada APK"
+          # Cari di release dulu, lalu semua lokasi
+          SRC=$(find android/app/build/outputs/apk/release/ -name "*.apk" 2>/dev/null | head -1)
           if [ -z "$SRC" ]; then
-            echo "ERROR: APK tidak ditemukan di output folder!"
-            find android/app/build/outputs/ -name "*.apk" 2>/dev/null || echo "Tidak ada APK sama sekali"
+            SRC=$(find android/ -name "*.apk" -not -path "*/debug/*" 2>/dev/null | head -1)
+          fi
+          if [ -z "$SRC" ]; then
+            SRC=$(find android/ -name "*.apk" 2>/dev/null | head -1)
+          fi
+          if [ -z "$SRC" ]; then
+            echo "ERROR: APK tidak ditemukan!"
+            find android/app/build/ -type f 2>/dev/null | head -20 || echo "Folder build kosong"
             exit 1
           fi
           DST="SIGAP-PKL-K9-v${VER}.apk"
