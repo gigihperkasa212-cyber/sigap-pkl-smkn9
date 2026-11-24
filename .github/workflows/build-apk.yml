@@ -49,11 +49,11 @@ jobs:
           fi
           echo "✅ Semua secrets tersedia"
 
-      # ── 3. Setup JDK 17 ──────────────────────────────────────────
-      - name: Setup JDK 17
+      # ── 3. Setup JDK 21 ──────────────────────────────────────────
+      - name: Setup JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
           cache: gradle
 
@@ -64,6 +64,7 @@ jobs:
           yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null 2>&1 || true
           $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \
             "platform-tools" \
+            "platforms;android-35" \
             "platforms;android-36" \
             "build-tools;35.0.0" > /dev/null 2>&1
           echo "✅ Android SDK siap"
@@ -137,6 +138,8 @@ jobs:
         run: |
           cd android
           # Debug: tampilkan info environment
+          echo "JAVA_HOME: $JAVA_HOME"
+          java -version
           echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
           echo "KEYSTORE_PATH: $KEYSTORE_PATH"
           ls -la "$KEYSTORE_PATH" 2>/dev/null || echo "KEYSTORE tidak ada di $KEYSTORE_PATH"
@@ -145,12 +148,16 @@ jobs:
           ./gradlew --version
           echo "--- Build ---"
           ./gradlew assembleRelease \
-            -Pandroid.injected.signing.store.file=$KEYSTORE_PATH \
-            -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD \
-            -Pandroid.injected.signing.key.alias=$KEY_ALIAS \
-            -Pandroid.injected.signing.key.password=$KEY_PASSWORD \
-            --no-daemon
-          echo "✅ Build selesai"
+            -Pandroid.injected.signing.store.file="$KEYSTORE_PATH" \
+            -Pandroid.injected.signing.store.password="$KEYSTORE_PASSWORD" \
+            -Pandroid.injected.signing.key.alias="$KEY_ALIAS" \
+            -Pandroid.injected.signing.key.password="$KEY_PASSWORD" \
+            --no-daemon \
+            --stacktrace \
+            2>&1 | grep -E "(FAILURE|ERROR|error:|warning:|> Task|BUILD|Exception|Cannot|Could not|at com\.|Caused by)" | head -80
+          EXIT_CODE=${PIPESTATUS[0]}
+          echo "Gradle exit code: $EXIT_CODE"
+          exit $EXIT_CODE
 
       # ── 9. Rename APK ────────────────────────────────────────────
       - name: Rename APK
