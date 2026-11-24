@@ -1,6 +1,7 @@
 package com.smkn9.sigappkl;
 
 import android.content.Context;
+import android.content.IntentSender;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.print.PrintAttributes;
@@ -13,6 +14,14 @@ import android.util.Log;
 
 import com.getcapacitor.BridgeActivity;
 import com.getcapacitor.Bridge;
+
+// Google Play In-App Updates
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
+import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -34,6 +43,10 @@ import okhttp3.Response;
 
 public class MainActivity extends BridgeActivity {
 
+    private static final String TAG = "SIGAP";
+    private static final int IN_APP_UPDATE_REQUEST_CODE = 100;
+    private AppUpdateManager appUpdateManager;
+
     private static SSLSocketFactory trustAllSocketFactory = null;
     private static X509TrustManager trustAllManager = null;
     private static OkHttpClient sigapHttpClient = null;
@@ -42,7 +55,96 @@ public class MainActivity extends BridgeActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initTrustAllSSL();
+        // Cek update dari Google Play setiap kali app dibuka
+        checkForAppUpdate();
     }
+
+    // ══════════════════════════════════════════════════════════════
+    // IN-APP UPDATE — Notifikasi update otomatis dari Google Play
+    // FLEXIBLE: update berjalan di background, notifikasi muncul
+    // IMMEDIATE: update wajib, fullscreen, tidak bisa skip
+    // ══════════════════════════════════════════════════════════════
+    private void checkForAppUpdate() {
+        appUpdateManager = AppUpdateManagerFactory.create(this);
+        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+
+        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+            int availability = appUpdateInfo.updateAvailability();
+            Log.i(TAG, "Update availability: " + availability);
+
+            if (availability == UpdateAvailability.UPDATE_AVAILABLE) {
+                // Prioritas update: IMMEDIATE untuk update kritis (high priority >= 4)
+                // FLEXIBLE untuk update biasa
+                int priority = appUpdateInfo.updatePriority();
+                Log.i(TAG, "Update tersedia! Priority: " + priority);
+
+                if (priority >= 4 && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                    // Update WAJIB — pengguna tidak bisa pakai app sebelum update
+                    try {
+                        appUpdateManager.startUpdateFlowForResult(
+                            appUpdateInfo,
+                            AppUpdateType.IMMEDIATE,
+                            this,
+                            IN_APP_UPDATE_REQUEST_CODE
+                        );
+                    } catch (IntentSender.SendIntentException e) {
+                        Log.e(TAG, "IMMEDIATE update error: " + e.getMessage());
+                    }
+                } else if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+                    // Update OPSIONAL — popup muncul, pengguna bisa update sambil pakai app
+                    try {
+                        appUpdateManager.startUpdateFlowForResult(
+                            appUpdateInfo,
+                            AppUpdateType.FLEXIBLE,
+                            this,
+                            IN_APP_UPDATE_REQUEST_CODE
+                        );
+                    } catch (IntentSender.SendIntentException e) {
+                        Log.e(TAG, "FLEXIBLE update error: " + e.getMessage());
+                    }
+                }
+            } else if (availability == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                // Ada update IMMEDIATE yang sedang berjalan — lanjutkan
+                try {
+                    appUpdateManager.startUpdateFlowForResult(
+                        appUpdateInfo,
+                        AppUpdateType.IMMEDIATE,
+                        this,
+                        IN_APP_UPDATE_REQUEST_CODE
+                    );
+                } catch (IntentSender.SendIntentException e) {
+                    Log.e(TAG, "Resume update error: " + e.getMessage());
+                }
+            }
+        }).addOnFailureListener(e -> {
+            // Tidak ada Google Play (misalnya emulator/debug) — abaikan
+            Log.w(TAG, "In-app update check gagal (mungkin tidak ada Play Store): " + e.getMessage());
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, android.content.Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == IN_APP_UPDATE_REQUEST_CODE) {
+            if (resultCode != RESULT_OK) {
+                Log.w(TAG, "Update dibatalkan atau gagal, resultCode: " + resultCode);
+                // Jika IMMEDIATE update ditolak, coba lagi
+                if (appUpdateManager != null) {
+                    appUpdateManager.getAppUpdateInfo().addOnSuccessListener(info -> {
+                        if (info.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                            try {
+                                appUpdateManager.startUpdateFlowForResult(
+                                    info, AppUpdateType.IMMEDIATE, this, IN_APP_UPDATE_REQUEST_CODE);
+                            } catch (IntentSender.SendIntentException e) {
+                                Log.e(TAG, "Resume IMMEDIATE error: " + e.getMessage());
+                            }
+                        }
+                    });
+                }
+            }
+        }
+    }
+    // ══════════════════════════════════════════════════════════════
 
     private static void initTrustAllSSL() {
         try {
