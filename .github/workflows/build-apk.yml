@@ -149,17 +149,13 @@ jobs:
           echo "--- Gradle version ---"
           ./gradlew --version
           echo "--- Build ---"
-          ./gradlew assembleRelease \
+          ./gradlew assembleRelease bundleRelease \
             -Pandroid.injected.signing.store.file="$KEYSTORE_PATH" \
             -Pandroid.injected.signing.store.password="$KEYSTORE_PASSWORD" \
             -Pandroid.injected.signing.key.alias="$KEY_ALIAS" \
             -Pandroid.injected.signing.key.password="$KEY_PASSWORD" \
-            --no-daemon \
-            --stacktrace \
-            2>&1 | grep -E "(FAILURE|ERROR|error:|warning:|> Task|BUILD|Exception|Cannot|Could not|at com\.|Caused by)" | head -80
-          EXIT_CODE=${PIPESTATUS[0]}
-          echo "Gradle exit code: $EXIT_CODE"
-          exit $EXIT_CODE
+            --no-daemon
+          echo "✅ Build selesai"
 
       # ── 9. Export signing certificate (.pem) untuk Play Console ─
       - name: Export signing certificate
@@ -171,37 +167,37 @@ jobs:
             -file sigap_cert.pem
           echo "✅ Certificate exported"
 
-      # ── 10. Rename APK ───────────────────────────────────────────
-      - name: Rename APK
+      # ── 10. Rename APK & AAB ─────────────────────────────────────
+      - name: Rename APK and AAB
         run: |
           VER=${{ steps.version.outputs.version_name }}
-          echo "Mencari APK..."
-          find android/ -name "*.apk" 2>/dev/null | head -10 || echo "Tidak ada APK"
-          # Cari di release dulu, lalu semua lokasi
-          SRC=$(find android/app/build/outputs/apk/release/ -name "*.apk" 2>/dev/null | head -1)
-          if [ -z "$SRC" ]; then
-            SRC=$(find android/ -name "*.apk" -not -path "*/debug/*" 2>/dev/null | head -1)
+          # Rename APK
+          SRC_APK=$(find android/app/build/outputs/apk/release/ -name "*.apk" 2>/dev/null | head -1)
+          if [ -n "$SRC_APK" ]; then
+            cp "$SRC_APK" "SIGAP-PKL-K9-v${VER}.apk"
+            echo "✅ APK: SIGAP-PKL-K9-v${VER}.apk"
           fi
-          if [ -z "$SRC" ]; then
-            SRC=$(find android/ -name "*.apk" 2>/dev/null | head -1)
+          # Rename AAB
+          SRC_AAB=$(find android/app/build/outputs/bundle/release/ -name "*.aab" 2>/dev/null | head -1)
+          if [ -n "$SRC_AAB" ]; then
+            cp "$SRC_AAB" "SIGAP-PKL-K9-v${VER}.aab"
+            echo "✅ AAB: SIGAP-PKL-K9-v${VER}.aab"
           fi
-          if [ -z "$SRC" ]; then
-            echo "ERROR: APK tidak ditemukan!"
-            find android/app/build/ -type f 2>/dev/null | head -20 || echo "Folder build kosong"
-            exit 1
-          fi
-          DST="SIGAP-PKL-K9-v${VER}.apk"
-          cp "$SRC" "$DST"
-          SIZE=$(du -h $DST | cut -f1)
-          echo "✅ APK: $DST ($SIZE)"
-          echo "apk_name=$DST" >> $GITHUB_ENV
 
       # ── 11. Upload APK sebagai artifact ─────────────────────────
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: SIGAP-PKL-K9-v${{ steps.version.outputs.version_name }}
+          name: SIGAP-PKL-K9-v${{ steps.version.outputs.version_name }}-APK
           path: SIGAP-PKL-K9-v${{ steps.version.outputs.version_name }}.apk
+          retention-days: 30
+
+      # ── 12. Upload AAB sebagai artifact ──────────────────────────
+      - name: Upload AAB Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SIGAP-PKL-K9-v${{ steps.version.outputs.version_name }}-AAB
+          path: SIGAP-PKL-K9-v${{ steps.version.outputs.version_name }}.aab
           retention-days: 30
 
       # ── 12. Upload certificate sebagai artifact ──────────────────
@@ -232,7 +228,9 @@ jobs:
             ---
             > versionCode: ${{ steps.version.outputs.version_code }}
             > Build: ${{ github.sha }}
-          files: SIGAP-PKL-K9-v${{ steps.version.outputs.version_name }}.apk
+          files: |
+            SIGAP-PKL-K9-v${{ steps.version.outputs.version_name }}.apk
+            SIGAP-PKL-K9-v${{ steps.version.outputs.version_name }}.aab
           draft: false
           prerelease: false
         env:
