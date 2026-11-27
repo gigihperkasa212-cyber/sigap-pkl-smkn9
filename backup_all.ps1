@@ -27,11 +27,15 @@ Write-Host "[1/5] Folder backup: $BDIR" -ForegroundColor Yellow
 # ── 1. Backup web root CT-102 ────────────────────────────
 Write-Host ""
 Write-Host "[2/5] Backup web root CT-102..." -ForegroundColor Yellow
-$webCmd = "pct exec 102 -- bash -c 'tar -czf /tmp/sigap-webroot-$DATE.tar.gz /var/www/html/SIGAP-SMKN9-Official 2>/dev/null && echo OK'"
-& $SSH @OPT $SRV $webCmd
-& $SCP @OPT "${SRV}:/tmp/sigap-webroot-${DATE}.tar.gz" "$BDIR\sigap-webroot-${DATE}.tar.gz"
-if (Test-Path "$BDIR\sigap-webroot-${DATE}.tar.gz") {
-    $size = (Get-Item "$BDIR\sigap-webroot-${DATE}.tar.gz").Length / 1MB
+$remoteWebFile = "/tmp/sigap-webroot-$DATE.tar.gz"
+$localWebFile  = "$BDIR\sigap-webroot-$DATE.tar.gz"
+# Tulis perintah ke file sementara lalu kirim via SSH
+$webScript = "pct exec 102 -- tar -czf $remoteWebFile /var/www/html/SIGAP-SMKN9-Official 2>/dev/null && echo OK_WEB"
+$result = & $SSH @OPT $SRV $webScript
+Write-Host "   Server: $result"
+& $SCP @OPT "${SRV}:${remoteWebFile}" $localWebFile 2>&1 | Out-Null
+if (Test-Path $localWebFile) {
+    $size = (Get-Item $localWebFile).Length / 1MB
     Write-Host "   ✅ Web root backup OK ($([math]::Round($size,1)) MB)" -ForegroundColor Green
 } else {
     Write-Host "   ❌ Web root backup GAGAL" -ForegroundColor Red
@@ -40,11 +44,14 @@ if (Test-Path "$BDIR\sigap-webroot-${DATE}.tar.gz") {
 # ── 2. Backup database ───────────────────────────────────
 Write-Host ""
 Write-Host "[3/5] Backup database MySQL..." -ForegroundColor Yellow
-$dbCmd = "pct exec 102 -- bash -c 'mysqldump -u root sigap_pkl > /tmp/sigap-db-$DATE.sql 2>/dev/null && echo OK'"
-& $SSH @OPT $SRV $dbCmd
-& $SCP @OPT "${SRV}:/tmp/sigap-db-${DATE}.sql" "$BDIR\sigap-db-${DATE}.sql"
-if (Test-Path "$BDIR\sigap-db-${DATE}.sql") {
-    $size = (Get-Item "$BDIR\sigap-db-${DATE}.sql").Length / 1KB
+$remoteDbFile = "/tmp/sigap-db-$DATE.sql"
+$localDbFile  = "$BDIR\sigap-db-$DATE.sql"
+$dbScript = "pct exec 102 -- bash -c `"mysqldump -u root sigap_pkl > $remoteDbFile`" && echo OK_DB"
+$result = & $SSH @OPT $SRV $dbScript
+Write-Host "   Server: $result"
+& $SCP @OPT "${SRV}:${remoteDbFile}" $localDbFile 2>&1 | Out-Null
+if (Test-Path $localDbFile) {
+    $size = (Get-Item $localDbFile).Length / 1KB
     Write-Host "   ✅ Database backup OK ($([math]::Round($size,0)) KB)" -ForegroundColor Green
 } else {
     Write-Host "   ❌ Database backup GAGAL" -ForegroundColor Red
@@ -76,7 +83,7 @@ if ($gitStatus) {
 }
 
 # ── Bersihkan file tmp di server ─────────────────────────
-$cleanCmd = "rm -f /tmp/sigap-webroot-$DATE.tar.gz /tmp/sigap-db-$DATE.sql"
+$cleanCmd = "rm -f $remoteWebFile $remoteDbFile"
 & $SSH @OPT $SRV $cleanCmd 2>&1 | Out-Null
 
 # ── Ringkasan ─────────────────────────────────────────────
