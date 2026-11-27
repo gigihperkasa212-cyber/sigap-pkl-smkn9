@@ -27,7 +27,8 @@ Write-Host "[1/5] Folder backup: $BDIR" -ForegroundColor Yellow
 # ── 1. Backup web root CT-102 ────────────────────────────
 Write-Host ""
 Write-Host "[2/5] Backup web root CT-102..." -ForegroundColor Yellow
-& $SSH @OPT $SRV "pct exec 102 -- bash -c 'tar -czf /tmp/sigap-webroot-$DATE.tar.gz /var/www/html/SIGAP-SMKN9-Official 2>/dev/null && echo OK'"
+$webCmd = "pct exec 102 -- bash -c 'tar -czf /tmp/sigap-webroot-$DATE.tar.gz /var/www/html/SIGAP-SMKN9-Official 2>/dev/null && echo OK'"
+& $SSH @OPT $SRV $webCmd
 & $SCP @OPT "${SRV}:/tmp/sigap-webroot-${DATE}.tar.gz" "$BDIR\sigap-webroot-${DATE}.tar.gz"
 if (Test-Path "$BDIR\sigap-webroot-${DATE}.tar.gz") {
     $size = (Get-Item "$BDIR\sigap-webroot-${DATE}.tar.gz").Length / 1MB
@@ -39,7 +40,8 @@ if (Test-Path "$BDIR\sigap-webroot-${DATE}.tar.gz") {
 # ── 2. Backup database ───────────────────────────────────
 Write-Host ""
 Write-Host "[3/5] Backup database MySQL..." -ForegroundColor Yellow
-& $SSH @OPT $SRV "pct exec 102 -- bash -c 'mysqldump -u root sigap_pkl > /tmp/sigap-db-$DATE.sql 2>/dev/null && echo OK'"
+$dbCmd = "pct exec 102 -- bash -c 'mysqldump -u root sigap_pkl > /tmp/sigap-db-$DATE.sql 2>/dev/null && echo OK'"
+& $SSH @OPT $SRV $dbCmd
 & $SCP @OPT "${SRV}:/tmp/sigap-db-${DATE}.sql" "$BDIR\sigap-db-${DATE}.sql"
 if (Test-Path "$BDIR\sigap-db-${DATE}.sql") {
     $size = (Get-Item "$BDIR\sigap-db-${DATE}.sql").Length / 1KB
@@ -74,7 +76,8 @@ if ($gitStatus) {
 }
 
 # ── Bersihkan file tmp di server ─────────────────────────
-& $SSH @OPT $SRV "rm -f /tmp/sigap-webroot-$DATE.tar.gz /tmp/sigap-db-$DATE.sql" 2>&1 | Out-Null
+$cleanCmd = "rm -f /tmp/sigap-webroot-$DATE.tar.gz /tmp/sigap-db-$DATE.sql"
+& $SSH @OPT $SRV $cleanCmd 2>&1 | Out-Null
 
 # ── Ringkasan ─────────────────────────────────────────────
 Write-Host ""
