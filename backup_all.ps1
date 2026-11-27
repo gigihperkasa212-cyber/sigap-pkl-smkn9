@@ -1,17 +1,15 @@
 # ============================================================
 # SIGAP PKL - BACKUP SEMUA (1 KLIK)
 # Backup: web root, database, SSL cert, kode lokal ke GitHub
-# Jalankan: klik kanan → Run with PowerShell
 # ============================================================
 
-$DATE = Get-Date -Format "yyyyMMdd_HHmmss"
-$SSH  = "C:\Windows\System32\OpenSSH\ssh.exe"
-$SCP  = "C:\Windows\System32\OpenSSH\scp.exe"
-$KEY  = "$env:USERPROFILE\.ssh\sigap_pkl_key"
-$SRV  = "root@103.153.190.69"
-$OPT  = @("-o","StrictHostKeyChecking=no","-o","ConnectTimeout=30","-i",$KEY)
-$ROOT = "d:\absen pkl update"
-$BDIR = "$ROOT\backups\$DATE"
+$DATE  = Get-Date -Format "yyyyMMdd_HHmmss"
+$SSH   = "C:\Windows\System32\OpenSSH\ssh.exe"
+$SCP   = "C:\Windows\System32\OpenSSH\scp.exe"
+$KEY   = "$env:USERPROFILE\.ssh\sigap_pkl_key"
+$SRV   = "root@103.153.190.69"
+$ROOT  = "d:\absen pkl update"
+$BDIR  = "$ROOT\backups\$DATE"
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
@@ -24,51 +22,92 @@ Write-Host ""
 New-Item -ItemType Directory -Force -Path $BDIR | Out-Null
 Write-Host "[1/5] Folder backup: $BDIR" -ForegroundColor Yellow
 
-# ── 1. Backup web root CT-102 ────────────────────────────
+# ── Tulis script bash ke file temp lokal ─────────────────
+$bashScript = @"
+#!/bin/bash
+DATE="$DATE"
+echo "=== Backup dimulai: `$DATE ==="
+
+# Backup web root
+echo "--- Backup web root..."
+tar -czf /tmp/sigap-webroot-`$DATE.tar.gz /var/www/html/SIGAP-SMKN9-Official 2>/dev/null
+if [ -f "/tmp/sigap-webroot-`$DATE.tar.gz" ]; then
+    echo "OK_WEBROOT:`$(wc -c < /tmp/sigap-webroot-`$DATE.tar.gz)"
+else
+    # Coba dari CT-102
+    pct exec 102 -- tar -czf /tmp/sigap-webroot-`$DATE.tar.gz /var/www/html/SIGAP-SMKN9-Official 2>/dev/null
+    pct pull 102 /tmp/sigap-webroot-`$DATE.tar.gz /tmp/sigap-webroot-`$DATE.tar.gz 2>/dev/null
+    if [ -f "/tmp/sigap-webroot-`$DATE.tar.gz" ]; then
+        echo "OK_WEBROOT:`$(wc -c < /tmp/sigap-webroot-`$DATE.tar.gz)"
+    else
+        echo "FAIL_WEBROOT"
+    fi
+fi
+
+# Backup database
+echo "--- Backup database..."
+pct exec 102 -- bash -c "mysqldump -u root sigap_pkl 2>/dev/null" > /tmp/sigap-db-`$DATE.sql
+if [ -s "/tmp/sigap-db-`$DATE.sql" ]; then
+    echo "OK_DB:`$(wc -c < /tmp/sigap-db-`$DATE.sql)"
+else
+    echo "FAIL_DB"
+fi
+
+echo "=== Backup selesai ==="
+"@
+
+# Simpan script ke file temp
+$tempScript = "$env:TEMP\sigap_backup.sh"
+$bashScript | Set-Content -Path $tempScript -Encoding UTF8
+
+# Upload script ke server
 Write-Host ""
-Write-Host "[2/5] Backup web root CT-102..." -ForegroundColor Yellow
-$remoteWebFile = "/tmp/sigap-webroot-$DATE.tar.gz"
-$localWebFile  = "$BDIR\sigap-webroot-$DATE.tar.gz"
-# Tulis perintah ke file sementara lalu kirim via SSH
-$webScript = "pct exec 102 -- tar -czf $remoteWebFile /var/www/html/SIGAP-SMKN9-Official 2>/dev/null && echo OK_WEB"
-$result = & $SSH @OPT $SRV $webScript
-Write-Host "   Server: $result"
-& $SCP @OPT "${SRV}:${remoteWebFile}" $localWebFile 2>&1 | Out-Null
-if (Test-Path $localWebFile) {
-    $size = (Get-Item $localWebFile).Length / 1MB
-    Write-Host "   ✅ Web root backup OK ($([math]::Round($size,1)) MB)" -ForegroundColor Green
+Write-Host "[2/5] Upload script ke server..." -ForegroundColor Yellow
+$scpArgs = @("-o","StrictHostKeyChecking=no","-o","ConnectTimeout=30","-i",$KEY,$tempScript,"${SRV}:/tmp/sigap_backup.sh")
+& $SCP @scpArgs 2>&1 | Out-Null
+
+# Jalankan script di server
+Write-Host "[3/5] Menjalankan backup di server..." -ForegroundColor Yellow
+$sshArgs = @("-o","StrictHostKeyChecking=no","-o","ConnectTimeout=120","-i",$KEY,$SRV,"bash /tmp/sigap_backup.sh")
+$output = & $SSH @sshArgs 2>&1
+Write-Host $output
+
+# Download hasil backup
+Write-Host ""
+Write-Host "[4/5] Download hasil backup..." -ForegroundColor Yellow
+
+# Web root
+$scpWeb = @("-o","StrictHostKeyChecking=no","-o","ConnectTimeout=60","-i",$KEY,"${SRV}:/tmp/sigap-webroot-${DATE}.tar.gz","$BDIR\sigap-webroot-${DATE}.tar.gz")
+& $SCP @scpWeb 2>&1 | Out-Null
+if (Test-Path "$BDIR\sigap-webroot-${DATE}.tar.gz") {
+    $size = [math]::Round((Get-Item "$BDIR\sigap-webroot-${DATE}.tar.gz").Length / 1MB, 1)
+    Write-Host "   ✅ Web root: $size MB" -ForegroundColor Green
 } else {
-    Write-Host "   ❌ Web root backup GAGAL" -ForegroundColor Red
+    Write-Host "   ❌ Web root GAGAL" -ForegroundColor Red
 }
 
-# ── 2. Backup database ───────────────────────────────────
-Write-Host ""
-Write-Host "[3/5] Backup database MySQL..." -ForegroundColor Yellow
-$remoteDbFile = "/tmp/sigap-db-$DATE.sql"
-$localDbFile  = "$BDIR\sigap-db-$DATE.sql"
-$dbScript = "pct exec 102 -- bash -c `"mysqldump -u root sigap_pkl > $remoteDbFile`" && echo OK_DB"
-$result = & $SSH @OPT $SRV $dbScript
-Write-Host "   Server: $result"
-& $SCP @OPT "${SRV}:${remoteDbFile}" $localDbFile 2>&1 | Out-Null
-if (Test-Path $localDbFile) {
-    $size = (Get-Item $localDbFile).Length / 1KB
-    Write-Host "   ✅ Database backup OK ($([math]::Round($size,0)) KB)" -ForegroundColor Green
+# Database
+$scpDb = @("-o","StrictHostKeyChecking=no","-o","ConnectTimeout=60","-i",$KEY,"${SRV}:/tmp/sigap-db-${DATE}.sql","$BDIR\sigap-db-${DATE}.sql")
+& $SCP @scpDb 2>&1 | Out-Null
+if (Test-Path "$BDIR\sigap-db-${DATE}.sql") {
+    $size = [math]::Round((Get-Item "$BDIR\sigap-db-${DATE}.sql").Length / 1KB, 0)
+    Write-Host "   ✅ Database: $size KB" -ForegroundColor Green
 } else {
-    Write-Host "   ❌ Database backup GAGAL" -ForegroundColor Red
+    Write-Host "   ❌ Database GAGAL" -ForegroundColor Red
 }
 
-# ── 3. Backup SSL certificate ────────────────────────────
-Write-Host ""
-Write-Host "[4/5] Backup SSL certificate..." -ForegroundColor Yellow
-& $SCP @OPT "${SRV}:/root/.acme.sh/sigap.smkn9malang.sch.id_ecc/fullchain.cer" "$BDIR\ssl-fullchain-${DATE}.cer"
-& $SCP @OPT "${SRV}:/root/.acme.sh/sigap.smkn9malang.sch.id_ecc/sigap.smkn9malang.sch.id.key" "$BDIR\ssl-privkey-${DATE}.key"
+# SSL Certificate
+$scpSsl1 = @("-o","StrictHostKeyChecking=no","-i",$KEY,"${SRV}:/root/.acme.sh/sigap.smkn9malang.sch.id_ecc/fullchain.cer","$BDIR\ssl-fullchain-${DATE}.cer")
+$scpSsl2 = @("-o","StrictHostKeyChecking=no","-i",$KEY,"${SRV}:/root/.acme.sh/sigap.smkn9malang.sch.id_ecc/sigap.smkn9malang.sch.id.key","$BDIR\ssl-privkey-${DATE}.key")
+& $SCP @scpSsl1 2>&1 | Out-Null
+& $SCP @scpSsl2 2>&1 | Out-Null
 if (Test-Path "$BDIR\ssl-fullchain-${DATE}.cer") {
-    Write-Host "   ✅ SSL certificate backup OK" -ForegroundColor Green
+    Write-Host "   ✅ SSL certificate OK" -ForegroundColor Green
 } else {
-    Write-Host "   ⚠️  SSL backup GAGAL (tidak kritis)" -ForegroundColor Yellow
+    Write-Host "   ⚠️  SSL backup tidak ada" -ForegroundColor Yellow
 }
 
-# ── 4. Backup kode lokal ke GitHub ───────────────────────
+# ── Push kode lokal ke GitHub ─────────────────────────────
 Write-Host ""
 Write-Host "[5/5] Push kode lokal ke GitHub..." -ForegroundColor Yellow
 Set-Location $ROOT
@@ -82,9 +121,9 @@ if ($gitStatus) {
     Write-Host "   ✅ Tidak ada perubahan kode baru" -ForegroundColor Green
 }
 
-# ── Bersihkan file tmp di server ─────────────────────────
-$cleanCmd = "rm -f $remoteWebFile $remoteDbFile"
-& $SSH @OPT $SRV $cleanCmd 2>&1 | Out-Null
+# Bersihkan file tmp server
+$sshClean = @("-o","StrictHostKeyChecking=no","-i",$KEY,$SRV,"rm -f /tmp/sigap-webroot-${DATE}.tar.gz /tmp/sigap-db-${DATE}.sql /tmp/sigap_backup.sh")
+& $SSH @sshClean 2>&1 | Out-Null
 
 # ── Ringkasan ─────────────────────────────────────────────
 Write-Host ""
@@ -93,6 +132,9 @@ Write-Host "  BACKUP SELESAI!" -ForegroundColor Green
 Write-Host "  Lokasi: $BDIR" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
+
+# Tampilkan isi folder backup
+Get-ChildItem $BDIR | Format-Table Name, @{L='Size(KB)';E={[math]::Round($_.Length/1KB,0)}} -AutoSize
 
 # Buka folder backup
 Start-Process explorer.exe $BDIR
