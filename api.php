@@ -330,9 +330,9 @@ switch ($action) {
         file_put_contents($filepath, $htmlContent);
 
         // Return URL HTTP 8080 (tanpa SSL) untuk dibuka di browser eksternal Android
-        $httpUrl = 'http://103.153.190.69:8080/SIGAP-SMKN9-Official/print_temp/' . $filename;
-        // Fallback HTTPS 8443 jika NAT 8080 tidak aktif
-        $httpsUrl = 'https://103.153.190.69:8443/print_temp/' . $filename;
+        $httpUrl = 'https://sigap.smkn9malang.sch.id/print_temp/' . $filename;
+        // Fallback ke IP langsung jika domain belum aktif
+        $httpsUrl = 'https://sigap.smkn9malang.sch.id/print_temp/' . $filename;
 
         jsonSuccess(['url' => $httpUrl, 'https_url' => $httpsUrl, 'filename' => $filename]);
         break;

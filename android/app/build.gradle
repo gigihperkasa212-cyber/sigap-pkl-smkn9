@@ -62,8 +62,8 @@ dependencies {
     implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
     implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
     implementation project(':capacitor-android')
-    // OkHttp untuk SSL bypass pada request ke server self-signed
-    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    // OkHttp — tidak diperlukan lagi setelah migrasi ke domain dengan SSL valid
+    // implementation 'com.squareup.okhttp3:okhttp:4.12.0'
     // Google Play In-App Updates — akan diaktifkan setelah app masuk Play Store
     // implementation 'com.google.android.play:app-update:2.1.0'
     testImplementation "junit:junit:$junitVersion"

@@ -4,8 +4,8 @@
 
 // -- Server config --
 (function(){
-  // APK dan browser pakai HTTPS 8443 � certificate di-trust via network_security_config.xml
-  var _base = 'https://103.153.190.69:8443';
+  // APK pakai domain dengan SSL valid (Let's Encrypt via sigap.smkn9malang.sch.id)
+  var _base = 'https://sigap.smkn9malang.sch.id';
   window._SERVER_HTTPS = _base;
   window._SSE_URL = _base + '/api.php?action=sse_events';
 })();
